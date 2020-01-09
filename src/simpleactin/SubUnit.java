@@ -27,7 +27,7 @@ public class SubUnit {
 
     public void remove(double t) {
         
-        if (_t > 800&&t-_t>=0.0) {
+        if (_t > 000&&t-_t>=0.0) {
             _ps.println(t - _t);
             _ps.flush();
         }
