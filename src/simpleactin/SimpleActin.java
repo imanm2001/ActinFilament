@@ -29,11 +29,11 @@ public class SimpleActin {
         if (!_subunits.isEmpty()&& Math.random() < poff) {
             if (barbed) {
                 ab.set(_subunits.getLast()._state == 3);
-                _subunits.getLast().remove(t);
+                //_subunits.getLast().remove(t);
                 _subunits.removeLast();
             } else {
                 ab.set(_subunits.getFirst()._state == 3);
-                _subunits.getFirst().remove(t);
+                //_subunits.getFirst().remove(t);
                 _subunits.removeFirst();
             }
             ret = -1;
@@ -68,15 +68,15 @@ public class SimpleActin {
      */
     public static void main(String[] args) throws FileNotFoundException {
         // TODO code application logic hered
-        final double ATP = 1, ADP = 0.0, ADF = 10;
-        final double bton = 11.6 * ATP, bdon = 3.8 * ADP, btoff = 1.4*0 , bdoff = 7.2*0 ;
-        final double pton = 1.3 * ATP*0, pdon = 0.16 * ADP, ptoff = 0.8 , pdoff = 0.27*0 ;
-        final double atpR = 0.35, adppi = 0.0019, adppico = 0.035*ADF, adf = 0.0085*ADF, adfco = 0.075 * ADF, adfoff = 0.005, sev = 0.012, SVR2 = 43*0, SVR2B = 11/1, SVR2UB = 0.45;
+        final double ATP = 1, ADP = 0.0, ADF = 40;
+        final double bton = 11.6 * ATP, bdon = 3.8 * ADP, btoff = 1.4 , bdoff = 7.2 ;
+        final double pton = 1.3 * ATP, pdon = 0.16 * ADP, ptoff = 0.8 , pdoff = 0.27 ;
+        final double atpR = 0.35, adppi = 0.0019, adppico = 0.035*ADF, adf = 0.0085*ADF, adfco = 0.075 * ADF, adfoff = 0.005, sev = 0.012, SVR2 = 43, SVR2B = 11/50.0, SVR2UB = 0.45;
         final double maxR = Math.max(SVR2,bton);
         final double dt = PC / maxR;
         final double raise = 0.00275;
         final double totalTime = 10000;
-        final int distance = 100, chunksize = 2;
+        final int distance = 10, chunksize = 1;
 
         PrintStream ps = new PrintStream("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\Sims\\ATP" + ATP + "_ADF" + (ADF*0+1) + ".txt");
         String fn="C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\Sims\\LTATP" + ATP + "_ADF" + (ADF*0+1) + ".txt";
@@ -94,10 +94,10 @@ public class SimpleActin {
 
                 b += dynamic(_subunits, PC * bton / maxR, PC * bdon / maxR, PC * btoff / maxR, PC * bdoff / maxR, true, t, ab, ltps);
                 
-                p += dynamic(_subunits, PC * pton / maxR, PC * pdon / maxR, PC * ptoff / maxR*(totalSRV>0?7:1), PC * pdoff / maxR, false, t, ab, ltps);
+                p += dynamic(_subunits, PC * pton / maxR, PC * pdon / maxR, PC * ptoff / maxR, PC * pdoff / maxR, false, t, ab, ltps);
                
                 int sever = -1;
-                boolean coffilinwithindist =totalADF>0;
+                boolean coffilinwithindist =totalADF>-1;
                 /*
                 for (int i = 0; i < Math.min(_subunits.size(), distance); i++) {
                     if (_subunits.get(i)._state == 3) {
@@ -107,7 +107,7 @@ public class SimpleActin {
                 }*/
                 //for (SubUnit su : _subunits) {
                
-                for (int i = 0; i < _subunits.size()*0; i++) {
+                for (int i = 0; i < _subunits.size(); i++) {
                     SubUnit su = _subunits.get(i);
                
                     if (su._state < 3 && Math.random() < PC * SVR2B / maxR) {
