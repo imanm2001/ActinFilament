@@ -102,4 +102,11 @@ public class Utils {
         }
         return ret;
     }
+     public static double max(double...v){
+         double ret=v[0];
+         for(int i=1;i<v.length;i++){
+             ret=Math.max(v[i],ret);
+         }
+         return ret;
+     }
 }

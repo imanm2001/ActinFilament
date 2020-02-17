@@ -29,7 +29,6 @@ public class MainJFrame extends javax.swing.JFrame {
 
     boolean _running = false, _ended = true;
     Filament mr[] = new Filament[8];
-    static LinkedList<Double> lifeTimes = new LinkedList<>();
     private LinkedList<PointF> _ps1 = Utils.getPoints("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\out_fimbrin.txt");
 
     /**
@@ -539,12 +538,10 @@ public class MainJFrame extends javax.swing.JFrame {
         _running = false;
         runFromUI();
     }//GEN-LAST:event_ADFSliderStateChanged
-    
 
-    public void simulate(double ATP, double ADP, double ADF, double SVR2C, double btonr, double bdonr,
-            double btoff, double bdoff, double ptonr, double pdonr, double ptoff, double pdoff,
-            double atpR, double adppi, double adppico, double adfon, double adfcoon, double adfoff, double sev, double SRV2Br, double SRV2UB, double SRV2,
-            int distance, int chunksize, double totalTime) throws Exception {
+    public void simulate(PolymerizationRate barbed, PolymerizationRate pointed,
+            ReactionRate cofilin, ReactionRate SRV2, double atp, double adppi, double adppico,
+            int distance, int chunksize, final double dt, double totalTime) throws Exception {
         /*
         final double ATP = 1, ADP = 0.0, ADF = 0;
         final double bton = 11.6 * ATP, bdon = 3.8 * ADP, btoff = 1.4 , bdoff = 7.2 ;
@@ -554,58 +551,45 @@ public class MainJFrame extends javax.swing.JFrame {
          */
         //LinkedList<SubUnit> _subunits = new LinkedList<>();
 
-        double bton = btonr * ATP, pton = ptonr * ATP, bdon = btonr * ADP, pdon = bdonr * ADP, SRV2B = SRV2Br * SVR2C;
+        /*double bton = btonr * ATP, pton = ptonr * ATP, bdon = btonr * ADP, pdon = bdonr * ADP, SRV2B = SRV2Br * SVR2C;
         adfon *= ADF;
         adfcoon *= ADF;
         System.out.println(">>>" + SRV2B + "   " + ADF);
-        final double maxR = Math.max(SRV2, bton);
-        final double dt = PC / maxR;
+        final double maxR = Math.max(SRV2, bton);*/
         final double raise = 0.00275;
 
         _ended = false;
-        PrintStream ps = new PrintStream("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\Sims\\ATP" + ATP + "_ADF" + (ADF * 0 + 1) + ".txt");
-        String fn = "C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\Sims\\LTATP" + ATP + "_ADF" + (ADF * 0 + 1) + ".txt";
-        System.out.println(":::" + fn);
+
+        PrintStream ps = new PrintStream("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\Sims\\Len.txt");
+        String fn = "C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\Sims\\LT.txt";
         PrintStream ltps = new PrintStream(fn);
 
-        
-        final int numT = 2;
-        int totalRuns = 500;
-        lifeTimes.clear();
+        final int totalRuns = 500;
+
         for (int ii = 0; ii < totalRuns && _running; ii++) {
             long t1 = System.currentTimeMillis();
             int totalADF = 0, totalSRV = 0;
-            double adppir = adppi, adfr = adfon;
             double t = 0;
 
             int n = 0, b = 0, p = 0;
             AtomicBoolean ab = new AtomicBoolean(false);
-            Filament fl=new Filament();
-            
-            fl.setParams(SRV2B, SRV2UB, SRV2, atpR, adppir, adfon,
-                    adfcoon, adfoff, sev, totalADF, maxR, false,
-                    distance, chunksize);
+            Filament fl = new Filament();
+
+            fl.setParams(barbed, pointed, cofilin, SRV2, atp, adppi, adppico, distance, chunksize);
             while (t < totalTime) {
 
-          
                 if ((n++) % 100 == 0) {
                     //ps.println("" + t + "\t" + b * raise + "\t" + (p) * raise + "\t" + _subunits.size() * raise + "\t" + b / totalTime + "\t" + p / totalTime);
                     //            System.out.print("\033[2K"); 
                     //   System.out.println("" + ii + "::" + t + "\t" + totalADF + "\t" + totalSRV + "\t" + _subunits.size() + "::\t" + _subunits.size() / numT);
                     jProgressBar1.setValue((int) (100 * (ii * totalTime + t) / (double) (totalTime * totalRuns)));
-                    updateHisto();
+                    updateHisto(fl._lifeTimes);
                 }
                 if (n % 10000 == 0) {
                     System.gc();
                 }
-
+                fl.update(t);
                 t += dt;
-    
-                if (totalADF == 0) {
-                    adppir = adppi;
-                } else {
-                    adppir = adppico;
-                }
 
             }
             //  System.out.println("NUM:"+_subunits.size());
@@ -621,7 +605,6 @@ public class MainJFrame extends javax.swing.JFrame {
 
     }
 
-  
     /**
      * @param args the command line arguments
      */
@@ -731,12 +714,26 @@ public class MainJFrame extends javax.swing.JFrame {
                 }
             }
             _running = true;
-            double ATP = getValue(atpTextField), ADP = getValue(adpTextField), atpbonr = getValue(atpbonTextField), atpboff = getValue(atpboffTextField), adpbonr = getValue(adpbonTextField),//5
-                    adpboff = getValue(adpboffTextField), atpponr = getValue(atpponTextField), atppoff = getValue(atppoffTextField), adpponr = getValue(adpponTextField), adppoff = getValue(adppoffTextField),//5
-                    svrr = getValue(svrrTextField), atp = getValue(katpTextField), adppi = getValue(kadppiTextField), adppic = getValue(kadppicTextField), adfonr = getValue(adfonTextField),//5
-                    adfcoonr = getValue(adfcoonTextField), adfoff = getValue(adfoffTextField), srv2on = getValue(srv2onTextField), srv2off = getValue(srv2offTextField),
+            final double ATP = getValue(atpTextField), ADP = getValue(adpTextField),
+                    atpbon = getValue(atpbonTextField), atpboff = getValue(atpboffTextField), adpbon = getValue(adpbonTextField),//5
+                    adpboff = getValue(adpboffTextField), atppon = getValue(atpponTextField), atppoff = getValue(atppoffTextField),
+                    adppon = getValue(adpponTextField), adppoff = getValue(adppoffTextField),//5
+                    cofsvrr = getValue(svrrTextField), atp = getValue(katpTextField), adppi = getValue(kadppiTextField), adppic = getValue(kadppicTextField),
+                    adfon = getValue(adfonTextField),adfcoon = getValue(adfcoonTextField), adfoff = getValue(adfoffTextField),
+                    srv2on = getValue(srv2onTextField), srv2off = getValue(srv2offTextField),
                     ADF = ADFSlider.getValue() / 10.0, K_SRV2 = SRV2Slider.getValue() / 10.0;
-            int distance = DistanceSlider.getValue(), chunk = ChunkSlider.getValue();
+            final double atpbonr =atpbon*ATP;
+            final double atpponr =atppon*ATP;
+
+            final double adpbonr =adpbon*ADP;
+            final double adpponr = adppon*ADP;
+
+            final double adfonr =adfon*ADF;
+            final double adfcoonr =adfcoon*ADF;
+
+            final double maxRate = Utils.max(atpbonr, adpbonr, atpponr, adpponr, srv2on, K_SRV2), dt = PC / maxRate;
+
+            final int distance = DistanceSlider.getValue(), chunk = ChunkSlider.getValue();
             ADFLabel.setText("" + ADF);
             SRV2Label.setText("" + K_SRV2);
             DistanceLabel.setText("" + distance);
@@ -745,9 +742,13 @@ public class MainJFrame extends javax.swing.JFrame {
                 @Override
                 public void run() {
                     try {
-                        simulate(ATP, ADP, ADF, 1, atpbonr, adpbonr, atpboff, adpboff, atpponr,
-                                adpponr, atppoff, adppoff, atp, adppi, adppic, adfonr, adfcoonr,
-                                adfoff, svrr, srv2on, srv2off, K_SRV2, distance, chunk, getValue(totalTimeTextField));
+                        PolymerizationRate barbed = new PolymerizationRate(atpbonr * dt, atpboff * dt, adpbonr * dt, adpboff * dt);
+                        PolymerizationRate pointed = new PolymerizationRate(atpponr * dt, atppoff * dt, adpponr * dt, adppoff * dt);
+
+                        ReactionRate cofilin = new ReactionRate(cofsvrr * dt, adfoff * dt, adfonr * dt, adfcoonr * dt);
+                        ReactionRate srv2 = new ReactionRate(K_SRV2 * dt, srv2off, srv2on);
+
+                        simulate(barbed, pointed, cofilin, srv2, atp, adppi, adppic, distance, chunk, dt, getValue(totalTimeTextField));
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -772,7 +773,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
     }
 
-    private void updateHisto() {
+    private void updateHisto(LinkedList<Double> lifeTimes) {
         Object[] ret = Utils.generateHist(lifeTimes, 0, 10, 0.1);
         LinkedList<PointF> points = (LinkedList<PointF>) ret[0];
         BufferedImage img = null;
@@ -800,10 +801,10 @@ public class MainJFrame extends javax.swing.JFrame {
         Utils.drawPoints(g, h, dw, 20, points, Color.red);
         Utils.drawPoints(g, h, dw, 20, _ps1, Color.blue);
         g.drawString("Life Time (s)", (w - g.getFontMetrics().stringWidth("Life Time (s)")) / 2, h + 20);
-         g.translate(30, (h-50+g.getFontMetrics().stringWidth("Frequency"))/2);
-        g.rotate(-Math.PI/2);
-      
-        g.drawString("Frequency", 0,00);
+        g.translate(30, (h - 50 + g.getFontMetrics().stringWidth("Frequency")) / 2);
+        g.rotate(-Math.PI / 2);
+
+        g.drawString("Frequency", 0, 00);
         imageBox1.setImage(img);
 
     }

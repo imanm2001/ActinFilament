@@ -47,18 +47,18 @@ public class SimpleActin {
         }*/
         if (addATP && addADP) {
             if (Math.random() < 0.5) {
-                _subunits.add(index, new SubUnit(2, barbed, t));
-                _subunits.add(index, new SubUnit(0, barbed, t));
+                _subunits.add(index, new SubUnit(2, barbed, t,null));
+                _subunits.add(index, new SubUnit(0, barbed, t,null));
             } else {
-                _subunits.add(index, new SubUnit(0, barbed, t));
-                _subunits.add(index, new SubUnit(2, barbed, t));
+                _subunits.add(index, new SubUnit(0, barbed, t,null));
+                _subunits.add(index, new SubUnit(2, barbed, t,null));
             }
             ret += 2;
         } else if (addADP) {
-            _subunits.add(index, new SubUnit(2, barbed, t));
+            _subunits.add(index, new SubUnit(2, barbed, t,null));
             ret++;
         } else if (addATP) {
-            _subunits.add(index, new SubUnit(0, barbed, t));
+            _subunits.add(index, new SubUnit(0, barbed, t,null));
             ret++;
         }
         return ret;

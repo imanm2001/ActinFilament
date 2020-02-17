@@ -14,11 +14,12 @@ public class ReactionRate {
     public double onRates[], reactRate,offRate;
 
     public ReactionRate(double reactRate, double offRate,double... onRates) {
-        onRates = new double[onRates.length ];
+        this.onRates = new double[onRates.length ];
+        
         for (int i = 0; i < onRates.length; i++) {
-            onRates[i] = onRates[i];
+            this.onRates[i] = onRates[i];
         }
-        offRate = offRate;
-        reactRate=reactRate;
+        this.offRate = offRate;
+        this.reactRate=reactRate;
     }
 }
