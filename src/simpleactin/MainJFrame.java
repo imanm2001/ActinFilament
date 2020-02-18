@@ -29,7 +29,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
     boolean _running = false, _ended = true;
     Filament mr[] = new Filament[8];
-    private LinkedList<PointF> _ps1 = Utils.getPoints("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\out_fimbrin.txt");
+    private LinkedList<PointF> _ps1 = Utils.getPoints("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\out_actin.txt");
 
     /**
      * Creates new form MainJFrame
@@ -181,6 +181,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel15.setText("SRV2off:");
 
+        ADFSlider.setMaximum(10000);
         ADFSlider.setValue(10);
         ADFSlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -564,9 +565,10 @@ public class MainJFrame extends javax.swing.JFrame {
         String fn = "C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\Sims\\LT.txt";
         PrintStream ltps = new PrintStream(fn);
 
-        final int totalRuns = 500;
-
-        for (int ii = 0; ii < totalRuns && _running; ii++) {
+        final int totalRuns = 1500;
+        LinkedList<Double> lifeTimes=new LinkedList<>();
+        int ii=0;
+        for ( ii = 0; ii < totalRuns && _running; ii++) {
             long t1 = System.currentTimeMillis();
             int totalADF = 0, totalSRV = 0;
             double t = 0;
@@ -574,8 +576,9 @@ public class MainJFrame extends javax.swing.JFrame {
             int n = 0, b = 0, p = 0;
             AtomicBoolean ab = new AtomicBoolean(false);
             Filament fl = new Filament();
-
+            fl._lifeTimes=lifeTimes;
             fl.setParams(barbed, pointed, cofilin, SRV2, atp, adppi, adppico, distance, chunksize);
+        
             while (t < totalTime) {
 
                 if ((n++) % 100 == 0) {
@@ -592,12 +595,15 @@ public class MainJFrame extends javax.swing.JFrame {
                 t += dt;
 
             }
+            
+            
             //  System.out.println("NUM:"+_subunits.size());
             //ps.println("" + t + "\t" + b * raise + "\t" + (p) * raise + "\t" + _subunits.size() * raise + "\t" + b / totalTime + "\t" + p / totalTime);
             //    System.out.println(_subunits.size() * raise + "\t" + _subunits.size() / t);
             // System.out.println("" + (System.currentTimeMillis() - t1));
         }
-        System.out.println("Done");
+        
+       
         _ended = true;
         jButton1.setText("Run");
         jProgressBar1.setValue(0);
@@ -738,6 +744,7 @@ public class MainJFrame extends javax.swing.JFrame {
             SRV2Label.setText("" + K_SRV2);
             DistanceLabel.setText("" + distance);
             ChunkLabel.setText("" + chunk);
+            
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -746,9 +753,9 @@ public class MainJFrame extends javax.swing.JFrame {
                         PolymerizationRate pointed = new PolymerizationRate(atpponr * dt, atppoff * dt, adpponr * dt, adppoff * dt);
 
                         ReactionRate cofilin = new ReactionRate(cofsvrr * dt, adfoff * dt, adfonr * dt, adfcoonr * dt);
-                        ReactionRate srv2 = new ReactionRate(K_SRV2 * dt, srv2off, srv2on);
+                        ReactionRate srv2 = new ReactionRate(K_SRV2 * dt, srv2off*dt, srv2on*dt);
 
-                        simulate(barbed, pointed, cofilin, srv2, atp, adppi, adppic, distance, chunk, dt, getValue(totalTimeTextField));
+                        simulate(barbed, pointed, cofilin, srv2, atp*dt, adppi*dt, adppic*dt, distance, chunk, dt, getValue(totalTimeTextField));
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }

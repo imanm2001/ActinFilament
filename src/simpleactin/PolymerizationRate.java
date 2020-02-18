@@ -19,5 +19,8 @@ public class PolymerizationRate {
         this.ADPon = ADPon;
         this.ADPoff = ADPoff;
     }
-   
+   @Override
+   public String toString(){
+       return String.format("%f\t%f\t%f\t%f", ATPon,ATPoff,ADPon,ADPoff);
+   }
 }

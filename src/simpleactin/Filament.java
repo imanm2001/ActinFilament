@@ -15,7 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author sm2983
  */
 public class Filament implements SubUnitListener {
-
+    final int __ATP=1,__ADPPI=2,__ADP=4,__COFILIN=8,__SRV2=16;
     int i = 0;
     public LinkedList<SubUnit> _subunits = new LinkedList<>();
     double _atpR, _adppiR, _adppicoR;
@@ -24,7 +24,7 @@ public class Filament implements SubUnitListener {
     PolymerizationRate _barbed, _pointed;
     ReactionRate _coflin, _SRV2;
     private int _b, _p;
-    LinkedList<Double> _lifeTimes = new LinkedList<>();
+    LinkedList<Double> _lifeTimes = null;
     
     public Filament() {
         _b = _p = 0;
@@ -42,13 +42,14 @@ public class Filament implements SubUnitListener {
         _pointed = pointed;
         _SRV2 = SRV2;
         _coflin = cofilin;
-        _lifeTimes.clear();
+        
     }
 
     public void update(double t) {
         _b += dynamic(_subunits, _barbed, true, t);
-        _p += dynamic(_subunits, _pointed, false, t);
 
+        _p += dynamic(_subunits, _pointed, false, t);
+        
         int sever = -1;
 
         //int ssize = _subunits.size() / numT;
@@ -95,39 +96,41 @@ public class Filament implements SubUnitListener {
         for (int i = start; i < end && (_coflin.onRates[0] > 0 || _SRV2.onRates[0] > 0); i++) {
             SubUnit su = _subunits.get(i);
 
-            if (su._state < 3 && Math.random() < _SRV2.onRates[0]) {
+            if (su._state < __COFILIN && Math.random() < _SRV2.onRates[0]) {
                 //   su._state = 4;
-                changed.add(new Point(i, 4));
-            } else if (su._state == 4) {
+                
+                changed.add(new Point(i, (su._state|__SRV2)));
+            } else if ((su._state & __SRV2)==__SRV2) {
                 if (Math.random() < _SRV2.offRate) {
                     //  su._state = 2;
-                    changed.add(new Point(i, 2));
+                    changed.add(new Point(i, su._state&~__SRV2));
                 } else if (_coffilinwithindist && i < distance && Math.random() < _SRV2.reactRate) {
                     sever = Math.max(Math.min(_subunits.size() - 1, chunksize), sever);
                 }
             }
+
             switch (su._state) {
-                case 0:
+                case __ATP:
 
                     if (Math.random() < _atpR) {
                         // su._state = 2;
-                        changed.add(new Point(i, 1));
+                        changed.add(new Point(i, __ADPPI));
                     }
                     break;
-                case 1:
+                case __ADPPI:
                     if (Math.random() < adppi) {
 
                         //   su._state = 2;
-                        changed.add(new Point(i, 2));
+                        changed.add(new Point(i, __ADP));
                     }
                     break;
-                case 2:
+                case __ADP:
                     adfr = _coflin.onRates[0];
                     if (totalADF > 0) {
 
-                        if (i > 0 && _subunits.get(i - 1)._state == 3) {
+                        if (i > 0 && _subunits.get(i - 1)._state == __COFILIN) {
                             adfr = _coflin.onRates[0];
-                        } else if (i < _subunits.size() - 1 && _subunits.get(i + 1)._state == 3) {
+                        } else if (i < _subunits.size() - 1 && _subunits.get(i + 1)._state == __COFILIN) {
                             adfr = _coflin.onRates[1];
                         }
                         // adfr = adfco;
@@ -139,7 +142,7 @@ public class Filament implements SubUnitListener {
                         changed.add(new Point(i, 3));
                     }
                     break;
-                case 3:
+                case __COFILIN:
                     if (Math.random() < _coflin.offRate) {
                         su._state = 2;
                         //   changed.add(i);
@@ -171,17 +174,17 @@ public class Filament implements SubUnitListener {
     }
 
     private int dynamic(LinkedList<SubUnit> _subunits, PolymerizationRate rates, boolean barbed, double t) {
-        boolean addATP = Math.random() < rates.ATPoff;
+        boolean addATP = Math.random() < rates.ATPon;
         boolean addADP = Math.random() < rates.ADPon;
         int ret = 0;
         
         double poff = _subunits.isEmpty() ? 0 : _subunits.getLast()._state == 0 ? rates.ATPoff : rates.ADPoff;
         if (!_subunits.isEmpty() && Math.random() < poff) {
             if (barbed) {
-                _subunits.getLast().remove(t);
+                //_subunits.getLast().remove(t);
                 _subunits.removeLast();
             } else {
-                _subunits.getFirst().remove(t);
+                //_subunits.getFirst().remove(t);
                 _subunits.removeFirst();
             }
             ret = -1;
@@ -194,19 +197,19 @@ public class Filament implements SubUnitListener {
             ps.println(t);
         }*/
         if (addATP && addADP) {
-            if (Math.random() < 0.5) {
-                _subunits.add(index, new SubUnit(2, barbed, t, this));
-                _subunits.add(index, new SubUnit(0, barbed, t, this));
+            if (Math.random() < rates.ATPon/(rates.ATPon+rates.ADPon)) {
+                _subunits.add(index, new SubUnit(__ATP, barbed, t, this));
+                //_subunits.add(index, new SubUnit(1, barbed, t, this));
             } else {
-                _subunits.add(index, new SubUnit(0, barbed, t, this));
-                _subunits.add(index, new SubUnit(2, barbed, t, this));
+                _subunits.add(index, new SubUnit(__ADP, barbed, t, this));
+                //_subunits.add(index, new SubUnit(2, barbed, t, this));
             }
             ret += 2;
         } else if (addADP) {
-            _subunits.add(index, new SubUnit(2, barbed, t, this));
+            _subunits.add(index, new SubUnit(__ADP, barbed, t, this));
             ret++;
         } else if (addATP) {
-            _subunits.add(index, new SubUnit(0, barbed, t, this));
+            _subunits.add(index, new SubUnit(__ATP, barbed, t, this));
             ret++;
         }
         return ret;
@@ -214,6 +217,6 @@ public class Filament implements SubUnitListener {
 
     @Override
     public void remove(double t) {
-        
+        _lifeTimes.add(t);
     }
 }
