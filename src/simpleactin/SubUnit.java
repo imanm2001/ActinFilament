@@ -17,29 +17,41 @@ public class SubUnit {
     public int _id, _state;
     public boolean _barbed;
     public double _t;
-    private LinkedList<SubUnitListener> _listerns=new LinkedList<>();
+    private LinkedList<SubUnitListener> _listerns = new LinkedList<>();
+    boolean _record = false;
 
-    public SubUnit(int state, boolean barbed, double t,SubUnitListener list) {
+    public SubUnit(int state, boolean barbed, double t, SubUnitListener list) {
         _state = state;
         _barbed = barbed;
         _t = t;
-        _listerns.add(list);
+        if (list != null) {
+            _listerns.add(list);
+        }
+        _record = Math.random() < 0.1;
     }
-public void addListener(SubUnitListener sl){
-    _listerns.add(sl);
-}
+
+    public void addListener(SubUnitListener sl) {
+        _listerns.add(sl);
+    }
+
+    public void removeListener(SubUnitListener sl) {
+        _listerns.remove(sl);
+    }
+
     public void remove(double t) {
 
-        if (_t > 000 && t - _t >= 0.0) {
-            double dt=Math.ceil((t-_t)*10-Math.random())/10;
-            for(SubUnitListener sl:_listerns){
-                sl.remove(dt);
+        if (_t > 000) {
+            double dt = Math.ceil((t - _t) * 10 + Math.random() - 1) / 10;
+            if (dt >= 0.3) {
+                for (SubUnitListener sl : _listerns) {
+                    sl.remove(dt, this);
+                }
             }
             /*
             MainJFrame.lifeTimes.add(dt);
             _ps.println(t - _t);
             _ps.flush();*/
-  
+
         }
     }
 }

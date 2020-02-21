@@ -10,5 +10,5 @@ package simpleactin;
  * @author sm2983
  */
 public interface SubUnitListener {
-    public void remove(double t);
+    public void remove(double t,SubUnit su);
 }

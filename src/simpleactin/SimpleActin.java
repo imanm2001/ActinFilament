@@ -5,11 +5,14 @@
  */
 package simpleactin;
 
+import com.bulenkov.darcula.DarculaLaf;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import javax.swing.UIManager;
+import javax.swing.plaf.basic.BasicLookAndFeel;
 
 /**
  *
@@ -68,6 +71,16 @@ public class SimpleActin {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws Exception {
+        try {
+            // Set cross-platform Java L&F (also called "Metal")
+         BasicLookAndFeel darcula = new DarculaLaf();
+        UIManager.setLookAndFeel(darcula);
+       
+    } 
+    catch (Exception e) {
+       // handle exception
+       e.printStackTrace();
+    }
         new MainJFrame().setVisible(true);
         //run();
     }

@@ -15,7 +15,8 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author sm2983
  */
 public class Filament implements SubUnitListener {
-    final int __ATP=1,__ADPPI=2,__ADP=4,__COFILIN=8,__SRV2=16;
+
+    final int __ATP = 1, __ADPPI = 2, __ADP = 4, __COFILIN = 8, __SRV2 = 16;
     int i = 0;
     public LinkedList<SubUnit> _subunits = new LinkedList<>();
     double _atpR, _adppiR, _adppicoR;
@@ -24,8 +25,8 @@ public class Filament implements SubUnitListener {
     PolymerizationRate _barbed, _pointed;
     ReactionRate _coflin, _SRV2;
     private int _b, _p;
-    LinkedList<Double> _lifeTimes = null;
-    
+    public LinkedList<Double> _lifeTimes = null;
+
     public Filament() {
         _b = _p = 0;
     }
@@ -42,14 +43,13 @@ public class Filament implements SubUnitListener {
         _pointed = pointed;
         _SRV2 = SRV2;
         _coflin = cofilin;
-        
+
     }
 
-    public void update(double t) {
+    public boolean update(double t) {
         _b += dynamic(_subunits, _barbed, true, t);
-
         _p += dynamic(_subunits, _pointed, false, t);
-        
+
         int sever = -1;
 
         //int ssize = _subunits.size() / numT;
@@ -62,15 +62,22 @@ public class Filament implements SubUnitListener {
         }
         totalADF = 0;
         totalSRV = 0;
-        for (SubUnit su : _subunits) {
+        int totalADF2 = 0;
+        //for (SubUnit su : _subunits) {
+        for (int i = 0; i < _subunits.size(); i++) {
+            SubUnit su = _subunits.get(i);
             if (su._state == 3) {
                 totalADF++;
+                if (i < 1000) {
+                    totalADF2++;
+                }
             }
             if (su._state == 4) {
                 totalSRV++;
             }
         }
-        _coffilinwithindist = totalADF > 0;
+        _coffilinwithindist = totalADF2 > 0;
+        return false;
     }
 
     private static int sever(LinkedList<SubUnit> _subunits, int c, double t) {
@@ -91,20 +98,26 @@ public class Filament implements SubUnitListener {
         int sever = -1;
         LinkedList<Point> changed = new LinkedList<>();
         //ThreadLocalRandom tlr=ThreadLocalRandom.current();
-        double adppi=totalADF==0?_adppiR:_adppicoR;
-        
+        double adppi = totalADF == 0 ? _adppiR : _adppicoR;
+
         for (int i = start; i < end && (_coflin.onRates[0] > 0 || _SRV2.onRates[0] > 0); i++) {
             SubUnit su = _subunits.get(i);
 
             if (su._state < __COFILIN && Math.random() < _SRV2.onRates[0]) {
                 //   su._state = 4;
-                
-                changed.add(new Point(i, (su._state|__SRV2)));
-            } else if ((su._state & __SRV2)==__SRV2) {
-                if (Math.random() < _SRV2.offRate) {
+                changed.add(new Point(i, (su._state | __SRV2)));
+            } else if ((su._state & __SRV2) == __SRV2) {
+                boolean off=Math.random() < _SRV2.offRate,
+                        severing=_coffilinwithindist && i < distance && Math.random() < _SRV2.reactRate;
+                if(off&&severing){
+                    off=Math.random()<_SRV2.offRate/(_SRV2.offRate+_SRV2.reactRate);
+                    severing=!off;
+                }
+                if (off) {
                     //  su._state = 2;
-                    changed.add(new Point(i, su._state&~__SRV2));
-                } else if (_coffilinwithindist && i < distance && Math.random() < _SRV2.reactRate) {
+                    changed.add(new Point(i, su._state & ~__SRV2));
+                } 
+                if (severing) {
                     sever = Math.max(Math.min(_subunits.size() - 1, chunksize), sever);
                 }
             }
@@ -114,7 +127,7 @@ public class Filament implements SubUnitListener {
 
                     if (Math.random() < _atpR) {
                         // su._state = 2;
-                        changed.add(new Point(i, __ADPPI));
+                        changed.add(new Point(i, __ADP));
                     }
                     break;
                 case __ADPPI:
@@ -177,14 +190,15 @@ public class Filament implements SubUnitListener {
         boolean addATP = Math.random() < rates.ATPon;
         boolean addADP = Math.random() < rates.ADPon;
         int ret = 0;
-        
+
         double poff = _subunits.isEmpty() ? 0 : _subunits.getLast()._state == 0 ? rates.ATPoff : rates.ADPoff;
+
         if (!_subunits.isEmpty() && Math.random() < poff) {
             if (barbed) {
-                //_subunits.getLast().remove(t);
+                _subunits.getLast().remove(t);
                 _subunits.removeLast();
             } else {
-                //_subunits.getFirst().remove(t);
+                _subunits.getFirst().remove(t);
                 _subunits.removeFirst();
             }
             ret = -1;
@@ -197,18 +211,14 @@ public class Filament implements SubUnitListener {
             ps.println(t);
         }*/
         if (addATP && addADP) {
-            if (Math.random() < rates.ATPon/(rates.ATPon+rates.ADPon)) {
-                _subunits.add(index, new SubUnit(__ATP, barbed, t, this));
-                //_subunits.add(index, new SubUnit(1, barbed, t, this));
-            } else {
-                _subunits.add(index, new SubUnit(__ADP, barbed, t, this));
-                //_subunits.add(index, new SubUnit(2, barbed, t, this));
-            }
-            ret += 2;
-        } else if (addADP) {
+            addATP=Math.random() < rates.ATPon / (rates.ATPon + rates.ADPon);
+            addADP=!addATP;
+        } 
+        if (addADP) {
             _subunits.add(index, new SubUnit(__ADP, barbed, t, this));
             ret++;
-        } else if (addATP) {
+        }
+        if (addATP) {
             _subunits.add(index, new SubUnit(__ATP, barbed, t, this));
             ret++;
         }
@@ -216,7 +226,11 @@ public class Filament implements SubUnitListener {
     }
 
     @Override
-    public void remove(double t) {
-        _lifeTimes.add(t);
+    public void remove(double t,SubUnit su) {
+        /*
+        if (_lifeTimes != null) {
+
+            _lifeTimes.add(t);
+        }*/
     }
 }

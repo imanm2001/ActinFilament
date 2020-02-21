@@ -29,7 +29,8 @@ public class MainJFrame extends javax.swing.JFrame {
 
     boolean _running = false, _ended = true;
     Filament mr[] = new Filament[8];
-    private LinkedList<PointF> _ps1 = Utils.getPoints("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\out_actin.txt");
+    private LinkedList<PointF> _ps1 = Utils.getPoints("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\out_fimbrin.txt");
+    //private LinkedList<PointF> _ps1 = Utils.getPoints("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\out_actin.txt");
 
     /**
      * Creates new form MainJFrame
@@ -106,6 +107,29 @@ public class MainJFrame extends javax.swing.JFrame {
         jProgressBar1 = new javax.swing.JProgressBar();
         jLabel28 = new javax.swing.JLabel();
         totalTimeTextField = new javax.swing.JTextField();
+        jLabel17 = new javax.swing.JLabel();
+        FLTDTextField = new javax.swing.JTextField();
+        FimTDTextField = new javax.swing.JTextField();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        Fimk1onTextField = new javax.swing.JTextField();
+        Fimk1offTextField = new javax.swing.JTextField();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
+        Fimk2offTextField = new javax.swing.JTextField();
+        UShTextField = new javax.swing.JTextField();
+        jLabel30 = new javax.swing.JLabel();
+        jLabel31 = new javax.swing.JLabel();
+        UScTextField = new javax.swing.JTextField();
+        uScALabel = new javax.swing.JLabel();
+        UScASlider = new javax.swing.JSlider();
+        jLabel33 = new javax.swing.JLabel();
+        jLabel32 = new javax.swing.JLabel();
+        UShASlider = new javax.swing.JSlider();
+        uShALabel = new javax.swing.JLabel();
+        ThFlucLabel = new javax.swing.JLabel();
+        ThFluSlider = new javax.swing.JSlider();
+        jLabel34 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -122,7 +146,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         adpponTextField.setText("0.16");
 
-        atpponTextField.setText("3.8");
+        atpponTextField.setText("1.3");
         atpponTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 atpponTextFieldActionPerformed(evt);
@@ -131,9 +155,14 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel1.setText("[ATP]:");
 
-        atpTextField.setText("1");
+        atpTextField.setText("2.75");
+        atpTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                atpTextFieldActionPerformed(evt);
+            }
+        });
 
-        adpTextField.setText("1");
+        adpTextField.setText("2");
 
         jLabel2.setText("[ADP]:");
 
@@ -157,13 +186,13 @@ public class MainJFrame extends javax.swing.JFrame {
 
         atpboffTextField.setText("1.4");
 
-        atppoffTextField.setText("7.2");
+        atppoffTextField.setText("0");
 
         jLabel9.setText("ATPpOff:");
 
         jLabel10.setText("ADPpOff:");
 
-        adppoffTextField.setText("0.27");
+        adppoffTextField.setText("0");
 
         jLabel11.setText("[ADF]:");
 
@@ -173,7 +202,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel13.setText("ADFon:");
 
-        srv2onTextField.setText("11");
+        srv2onTextField.setText("0.35");
 
         jLabel14.setText("SRV2on:");
 
@@ -181,8 +210,9 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel15.setText("SRV2off:");
 
-        ADFSlider.setMaximum(10000);
-        ADFSlider.setValue(10);
+        ADFSlider.setMaximum(1000);
+        ADFSlider.setValue(224);
+        ADFSlider.setValueIsAdjusting(true);
         ADFSlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 ADFSliderStateChanged(evt);
@@ -190,7 +220,7 @@ public class MainJFrame extends javax.swing.JFrame {
         });
 
         DistanceSlider.setMinimum(1);
-        DistanceSlider.setValue(1);
+        DistanceSlider.setValue(100);
         DistanceSlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 ADFSliderStateChanged(evt);
@@ -200,7 +230,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jLabel16.setText("Distance:");
 
         SRV2Slider.setMaximum(1000);
-        SRV2Slider.setValue(0);
+        SRV2Slider.setValue(330);
         SRV2Slider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 ADFSliderStateChanged(evt);
@@ -216,7 +246,7 @@ public class MainJFrame extends javax.swing.JFrame {
         ChunkLabel.setText("0");
 
         ChunkSlider.setMinimum(1);
-        ChunkSlider.setValue(1);
+        ChunkSlider.setValue(3);
         ChunkSlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 ADFSliderStateChanged(evt);
@@ -260,6 +290,69 @@ public class MainJFrame extends javax.swing.JFrame {
 
         totalTimeTextField.setText("10");
 
+        jLabel17.setText("FLTD:");
+
+        FLTDTextField.setText("0");
+
+        FimTDTextField.setText("0");
+
+        jLabel18.setText("FimTD:");
+
+        jLabel19.setText("k1on:");
+
+        Fimk1onTextField.setText("0.2");
+
+        Fimk1offTextField.setText("0.0333");
+
+        jLabel20.setText("k1off:");
+
+        jLabel29.setText("k2off:");
+
+        Fimk2offTextField.setText("0.03");
+
+        UShTextField.setText("3.4");
+
+        jLabel30.setText("USh:");
+
+        jLabel31.setText("USc:");
+
+        UScTextField.setText("10");
+
+        uScALabel.setText("0");
+
+        UScASlider.setMinimum(1);
+        UScASlider.setValue(0);
+        UScASlider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                ADFSliderStateChanged(evt);
+            }
+        });
+
+        jLabel33.setText("UScA:");
+
+        jLabel32.setText("UShA:");
+
+        UShASlider.setValue(1);
+        UShASlider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                ADFSliderStateChanged(evt);
+            }
+        });
+
+        uShALabel.setText("0");
+
+        ThFlucLabel.setText("0");
+
+        ThFluSlider.setMinimum(1);
+        ThFluSlider.setValue(0);
+        ThFluSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                ADFSliderStateChanged(evt);
+            }
+        });
+
+        jLabel34.setText("ThFluc:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -275,37 +368,93 @@ public class MainJFrame extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel16)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(DistanceSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(DistanceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(14, 14, 14)
                                 .addComponent(jLabel11)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(ADFSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(ADFLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(ADFLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel16)
+                                    .addComponent(jLabel17)
+                                    .addComponent(jLabel30))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(DistanceSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(DistanceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(10, 10, 10)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(UShTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(FLTDTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(25, 25, 25)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                                .addComponent(jLabel18)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(FimTDTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                                .addComponent(jLabel31)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(UScTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGap(38, 38, 38)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel19)
+                                            .addComponent(jLabel32))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(Fimk1onTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(UShASlider, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(14, 14, 14)
-                                .addComponent(jLabel12))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(14, 14, 14)
+                                                .addComponent(jLabel12))
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jLabel21)))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(ChunkSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(SRV2Slider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(ChunkLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(SRV2Label, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(26, 26, 26)
+                                        .addComponent(jLabel20)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(Fimk1offTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(26, 26, 26)
+                                        .addComponent(jLabel29)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(Fimk2offTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabel21)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ChunkSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(SRV2Slider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ChunkLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(SRV2Label, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(4, 4, 4)
+                                .addComponent(uShALabel, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel33)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(UScASlider, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(27, 27, 27)
+                                .addComponent(uScALabel, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel34)
+                                .addGap(15, 15, 15)
+                                .addComponent(ThFluSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(ThFlucLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(16, 16, 16)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -405,7 +554,7 @@ public class MainJFrame extends javax.swing.JFrame {
                                 .addComponent(jLabel28)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(totalTimeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -473,11 +622,31 @@ public class MainJFrame extends javax.swing.JFrame {
                     .addComponent(kadppicTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel12)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(SRV2Slider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
-                        .addComponent(ChunkSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel12)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(SRV2Slider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(12, 12, 12)
+                                .addComponent(ChunkSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(SRV2Label)
+                                        .addGap(24, 24, 24)
+                                        .addComponent(ChunkLabel)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(uScALabel)
+                                    .addComponent(jLabel34, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(ThFluSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(ADFLabel)
@@ -489,17 +658,44 @@ public class MainJFrame extends javax.swing.JFrame {
                             .addComponent(DistanceSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(DistanceLabel)
-                                .addComponent(jLabel21))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(SRV2Label)
-                                .addGap(24, 24, 24)
-                                .addComponent(ChunkLabel)))
+                                .addComponent(jLabel21)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(28, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel17)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(FLTDTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(FimTDTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel18)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(UScTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel31)
+                                        .addComponent(jLabel32, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(UShTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel30))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel19)
+                                    .addComponent(Fimk1onTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel20)
+                                    .addComponent(Fimk1offTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel29)
+                                    .addComponent(Fimk2offTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(uShALabel)
+                                        .addComponent(jLabel33))
+                                    .addComponent(UShASlider, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(UScASlider, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(ThFlucLabel)))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -519,7 +715,7 @@ public class MainJFrame extends javax.swing.JFrame {
                 .addComponent(imageBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(32, 32, 32))
         );
 
         pack();
@@ -540,9 +736,19 @@ public class MainJFrame extends javax.swing.JFrame {
         runFromUI();
     }//GEN-LAST:event_ADFSliderStateChanged
 
+    private void atpTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atpTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_atpTextFieldActionPerformed
+
     public void simulate(PolymerizationRate barbed, PolymerizationRate pointed,
-            ReactionRate cofilin, ReactionRate SRV2, double atp, double adppi, double adppico,
-            int distance, int chunksize, final double dt, double totalTime) throws Exception {
+            ReactionRate cofilin, ReactionRate SRV2, double atp, double adppi,
+            double adppico, int distance, int chunksize,
+            final double filamentTimeDiff, final double fimbrinTimeDiff,
+            final double fimk1on, final double fimk1off, final double fimk2off,
+            final double uSh, final double uShA, final double uSc,
+            final double uScA, final double thermalFluc, final double dt,
+            double totalTime) throws Exception {
+
         /*
         final double ATP = 1, ADP = 0.0, ADF = 0;
         final double bton = 11.6 * ATP, bdon = 3.8 * ADP, btoff = 1.4 , bdoff = 7.2 ;
@@ -558,52 +764,80 @@ public class MainJFrame extends javax.swing.JFrame {
         System.out.println(">>>" + SRV2B + "   " + ADF);
         final double maxR = Math.max(SRV2, bton);*/
         final double raise = 0.00275;
-
         _ended = false;
 
         PrintStream ps = new PrintStream("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\Sims\\Len.txt");
         String fn = "C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\Sims\\LT.txt";
         PrintStream ltps = new PrintStream(fn);
 
-        final int totalRuns = 1500;
-        LinkedList<Double> lifeTimes=new LinkedList<>();
-        int ii=0;
-        for ( ii = 0; ii < totalRuns && _running; ii++) {
+        final int totalRuns = 80000;
+        LinkedList<Double> lifeTimes = new LinkedList<>();
+        int ii = 0;
+        Fimbrin.setDists(uSh, uShA, uSc, uScA);
+        int tn = 0;
+
+        for (ii = 0; ii < totalRuns && _running; ii++) {
             long t1 = System.currentTimeMillis();
             int totalADF = 0, totalSRV = 0;
             double t = 0;
 
             int n = 0, b = 0, p = 0;
             AtomicBoolean ab = new AtomicBoolean(false);
-            Filament fl = new Filament();
-            fl._lifeTimes=lifeTimes;
-            fl.setParams(barbed, pointed, cofilin, SRV2, atp, adppi, adppico, distance, chunksize);
-        
-            while (t < totalTime) {
+            Filament f1 = new Filament(), f2 = new Filament();
+            Fimbrin fim = new Fimbrin(f1, f2, fimk1off, fimk2off, fimk1on, fimk1on , thermalFluc);
+
+            f1.setParams(barbed, pointed, cofilin, SRV2, atp, adppi, adppico, distance, chunksize);
+            f2.setParams(barbed, pointed, cofilin, SRV2, atp, adppi, adppico, distance, chunksize);
+            double st2 = Math.random() * filamentTimeDiff, stFim = Math.random() * fimbrinTimeDiff;
+            boolean init2 = false, initFim = false;
+            while (fim._t==-1|| t-fim._t < totalTime) {
 
                 if ((n++) % 100 == 0) {
                     //ps.println("" + t + "\t" + b * raise + "\t" + (p) * raise + "\t" + _subunits.size() * raise + "\t" + b / totalTime + "\t" + p / totalTime);
                     //            System.out.print("\033[2K"); 
                     //   System.out.println("" + ii + "::" + t + "\t" + totalADF + "\t" + totalSRV + "\t" + _subunits.size() + "::\t" + _subunits.size() / numT);
                     jProgressBar1.setValue((int) (100 * (ii * totalTime + t) / (double) (totalTime * totalRuns)));
-                    updateHisto(fl._lifeTimes);
+
+                    updateHisto(lifeTimes);
+
                 }
                 if (n % 10000 == 0) {
                     System.gc();
                 }
-                fl.update(t);
+                if (f1.update(t)) {
+                    break;
+                }
+                if (t > st2) {
+                    if (!init2) {
+                        st2 = t;
+                        init2 = true;
+                    }
+                    f2.update(t - st2);
+                }
+                if (t >= stFim) {
+                    if (!initFim) {
+                        stFim = t;
+                        initFim = true;
+                    }
+                    if (!fim.update(t - stFim) && fim._t > -1) {
+                        double dtt = Math.ceil((t - stFim - fim._t) * 10 + Math.random() - 1) / 10.0;
+                        if (dtt > 0) {
+                            lifeTimes.add(dtt);
+                        }
+                        break;
+                    }
+                }
                 t += dt;
 
             }
-            
-            
+            tn += f1._subunits.size();
             //  System.out.println("NUM:"+_subunits.size());
             //ps.println("" + t + "\t" + b * raise + "\t" + (p) * raise + "\t" + _subunits.size() * raise + "\t" + b / totalTime + "\t" + p / totalTime);
             //    System.out.println(_subunits.size() * raise + "\t" + _subunits.size() / t);
             // System.out.println("" + (System.currentTimeMillis() - t1));
         }
-        
-       
+        System.out.println("Total Number of samples:" + lifeTimes.size());
+        //  System.out.println("" + tn / (double) ii);
         _ended = true;
         jButton1.setText("Run");
         jProgressBar1.setValue(0);
@@ -653,8 +887,19 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JSlider ChunkSlider;
     private javax.swing.JLabel DistanceLabel;
     private javax.swing.JSlider DistanceSlider;
+    private javax.swing.JTextField FLTDTextField;
+    private javax.swing.JTextField FimTDTextField;
+    private javax.swing.JTextField Fimk1offTextField;
+    private javax.swing.JTextField Fimk1onTextField;
+    private javax.swing.JTextField Fimk2offTextField;
     private javax.swing.JLabel SRV2Label;
     private javax.swing.JSlider SRV2Slider;
+    private javax.swing.JSlider ThFluSlider;
+    private javax.swing.JLabel ThFlucLabel;
+    private javax.swing.JSlider UScASlider;
+    private javax.swing.JTextField UScTextField;
+    private javax.swing.JSlider UShASlider;
+    private javax.swing.JTextField UShTextField;
     private javax.swing.JTextField adfcoonTextField;
     private javax.swing.JTextField adfoffTextField;
     private javax.swing.JTextField adfonTextField;
@@ -678,7 +923,11 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
@@ -687,7 +936,13 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -703,6 +958,8 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JTextField srv2onTextField;
     private javax.swing.JTextField svrrTextField;
     private javax.swing.JTextField totalTimeTextField;
+    private javax.swing.JLabel uScALabel;
+    private javax.swing.JLabel uShALabel;
     // End of variables declaration//GEN-END:variables
 
     public double getValue(JTextField tf) {
@@ -725,18 +982,21 @@ public class MainJFrame extends javax.swing.JFrame {
                     adpboff = getValue(adpboffTextField), atppon = getValue(atpponTextField), atppoff = getValue(atppoffTextField),
                     adppon = getValue(adpponTextField), adppoff = getValue(adppoffTextField),//5
                     cofsvrr = getValue(svrrTextField), atp = getValue(katpTextField), adppi = getValue(kadppiTextField), adppic = getValue(kadppicTextField),
-                    adfon = getValue(adfonTextField),adfcoon = getValue(adfcoonTextField), adfoff = getValue(adfoffTextField),
+                    adfon = getValue(adfonTextField), adfcoon = getValue(adfcoonTextField), adfoff = getValue(adfoffTextField),
                     srv2on = getValue(srv2onTextField), srv2off = getValue(srv2offTextField),
-                    ADF = ADFSlider.getValue() / 10.0, K_SRV2 = SRV2Slider.getValue() / 10.0;
-            final double atpbonr =atpbon*ATP;
-            final double atpponr =atppon*ATP;
+                    ADF = ADFSlider.getValue() / 10.0, K_SRV2 = SRV2Slider.getValue() / 10.0,
+                    FLTD = getValue(FLTDTextField), fimTD = getValue(FimTDTextField), fimk1on = getValue(Fimk1onTextField),
+                    fimk1off = getValue(Fimk1offTextField), fimk2off = getValue(Fimk2offTextField),
+                    uSc = getValue(UScTextField), uSh = getValue(UShTextField), uScA = UScASlider.getValue() / 10.0,
+                    uShA = UShASlider.getValue() / 10.0, thermalFluc = ThFluSlider.getValue() / 50.0;
+            final double atpbonr = atpbon * ATP;
+            final double atpponr = atppon * ATP;
 
-            final double adpbonr =adpbon*ADP;
-            final double adpponr = adppon*ADP;
+            final double adpbonr = adpbon * ADP;
+            final double adpponr = adppon * ADP;
 
-            final double adfonr =adfon*ADF;
-            final double adfcoonr =adfcoon*ADF;
-
+            final double adfonr = adfon * ADF;
+            final double adfcoonr = adfcoon * ADF;
             final double maxRate = Utils.max(atpbonr, adpbonr, atpponr, adpponr, srv2on, K_SRV2), dt = PC / maxRate;
 
             final int distance = DistanceSlider.getValue(), chunk = ChunkSlider.getValue();
@@ -744,7 +1004,9 @@ public class MainJFrame extends javax.swing.JFrame {
             SRV2Label.setText("" + K_SRV2);
             DistanceLabel.setText("" + distance);
             ChunkLabel.setText("" + chunk);
-            
+            uShALabel.setText("" + uShA);
+            uScALabel.setText("" + uScA);
+
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -753,9 +1015,12 @@ public class MainJFrame extends javax.swing.JFrame {
                         PolymerizationRate pointed = new PolymerizationRate(atpponr * dt, atppoff * dt, adpponr * dt, adppoff * dt);
 
                         ReactionRate cofilin = new ReactionRate(cofsvrr * dt, adfoff * dt, adfonr * dt, adfcoonr * dt);
-                        ReactionRate srv2 = new ReactionRate(K_SRV2 * dt, srv2off*dt, srv2on*dt);
+                        ReactionRate srv2 = new ReactionRate(K_SRV2 * dt, srv2off * dt, srv2on * dt);
 
-                        simulate(barbed, pointed, cofilin, srv2, atp*dt, adppi*dt, adppic*dt, distance, chunk, dt, getValue(totalTimeTextField));
+                        simulate(barbed, pointed, cofilin, srv2, atp * dt,
+                                adppi * dt, adppic * dt, distance, chunk, FLTD,
+                                fimTD, fimk1on * dt, fimk1off * dt, fimk2off * dt, uSh, uShA,
+                                uSc, uScA, thermalFluc, dt, getValue(totalTimeTextField));
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -781,7 +1046,8 @@ public class MainJFrame extends javax.swing.JFrame {
     }
 
     private void updateHisto(LinkedList<Double> lifeTimes) {
-        Object[] ret = Utils.generateHist(lifeTimes, 0, 10, 0.1);
+
+        Object[] ret = Utils.generateHist(lifeTimes, 0.0, 10, 0.1);
         LinkedList<PointF> points = (LinkedList<PointF>) ret[0];
         BufferedImage img = null;
         Graphics2D g = null;
@@ -801,9 +1067,11 @@ public class MainJFrame extends javax.swing.JFrame {
         g.setColor(Color.BLACK);
         g.setStroke(new BasicStroke(2));
         double max = (Double) ret[1];
+        /*      
         points.removeFirst();
         points.removeFirst();
         points.removeFirst();
+         */
         // g.drawLine((int) (dw * 0.7) + 50, 0, (int) (dw * 0.7) + 50, h);
         Utils.drawPoints(g, h, dw, 20, points, Color.red);
         Utils.drawPoints(g, h, dw, 20, _ps1, Color.blue);
