@@ -67,10 +67,29 @@ public class SimpleActin {
         return ret;
     }
 
+    public static void testHist(){
+        
+    }
+    
     /**
      * @param args the command line arguments
      */
+    
     public static void main(String[] args) throws Exception {
+        /*
+        LinkedList<Double> vals=Utils.loadVector("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\fim_lt_mike_raw.txt", ",");
+        Object[] ret=Utils.generateHist(vals, 0.25, 17, 0.1);
+        LinkedList<PointF> data=(LinkedList<PointF>)ret[0];
+        String txt="";
+        for(int i=0;i<data.size();i++){
+            txt+=data.get(i).x+","+data.get(i).y+"\r\n";
+        }
+        
+        PrintStream ps=new PrintStream("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\out_fim_java.txt");
+        ps.print(txt);
+        ps.flush();
+        ps.close();*/
+    
         try {
             // Set cross-platform Java L&F (also called "Metal")
          BasicLookAndFeel darcula = new DarculaLaf();

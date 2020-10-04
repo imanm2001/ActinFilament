@@ -18,6 +18,7 @@ public class PolymerizationRate {
         this.ATPoff = ATPoff;
         this.ADPon = ADPon;
         this.ADPoff = ADPoff;
+        
     }
    @Override
    public String toString(){

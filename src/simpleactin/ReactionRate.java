@@ -11,15 +11,24 @@ package simpleactin;
  */
 public class ReactionRate {
 
-    public double onRates[], reactRate,offRate;
+    public double onRates[], reactRate, offRate;
 
-    public ReactionRate(double reactRate, double offRate,double... onRates) {
-        this.onRates = new double[onRates.length ];
-        
-        for (int i = 0; i < onRates.length; i++) {
-            this.onRates[i] = onRates[i];
+    public ReactionRate(double reactRate, double offRate, double... onR) {
+        this.onRates = new double[onR.length];
+
+        for (int i = 0; i < onR.length; i++) {
+            this.onRates[i] = onR[i];
         }
         this.offRate = offRate;
-        this.reactRate=reactRate;
+        this.reactRate = reactRate;
+    }
+
+    @Override
+    public String toString() {
+        String ret="(";
+        for (double d : onRates) {
+            ret+= d + "\t";
+        }
+        return ret+")"+String.format("%f\t%f", offRate, reactRate);
     }
 }

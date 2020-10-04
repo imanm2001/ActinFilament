@@ -40,8 +40,9 @@ public class SubUnit {
 
     public void remove(double t) {
 
-        if (_t > 000) {
+        if (MainJFrame.ACTIN && _record) {
             double dt = Math.ceil((t - _t) * 10 + Math.random() - 1) / 10;
+            //double dt = t - _t;
             if (dt >= 0.3) {
                 for (SubUnitListener sl : _listerns) {
                     sl.remove(dt, this);
