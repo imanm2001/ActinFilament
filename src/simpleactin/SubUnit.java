@@ -16,9 +16,12 @@ public class SubUnit {
 
     public int _id, _state;
     public boolean _barbed;
-    public double _t;
+    public double _t, _connectedTime = -1,_decoratedOffrate=0;
+            ;
     private LinkedList<SubUnitListener> _listerns = new LinkedList<>();
     boolean _record = false;
+    int _connectionStatus = 0;
+    public boolean _decorated=false;
 
     public SubUnit(int state, boolean barbed, double t, SubUnitListener list) {
         _state = state;
@@ -27,7 +30,8 @@ public class SubUnit {
         if (list != null) {
             _listerns.add(list);
         }
-        _record = Math.random() < 0.1;
+        _record = Math.random() < 0.01;
+        //  _record = true;
     }
 
     public void addListener(SubUnitListener sl) {
@@ -40,14 +44,20 @@ public class SubUnit {
 
     public void remove(double t) {
 
-        if (MainJFrame.ACTIN && _record) {
-            double dt = Math.ceil((t - _t) * 10 + Math.random() - 1) / 10;
-            //double dt = t - _t;
-            if (dt >= 0.3) {
-                for (SubUnitListener sl : _listerns) {
-                    sl.remove(dt, this);
+        if (MainJFrame.ACTIN ) {
+//            double dt = Math.ceil((t - _t) * 10 + Math.random() - 1) / 10;
+            
+            //if (dt >= 0.0) {
+                for(int i=0;i<_listerns.size();){
+                    SubUnitListener sl=_listerns.get(i);
+                    int size=_listerns.size();
+                    sl.remove(t, this);
+                    if(_listerns.size()==size){
+                        i++;
+                    }
                 }
-            }
+            //}
+            //_t = t;
             /*
             MainJFrame.lifeTimes.add(dt);
             _ps.println(t - _t);

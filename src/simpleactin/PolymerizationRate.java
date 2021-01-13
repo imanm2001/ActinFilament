@@ -9,6 +9,7 @@ package simpleactin;
  *
  * @author sm2983
  */
+
 public class PolymerizationRate {
     
    public double ATPon,ATPoff,ADPon,ADPoff;

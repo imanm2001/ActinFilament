@@ -24,7 +24,7 @@ public class SimpleActin {
 
     public static int dynamic(LinkedList<SubUnit> _subunits, double PCton,
             double PCdon, double PCtoff, double PCdoff, boolean barbed, double t,
-             PrintStream ps) {
+            PrintStream ps) {
         boolean addATP = Math.random() < PCton;
         boolean addADP = Math.random() < PCdon;
         int ret = 0;
@@ -33,10 +33,10 @@ public class SimpleActin {
             double poff = su._state == 0 ? PCtoff : PCdoff;
             if (!_subunits.isEmpty() && Math.random() < poff) {
                 if (barbed) {
-                  //  _subunits.getLast().remove(t);
+                    //  _subunits.getLast().remove(t);
                     _subunits.removeLast();
-                } else {   
-                  //  _subunits.getFirst().remove(t);
+                } else {
+                    //  _subunits.getFirst().remove(t);
                     _subunits.removeFirst();
                 }
                 ret = -1;
@@ -50,34 +50,57 @@ public class SimpleActin {
         }*/
         if (addATP && addADP) {
             if (Math.random() < 0.5) {
-                _subunits.add(index, new SubUnit(2, barbed, t,null));
-                _subunits.add(index, new SubUnit(0, barbed, t,null));
+                _subunits.add(index, new SubUnit(2, barbed, t, null));
+                _subunits.add(index, new SubUnit(0, barbed, t, null));
             } else {
-                _subunits.add(index, new SubUnit(0, barbed, t,null));
-                _subunits.add(index, new SubUnit(2, barbed, t,null));
+                _subunits.add(index, new SubUnit(0, barbed, t, null));
+                _subunits.add(index, new SubUnit(2, barbed, t, null));
             }
             ret += 2;
         } else if (addADP) {
-            _subunits.add(index, new SubUnit(2, barbed, t,null));
+            _subunits.add(index, new SubUnit(2, barbed, t, null));
             ret++;
         } else if (addATP) {
-            _subunits.add(index, new SubUnit(0, barbed, t,null));
+            _subunits.add(index, new SubUnit(0, barbed, t, null));
             ret++;
         }
         return ret;
     }
 
-    public static void testHist(){
-        
+    public static void testHist() {
+
     }
-    
+
     /**
      * @param args the command line arguments
      */
-    
+    public static void add(LinkedList<Integer> ls,int index){
+         int i = 0;
+
+        while (i < ls.size()) {
+            int v = ls.get(i);
+            if (v == index) {
+                i = -1;
+                break;
+            } else if (v > index) {
+                break;
+            } else {
+                i++;
+            }
+        }
+        if (i > -1) {
+            ls.add(i, index);
+        }
+    }
     public static void main(String[] args) throws Exception {
-        /*
-        LinkedList<Double> vals=Utils.loadVector("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\fim_lt_mike_raw.txt", ",");
+        
+        LinkedList<Integer> ls = new LinkedList<>();
+        for(int i:ls){
+            System.out.println(""+i);
+        }
+        
+        
+        LinkedList<Double> vals=Utils.loadVector("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\adb2_lt_xiaobai_raw.txt", ",");
         Object[] ret=Utils.generateHist(vals, 0.25, 17, 0.1);
         LinkedList<PointF> data=(LinkedList<PointF>)ret[0];
         String txt="";
@@ -85,21 +108,20 @@ public class SimpleActin {
             txt+=data.get(i).x+","+data.get(i).y+"\r\n";
         }
         
-        PrintStream ps=new PrintStream("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\out_fim_java.txt");
+        PrintStream ps=new PrintStream("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\out_adb2_java.txt");
         ps.print(txt);
         ps.flush();
-        ps.close();*/
-    
+        ps.close();
+                 
         try {
             // Set cross-platform Java L&F (also called "Metal")
-         BasicLookAndFeel darcula = new DarculaLaf();
-        UIManager.setLookAndFeel(darcula);
-       
-    } 
-    catch (Exception e) {
-       // handle exception
-       e.printStackTrace();
-    }
+            BasicLookAndFeel darcula = new DarculaLaf();
+            UIManager.setLookAndFeel(darcula);
+
+        } catch (Exception e) {
+            // handle exception
+            e.printStackTrace();
+        }
         new MainJFrame().setVisible(true);
         //run();
     }
@@ -107,17 +129,17 @@ public class SimpleActin {
     public static void run() throws FileNotFoundException {
         // TODO code application logic hered
         final double ATP = 1, ADP = 0.0, ADF = 0;
-/*
+        /*
         final double bton = 11.6 * ATP, bdon = 3.8 * ADP, btoff = 1.4, bdoff = 7.2;
         final double pton = 1.3 * ATP, pdon = 0.16 * ADP, ptoff = 0.8, pdoff = 0.27;
         final double atpR = 0.35, adppi = 0.0019, adppico = 0.035 * ADF, adf = 0.0085 * ADF,
                 adfco = 0.075 * ADF, adfoff = 0.005, sev = 0.012, SVR2 = 43, SVR2B = 11/10, SVR2UB = 0.45;
-*/
-        
+         */
+
         final double bton = 18 * ATP, bdon = 3.8 * ADP, btoff = 0, bdoff = 0;
         final double pton = 0 * ATP, pdon = 0.16 * ADP, ptoff = 0.8, pdoff = 0.27;
         final double atpR = 1, adppi = 0, adppico = 0.035, adf = 0.0085 * ADF, adfco = 0.075 * ADF, adfoff = 0.005, sev = 0.012, SVR2 = 0, SVR2B = 0 * 11 / 50.0, SVR2UB = 0.45;
-         
+
         final double maxR = Math.max(SVR2, bton);
         final double dt = PC / maxR;
         final double raise = 0.00275;
@@ -138,7 +160,7 @@ public class SimpleActin {
             double adppir = adppi, adfr = adf;
             double t = 0;
             LinkedList<SubUnit> _subunits = new LinkedList<>();
-            
+
             int n = 0, b = 0, p = 0;
             AtomicBoolean ab = new AtomicBoolean(false);
             double totalTime2 = totalTime + 0 * Math.random() * totalTime;
@@ -168,7 +190,7 @@ public class SimpleActin {
                         if (Math.random() < PC * SVR2UB / maxR) {
                             su._state = 2;
                         } else if (coffilinwithindist && i < distance && Math.random() < PC * SVR2 / maxR) {
-                           // sever = Math.max(Math.min(_subunits.size() - 1, chunksize), sever);
+                            // sever = Math.max(Math.min(_subunits.size() - 1, chunksize), sever);
                             sever = Math.max(Math.min(_subunits.size() - 1, i), sever);
                         }
                     }
@@ -225,7 +247,7 @@ public class SimpleActin {
                 }
                 if (sever != -1) {
                     // _subunits.get(sever).remove(t);
-                   sever(_subunits, sever, t);
+                    sever(_subunits, sever, t);
                     p -= sever;
                 }
                 if ((n++) % 1000 == 0) {
@@ -256,7 +278,7 @@ public class SimpleActin {
                 }
 
             }
-            len += _subunits.size() ;
+            len += _subunits.size();
             int totalATP = 0, totalADP = 0;
             totalSRV = totalADF = 0;
 
@@ -280,7 +302,7 @@ public class SimpleActin {
             //ps.println("" + t + "\t" + b * raise + "\t" + (p) * raise + "\t" + _subunits.size() * raise + "\t" + b / totalTime + "\t" + p / totalTime);
             //      System.out.println(_subunits.size() + "\t" + totalADF + "\t" + totalSRV + "\t" + totalADP + "\t" + totalATP);
         }
-        System.out.println("" + (System.currentTimeMillis() - st) + "     " + len/(double)totalIT);
+        System.out.println("" + (System.currentTimeMillis() - st) + "     " + len / (double) totalIT);
         /*
         int bb = 0, pp = 0;
         for (SubUnit su : _subunits) {

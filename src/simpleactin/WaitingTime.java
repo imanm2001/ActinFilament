@@ -9,11 +9,6 @@ package simpleactin;
  *
  * @author sm2983
  */
-public interface ProteinI {
+public interface WaitingTime {
     public double getTime();
-    public double getDetachedTime();
-    public abstract boolean update(double t);
-    public void reset();
-    public void severAlert();
-    
 }
