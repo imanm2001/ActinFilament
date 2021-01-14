@@ -183,11 +183,11 @@ public class Filament implements SubUnitListener {
                 _taggedOffTime = -1;
             }
         }
-        if (_subunits.size() < 2) {
+        if (_subunits.size() ==1 &&Protein.getFrames(t,_subunits.getFirst()._t)>0.0) {
             capoff(t);
             if (!storeCapped) {
 
-                if (_taggedOffTime == -1) {
+                if (_taggedOnTime!=-1&&_taggedOffTime == -1&&_subunits.getFirst()._record) {
                     _taggedOffTime = t;
                 }
 
@@ -197,11 +197,17 @@ public class Filament implements SubUnitListener {
 
                 }
                 _taggedOffTime = _taggedOnTime = -1;
+               
             }
             //
             //taggOFF(t);
             //_subunits.clear
             // _initTime = t;
+             if(_subunits.size()==1){
+                    _subunits.get(0).remove(t);
+                    _subunits.clear();
+                }
+                _taggedOffTime = _taggedOnTime = -1;
         }
 
     }

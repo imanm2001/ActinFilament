@@ -1831,7 +1831,7 @@ public class MainJFrame extends javax.swing.JFrame {
         long t1 = System.currentTimeMillis();
         boolean chiz = true;
         //int maxSamples = _sampNum;
-        int maxSamples = Math.min(3000, _sampNum);
+        int maxSamples = Math.min(1000, _sampNum);
         //GammaDistribution protDelay = new GammaDistribution(fimbrinTimeDiffS, fimbrinTimeDiffA);
         WaitingTime wt = new WaitingTime() {
             @Override
