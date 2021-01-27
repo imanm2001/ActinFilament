@@ -26,7 +26,7 @@ public class Filament implements SubUnitListener {
     public LinkedList<SubUnit> _subunits = new LinkedList<>();
     double _atpR, _adppiR, _adppicoR, _depolySRV2;
 
-    int totalADF, chunksize, distance, totalSRV, _mfs;
+    int totalADF, chunksize, distance, totalSRV;
     boolean _coffilinwithindist;
     PolymerizationRate _barbed, _pointed;
     ReactionRate _coflin, _SRV2, _Cap;
@@ -45,7 +45,7 @@ public class Filament implements SubUnitListener {
 
     public void setParams(PolymerizationRate barbed, PolymerizationRate pointed,
             ReactionRate cofilin, ReactionRate SRV2, ReactionRate cap, double patpR, double padppir, double padpico,
-            double depolySRV2, int pdistance, int pchunksize, int mfs) {
+            double depolySRV2, int pdistance, int pchunksize) {
         _atpR = patpR;
         _adppiR = padppir;
         _adppicoR = padpico;
@@ -57,7 +57,6 @@ public class Filament implements SubUnitListener {
         _coflin = cofilin;
         _depolySRV2 = depolySRV2;
         _Cap = cap;
-        _mfs = mfs;
 
     }
 
@@ -183,51 +182,69 @@ public class Filament implements SubUnitListener {
                 _taggedOffTime = -1;
             }
         }
-        if (_subunits.size() ==1 &&Protein.getFrames(t,_subunits.getFirst()._t)>0.0) {
-            capoff(t);
-            if (!storeCapped) {
+        if (_subunits.size() == 1 && Protein.getFrames(t, _subunits.getFirst()._t) > 0.0) {
 
-                if (_taggedOnTime!=-1&&_taggedOffTime == -1&&_subunits.getFirst()._record) {
+            if (storeCapped) {
+
+                if (_taggedOnTime != -1 && _taggedOffTime == -1 && _subunits.getFirst()._record) {
                     _taggedOffTime = t;
                 }
 
                 if (_taggedOnTime != -1 && _lifeTimes != null) {
                     addTime(_taggedOffTime, _taggedOnTime);
-                   
 
                 }
                 _taggedOffTime = _taggedOnTime = -1;
-               
+                capoff(t);
+            } else {
+                if (_taggedOnTime != -1 && _taggedOffTime == -1 && cappistagged) {
+                    _taggedOffTime = t;
+
+                }
+                if (_taggedOnTime != -1 && _lifeTimes != null) {
+                    addTime(_taggedOffTime, _taggedOnTime);
+
+                }
+                _taggedOffTime = _taggedOnTime = -1;
+                capped = cappistagged = pcappistagged = false;
             }
+
             //
             //taggOFF(t);
             //_subunits.clear
             // _initTime = t;
-             if(_subunits.size()==1){
-                    _subunits.get(0).remove(t);
-                    _subunits.clear();
-                }
-                _taggedOffTime = _taggedOnTime = -1;
+            if (_subunits.size() == 1) {
+                _subunits.get(0).remove(t);
+                _subunits.clear();
+            }
+            _taggedOffTime = _taggedOnTime = -1;
         }
 
     }
-    private void addTime(double offTime,double onTime){
-         double dt = (Math.ceil(_taggedOffTime * 10) - Math.ceil(_taggedOnTime * 10)) / 10;
-                    if (_taggedOnTime >= _initTime + _STARTTIME && dt <= 6000 && dt >= 0.0) {
-                        if (_lifeTimes != null) {
-                            _lifeTimes.add(dt);
-                        }
-                    }
+
+    private void addTime(double offTime, double onTime) {
+        double dt = (Math.ceil(_taggedOffTime * 10) - Math.ceil(_taggedOnTime * 10)) / 10;
+        if (_taggedOnTime >= _initTime + _STARTTIME && dt <= 6000 && dt >= 0.0) {
+            if (_lifeTimes != null) {
+                _lifeTimes.add(dt);
+            }
+        }
     }
+
     private int sever(double t, int start, int end) {
         int size = _subunits.size();
         if (capped && end < size - 1) {
-            //   uncap(t);
+            capoff(t);
+            /*if (storeCapped) {
+                   if (_taggedOffTime > -1 && _taggedOnTime > -1) {
+                addTime(_taggedOffTime, _taggedOnTime);
+            }
+                _taggedOffTime = _taggedOnTime = -1;
+            }*/
+
             capped = false;
             pcappistagged = cappistagged = false;
-            if (storeCapped) {
-                _taggedOffTime = _taggedOnTime = -1;
-            }
+            _taggedOffTime = _taggedOnTime = -1;
 
         }
         int adf = 0;
@@ -255,18 +272,17 @@ public class Filament implements SubUnitListener {
             _subunits.removeLast();
         }
         if (!storeCapped && isTagged() == 0) {
-            if(_taggedOffTime>-1&&_taggedOnTime>-1){
+            if (_taggedOffTime > -1 && _taggedOnTime > -1) {
                 addTime(_taggedOffTime, _taggedOnTime);
             }
-            
+
             _taggedOnTime = -1;
             _taggedOffTime = -1;
-        
 
         }
-            if (_prot != null) {
-                _prot.severAlert();
-            }
+        if (_prot != null) {
+            _prot.severAlert();
+        }
         return adf;
     }
 
@@ -525,7 +541,7 @@ public class Filament implements SubUnitListener {
             ret++;
         }
         if (newSu != null) {
-            newSu._record &= isTagged() <= 2;
+            newSu._record &= isTagged() <= 10;
             if (!storeCapped && newSu._record) {
                 taggON(t);
 
@@ -541,7 +557,7 @@ public class Filament implements SubUnitListener {
             if (su._record) {
                 i++;
             }
-            if (i == 2) {
+            if (i == 4) {
 
                 break;
             }
@@ -564,7 +580,7 @@ public class Filament implements SubUnitListener {
 
             if ((Math.ceil(t * 10) - Math.ceil(_taggedOffTime * 10)) / 10 > _TIME) {
                 addTime(_taggedOffTime, _taggedOnTime);
-                
+
                 if (update) {
                     _taggedOnTime = t;
                 } else {
@@ -605,7 +621,7 @@ public class Filament implements SubUnitListener {
 
         if (storeCapped) {
             pcappistagged = cappistagged;
-            cappistagged = Math.random() < 0.05;
+            cappistagged = Math.random() < 0.1;
             if (cappistagged) {
                 taggON(t);
             } else if (pcappistagged) {

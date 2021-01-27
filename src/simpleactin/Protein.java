@@ -21,6 +21,7 @@ public class Protein implements SubUnitListener, ProteinI {
     double _t = -1, _detached = -1;
     boolean _forceDetach = false;
     private LinkedList<SubUnit> _available = new LinkedList<>();
+    private double[] _offRates = new double[2];
     /*
     0:No connection
     1:Connected to filament 1
@@ -44,6 +45,7 @@ public class Protein implements SubUnitListener, ProteinI {
         _k2 = k2;
         _kon2 = kon2;
         _ratio = _kon1 / (_kon1 + _kon2);
+        resetOffrates();
     }
 
     public static void setDists(double Sh, double ShA, double Sc, double ScA) {
@@ -64,10 +66,15 @@ public class Protein implements SubUnitListener, ProteinI {
                 _end1Attached.remove(s);
             }
             s._decorated = false;
-            s._decoratedOffrate = -1;
+            s._decoratedOffrateIndex = -1;
 
         }
         _detachEnd1.clear();
+    }
+
+    public void resetOffrates() {
+        _offRates[0] = _k1;
+        _offRates[1] = _k2;
     }
 
     public static double getFrames(double t1, double t2) {
@@ -84,9 +91,9 @@ public class Protein implements SubUnitListener, ProteinI {
                 if (!s._decorated) {
                     boolean b1 = Math.random() < _kon1;
                     boolean b2 = Math.random() < _kon2;
-                    b2=false;
-                    b1=s._record;
-                    
+                    //b2=false;
+                    //b1=s._record;
+
                     if (b1 && b2) {
                         if (Math.random() < _ratio) {
                             b2 = false;
@@ -96,11 +103,10 @@ public class Protein implements SubUnitListener, ProteinI {
                     }
                     if (b1 || b2) {
                         s._decorated = true;
-                        s.addListener(this);
-                        if (b1) {
-                            if (true||Math.random() < 1 && _end1Attached.size() <= 400) {
 
-                                
+                        if (b1) {
+                            s.addListener(this);
+                            if ( Math.random() < 0.01 && _end1Attached.size() <= 400) {
 
                                 if (!_end1Attached.contains(s)) {
                                     _end1Attached.add(s);
@@ -109,15 +115,15 @@ public class Protein implements SubUnitListener, ProteinI {
                                 }
 
                             }
-                            s._decoratedOffrate = _k1;
+                            s._decoratedOffrateIndex = 0;
 
                         } else {
-                            s._decoratedOffrate = _k2;
+                            s._decoratedOffrateIndex = 1;
                         }
 
                     }
-                } else if (s._decorated && Math.random() < s._decoratedOffrate) {
-                    //    _detachEnd1.add(s);
+                } else if (s._decorated && Math.random() < _offRates[s._decoratedOffrateIndex]) {
+                    _detachEnd1.add(s);
                 }
             }
 
@@ -133,9 +139,9 @@ public class Protein implements SubUnitListener, ProteinI {
         if (_t == -1 && _f1.isTagged() > 0) {
             _t = t;
         }*/
-        if (_t == -1&&_end1Attached.size()>0) {
-                                    _t = t;
-                                }
+        if (_t == -1 && _end1Attached.size() > 0) {
+            _t = t;
+        }
         if (_t != -1 && _detached == -1 && (_end1Attached.size() == 0)) {
             _detached = t;
 
@@ -160,15 +166,15 @@ public class Protein implements SubUnitListener, ProteinI {
             attached = true;
         }
         attached |= _forceDetach;
-       
-        if ( (_end1Attached.size()==0) != (_f1.isTagged()==0)) {
+
+        /*if ( (_end1Attached.size()==0) != (_f1.isTagged()==0)) {
             //for (SubUnit s : _end1Attached) {
               //  if (!_f1._subunits.contains(s)) {
                     System.out.println("ERROOR" + _end1Attached.size() + "\t" + _f1.isTagged());
               //  }
            // }
 
-        }
+        }*/
  /*
         if (!attached) {
             _t += t - _detached;
@@ -201,9 +207,7 @@ public class Protein implements SubUnitListener, ProteinI {
         /*if (t == -1 && _t != -1 && _f1.isTagged() == 0) {
             _t = _detached = -1;
         }*/
-        if (!su._decorated) {
-            System.out.println("ERRROR");
-        }
+
         if (t > -1) {
             if (!_detachEnd1.contains(su)) {
                 _detachEnd1.add(su);

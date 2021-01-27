@@ -12,7 +12,7 @@ import org.apache.commons.math3.distribution.GammaDistribution;
  *
  * @author sm2983
  */
-public class Fimbrin implements SubUnitListener, ProteinI {
+public class FimbrinOld implements SubUnitListener, ProteinI {
 
     double _t = -1;
     final static double KBT = 4.114;
@@ -24,7 +24,7 @@ public class Fimbrin implements SubUnitListener, ProteinI {
     2:Connected to filament 2
      */
     private int _end1Connection = 0, _end2Connection = 0;
-    public static double _thermalFluctions, _k1off, _k2off, _k1on, _k2on,_k3off,_k3on;
+    public static double _thermalFluctions, _k1, _k2, _kon1, _kon2;
     private static Random _rand = new Random();
 
     private static GammaDistribution GammaDists[] = new GammaDistribution[140 * GSCALE];
@@ -35,7 +35,7 @@ public class Fimbrin implements SubUnitListener, ProteinI {
     WaitingTime _wt;
     
 
-    public Fimbrin(Filament f1, Filament f2,
+    public FimbrinOld(Filament f1, Filament f2,
             double thermalFluctions, WaitingTime waitingTime) {
         _f1 = f1;
         _f2 = f2;
@@ -45,20 +45,18 @@ public class Fimbrin implements SubUnitListener, ProteinI {
     }
 
     public static double getOffRate(double t) {
-        double factor = _k1off * Math.exp((GammaDists[(int) ((t) * 10 * GSCALE)].sample() / KBT));
+        double factor = _k1 * Math.exp((GammaDists[(int) ((t) * 10 * GSCALE)].sample() / KBT));
 
         return 1 - Math.exp(-factor);
 
     }
 
     public static void setDists(double Sh, double ShA, double Sc, double ScA,
-            double k1off, double k2off,double k3off, double k1on, double k2on, double k3on) {
-        _k1off = k1off;
-        _k2off = k2off;
-        _k3off = k3off;
-        _k1on = k1on;
-        _k2on = k2on;
-        _k3on = k3on;
+            double k1, double k2, double kon1, double kon2) {
+        _k1 = k1;
+        _k2 = k2;
+        _kon1 = kon1;
+        _kon2 = kon2;
         for (int j = 0; j < GammaDists.length; j++) {
             int i = j / GSCALE < 5 ? j : 5 * GSCALE;
             GammaDists[j] = new GammaDistribution(Sh + ShA * i / (double) GSCALE, Sc + ScA * i / (double) GSCALE);
@@ -87,7 +85,7 @@ public class Fimbrin implements SubUnitListener, ProteinI {
 
     @Override
     public boolean update(double t) {
-/*
+
         if (_end1Connection + _end2Connection == 0) {
             if (_t == -1) {
                 int n1 = _f1._subunits.size(), n2 = _f2._subunits.size() * 0;
@@ -134,6 +132,13 @@ public class Fimbrin implements SubUnitListener, ProteinI {
                     subunit = (int) (Math.random() * n);
                 }
             }
+            /*
+            for (; subunit < n && !attach;) {
+                attach |= _rand.nextDouble() < _kon2;
+                if (!attach) {
+                    subunit++;
+                }
+            }*/
             if (_end1Connection == 0) {
                 throw new RuntimeException("ERROR end1 cannot detach first");
 
@@ -174,8 +179,6 @@ public class Fimbrin implements SubUnitListener, ProteinI {
             bt = -1;
         }
         return (_end1Connection + _end2Connection > 0) || _t < 0;
-*/
-return false;
     }
 
     @Override
