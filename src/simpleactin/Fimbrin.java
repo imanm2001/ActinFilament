@@ -5,6 +5,7 @@
  */
 package simpleactin;
 
+import java.util.LinkedList;
 import java.util.Random;
 import org.apache.commons.math3.distribution.GammaDistribution;
 
@@ -14,7 +15,7 @@ import org.apache.commons.math3.distribution.GammaDistribution;
  */
 public class Fimbrin implements SubUnitListener, ProteinI {
 
-    double _t = -1;
+    
     final static double KBT = 4.114;
     final static int GSCALE = 16;
     private Filament _f1, _f2;
@@ -23,16 +24,21 @@ public class Fimbrin implements SubUnitListener, ProteinI {
     1:Connected to filament 1
     2:Connected to filament 2
      */
-    private int _end1Connection = 0, _end2Connection = 0;
+    double _t = -1, _detached = -1;
+    boolean _forceDetach1 = false,_forceDetach2 = false;
+    private LinkedList<SubUnit> _end1Attached = new LinkedList<>(), _detachEnd1 = new LinkedList<>();
+    
     public static double _thermalFluctions, _k1off, _k2off, _k1on, _k2on,_k3off,_k3on;
+    public Protein _p1,_p2;
     private static Random _rand = new Random();
 
     private static GammaDistribution GammaDists[] = new GammaDistribution[140 * GSCALE];
-    private SubUnit _end1Attached = null, _end2Attached = null;
-    private boolean _detachEnd1 = false, _detachEnd2 = false;
+    
+    
     private boolean _end1CanAttach = true, _end2CanAttach = true;
-    double bt = -1, _nextAttachTime,_detached;
+    double bt = -1, _nextAttachTime;
     WaitingTime _wt;
+    public double decoration=0.1;
     
 
     public Fimbrin(Filament f1, Filament f2,
@@ -41,7 +47,7 @@ public class Fimbrin implements SubUnitListener, ProteinI {
         _f2 = f2;
         _thermalFluctions = thermalFluctions;
         _wt = waitingTime;
-
+        _p1=new Protein(f1, _k1off, _k1on, _k3off, _k3on);
     }
 
     public static double getOffRate(double t) {
@@ -70,6 +76,7 @@ public class Fimbrin implements SubUnitListener, ProteinI {
     }
 
     private void detach(boolean end1, double t) {
+        /*
         if (end1) {
             _end1Connection = 0;
             _end1Attached.removeListener(this);
@@ -83,103 +90,18 @@ public class Fimbrin implements SubUnitListener, ProteinI {
             _end2CanAttach = false;
             _nextAttachTime = _wt.getTime() + t;
         }
+        */
     }
 
     @Override
     public boolean update(double t) {
-/*
-        if (_end1Connection + _end2Connection == 0) {
-            if (_t == -1) {
-                int n1 = _f1._subunits.size(), n2 = _f2._subunits.size() * 0;
-
-                for (int i = 0; i < n1 + n2; i++) {
-                    if (_end1Connection == 0 && _end1CanAttach && _rand.nextDouble() < _kon1) {
-                        _end1Connection = i < n1 ? 1 : 2;
-                        _end1Attached = getSubUnit(i, n1);
-                        _end1Attached.addListener(this);
-
-                    }
-                    if (_end2Connection == 0 && _end1Connection == 1 && i >= n1
-                            && (_end2CanAttach || t > _nextAttachTime) && _rand.nextDouble() < _kon2) {
-                        _end2Connection = 2;
-                        _end2Attached = _f2._subunits.get(i - n1);
-                        _end2Attached.addListener(this);
-                    }
-                }
-                if (_end1Connection + _end2Connection > 0 && _t < 0) {
-                    _t = t;
-                }
-            }
-        } else if (_end1Connection * _end2Connection > 0) {
-            double k1p = getOffRate(t - bt);
-
-            if (_rand.nextDouble() < k1p) {
-                _detachEnd2 = true;
-            }
-
-            if (_rand.nextDouble() < k1p) {
-                if (_detachEnd2) {
-                    _detachEnd1 = true;
-                } else {
-                    _detachEnd2 = true;
-                }
-            }
-        } else {
-            boolean detach = _rand.nextDouble() < _k2, attach = false;
-            int n = _end1Connection == 1 || _end2Connection == 1 ? _f2._subunits.size() : _f1._subunits.size();
-            int subunit = 0;
-            if (n > 0) {
-                attach = _rand.nextDouble() < 1 - Math.exp(-n * _kon2);
-                if (attach) {
-                    subunit = (int) (Math.random() * n);
-                }
-            }
-            if (_end1Connection == 0) {
-                throw new RuntimeException("ERROR end1 cannot detach first");
-
-            } else {
-
-                if (attach && _end2CanAttach) {
-                    _end2Connection = 3 - _end1Connection;
-                    _end2Attached = _end2Connection == 1 ? _f1._subunits.get(subunit)
-                            : _f2._subunits.get(subunit);
-                    _end2Attached.addListener(this);
-                }
-                if (detach) {
-                    _detachEnd1 = true;
-                }
-
-            }
-        }
-        if (_detachEnd1) {
-            detach(true, t);
-        }
-        if (_detachEnd2) {
-            detach(false, t);
-        }
-        if (_end1Connection == 0 && _end2Connection > 0) {
-            _end1Connection = _end2Connection;
-            _end1Attached = _end2Attached;
-            _end1CanAttach = _end2CanAttach;
-
-            _end2Connection = 0;
-            _end2Attached = null;
-
-        }
-        if (_end1Connection * _end2Connection > 0) {
-            if (bt == -1) {
-                bt = t;
-            }
-        } else {
-            bt = -1;
-        }
-        return (_end1Connection + _end2Connection > 0) || _t < 0;
-*/
-return false;
+        
+        return false;
     }
 
     @Override
     public void remove(double t, SubUnit su) {
+        /*
         if (t == -1) {
             if (su == _end1Attached) {
                 _end1Attached = _end2Attached;
@@ -200,6 +122,7 @@ return false;
                 throw new RuntimeException("Detachment from not-attached-subunit?!?");
             }
         }
+*/
     }
 
     @Override
@@ -211,10 +134,10 @@ return false;
     public void reset() {
         _t = -1;
         bt = -1;
-        _end1Connection = 0;
+/*        _end1Connection = 0;
         _end2Connection = 0;
         _end1Attached = null;
-        _end2Attached = null;
+        _end2Attached = null;*/
     }
 
     @Override
@@ -223,7 +146,7 @@ return false;
     }
 
     @Override
-    public void severAlert() {
+    public void severAlert(double t) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -8,6 +8,8 @@ package simpleactin;
 import java.util.LinkedList;
 import java.util.Random;
 import org.apache.commons.math3.distribution.GammaDistribution;
+import static simpleactin.Filament._STARTTIME;
+import static simpleactin.Filament._TIME;
 
 /**
  *
@@ -35,6 +37,7 @@ public class Protein implements SubUnitListener, ProteinI {
     private LinkedList<SubUnit> _end1Attached = new LinkedList<>(), _detachEnd1 = new LinkedList<>();
     private boolean _end1CanAttach = true;
     double bt = -1, _nextAttachTime;
+    public double decoration = 0.1;
 
     public Protein(Filament f1, double k1, double kon1, double k2, double kon2) {
         _f1 = f1;
@@ -91,9 +94,8 @@ public class Protein implements SubUnitListener, ProteinI {
                 if (!s._decorated) {
                     boolean b1 = Math.random() < _kon1;
                     boolean b2 = Math.random() < _kon2;
-                    //b2=false;
-                    //b1=s._record;
-
+                    //b1 = s._record;
+                    //b2 = false;
                     if (b1 && b2) {
                         if (Math.random() < _ratio) {
                             b2 = false;
@@ -106,7 +108,7 @@ public class Protein implements SubUnitListener, ProteinI {
 
                         if (b1) {
                             s.addListener(this);
-                            if ( Math.random() < 0.01 && _end1Attached.size() <= 400) {
+                            if (Math.random() < decoration) {
 
                                 if (!_end1Attached.contains(s)) {
                                     _end1Attached.add(s);
@@ -122,14 +124,11 @@ public class Protein implements SubUnitListener, ProteinI {
                         }
 
                     }
-                } else if (s._decorated && Math.random() < _offRates[s._decoratedOffrateIndex]) {
+                } else if (Math.random() < _offRates[s._decoratedOffrateIndex]) {
                     _detachEnd1.add(s);
                 }
             }
 
-        } else {
-            //   _t = -1;
-            //   _detached = -1;
         }
 
         if (_detachEnd1.size() > 0) {
@@ -146,28 +145,49 @@ public class Protein implements SubUnitListener, ProteinI {
             _detached = t;
 
         }
+        if (_f1._subunits.size() == 1 && _t > -1 && Protein.getFrames(t, _f1._subunits.getFirst()._t) > _TIME) {
+            if (_t != -1 && _detached == -1 && _end1Attached.size() == 1) {
+                _detachEnd1.add(_f1._subunits.get(0));
+                detach(t);
+                _f1._subunits.get(0)._record = false;
+                _detached = t;
+            }
+            if (_t > _STARTTIME) {
+                _forceDetach = true;
 
-        boolean waitingTime = _detached > 0 && (Math.floor(t * 10) - Math.floor(_detached * 10)) / 10.0 < 0.1;
-        if (waitingTime && _end1Attached.size() > 0) {
+            }
+            //capoff(t);
+        }
+        if (!_forceDetach && _detached > -1 && (Math.ceil(t * 10) - Math.ceil(_detached * 10)) / 10 <= _TIME && _end1Attached.size() > 0) {
+            _detached = -1;
+
+        }
+        boolean waitingTime = !_forceDetach && _detached > 0 && (Math.floor(t * 10) - Math.floor(_detached * 10)) / 10.0 < 0.1;
+        if (_end1Attached.size() > 0) {
             _detached = -1;
         }
+
         boolean attached = _detached == -1 || waitingTime;
-        if (_f1._subunits.size() < 1) {
-            if (_t > -1) {
+        /*
+        if (_f1._subunits.size() == 0) {
+            if (getFrames(t, _t) > 100.0) {
                 attached = false;
                 if (_detached == -1) {
                     _detached = t;
                 }
+            } else if(_t==-1) {
+                reset();
+
             }
 
-        }
+        }*/
+
+ /*
         if (!attached && _t < Filament._STARTTIME) {
             _t = _detached = -1;
             attached = true;
-        }
-        attached |= _forceDetach;
-
-        /*if ( (_end1Attached.size()==0) != (_f1.isTagged()==0)) {
+        }*/
+ /*if ( (_end1Attached.size()==0) != (_f1.isTagged()==0)) {
             //for (SubUnit s : _end1Attached) {
               //  if (!_f1._subunits.contains(s)) {
                     System.out.println("ERROOR" + _end1Attached.size() + "\t" + _f1.isTagged());
@@ -215,13 +235,15 @@ public class Protein implements SubUnitListener, ProteinI {
         } else {
             su.removeListener(this);
             _end1Attached.remove(su);
-            /*
-            if (_end1Attached.size() == 0) {
-                _t = -1;
-                _detached = -1;
-                _forceDetach=false;
 
-            }*/
+            if (_end1Attached.size() == 0) {
+                if (_t > Filament._STARTTIME && _detached != -1 && _f1._subunits.size() < 3) {
+                    _forceDetach = true;
+                } else {
+                    reset();
+                }
+
+            }
 
         }
 
@@ -250,10 +272,11 @@ public class Protein implements SubUnitListener, ProteinI {
     }
 
     @Override
-    public void severAlert() {
+    public void severAlert(double t) {
 
-        if (_t != -1 && _end1Attached.size() == 0) {
-            if (_detached != -1) {
+        if (_end1Attached.size() == 0) {
+
+            if (_detached > -1 && _t > _STARTTIME) {
                 _forceDetach = true;
             } else {
                 reset();

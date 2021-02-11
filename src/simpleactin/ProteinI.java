@@ -14,6 +14,6 @@ public interface ProteinI {
     public double getDetachedTime();
     public abstract boolean update(double t);
     public void reset();
-    public void severAlert();
+    public void severAlert(double t);
     
 }

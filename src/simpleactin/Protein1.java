@@ -145,7 +145,7 @@ public class Protein1 implements SubUnitListener, ProteinI {
     }
 
     @Override
-    public void severAlert() {
+    public void severAlert(double t) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

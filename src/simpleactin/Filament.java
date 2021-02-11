@@ -124,7 +124,7 @@ public class Filament implements SubUnitListener {
             if (_severingList.size() > 0) {
 
                 int select = selectAChuck(0);
-                //select=_severingList.size()-1;
+                select = _severingList.size() - 1;
                 //select=(int)(Math.random()*_severingList.size());
                 //select = Math.random() < 0.95 ? 0 : 1;
                 //select = 0;
@@ -170,21 +170,22 @@ public class Filament implements SubUnitListener {
         }
          */
         if (!storeCapped) {
-            if (isTagged() == 0 && _taggedOffTime == -1 && _taggedOnTime != -1) {
+            int numtagged = isTagged();
+            if (numtagged == 0 && _taggedOffTime == -1 && _taggedOnTime != -1) {
                 taggOFF(t);
                 //_taggedOffTime = _taggedOnTime = -1;
                 //_initTime=t;
             }
 
-            if (_taggedOffTime > -1 && (Math.ceil(t * 10) - Math.ceil(_taggedOffTime * 10)) / 10 > _TIME && isTagged() == 0) {
+            if (_taggedOffTime > -1 && (Math.ceil(t * 10) - Math.ceil(_taggedOffTime * 10)) / 10 > _TIME && numtagged == 0) {
                 taggON(t, false);
             } else if (_taggedOffTime > -1 && (Math.ceil(t * 10) - Math.ceil(_taggedOffTime * 10)) / 10 <= _TIME && isTagged() > 0) {
                 _taggedOffTime = -1;
             }
         }
-        if (_subunits.size() == 1 && Protein.getFrames(t, _subunits.getFirst()._t) > 0.0) {
+        if (_subunits.size() == 1 && _taggedOnTime > -1 && Protein.getFrames(t, _subunits.getFirst()._t) > _TIME) {
 
-            if (storeCapped) {
+            if (!storeCapped) {
 
                 if (_taggedOnTime != -1 && _taggedOffTime == -1 && _subunits.getFirst()._record) {
                     _taggedOffTime = t;
@@ -195,7 +196,7 @@ public class Filament implements SubUnitListener {
 
                 }
                 _taggedOffTime = _taggedOnTime = -1;
-                capoff(t);
+                //capoff(t);
             } else {
                 if (_taggedOnTime != -1 && _taggedOffTime == -1 && cappistagged) {
                     _taggedOffTime = t;
@@ -213,10 +214,11 @@ public class Filament implements SubUnitListener {
             //taggOFF(t);
             //_subunits.clear
             // _initTime = t;
+            /*
             if (_subunits.size() == 1) {
                 _subunits.get(0).remove(t);
                 _subunits.clear();
-            }
+            }*/
             _taggedOffTime = _taggedOnTime = -1;
         }
 
@@ -272,7 +274,7 @@ public class Filament implements SubUnitListener {
             _subunits.removeLast();
         }
         if (!storeCapped && isTagged() == 0) {
-            if (_taggedOffTime > -1 && _taggedOnTime > -1) {
+            if (_taggedOffTime > -1 && _taggedOnTime > _STARTTIME) {
                 addTime(_taggedOffTime, _taggedOnTime);
             }
 
@@ -281,7 +283,7 @@ public class Filament implements SubUnitListener {
 
         }
         if (_prot != null) {
-            _prot.severAlert();
+            _prot.severAlert(t);
         }
         return adf;
     }
@@ -382,8 +384,8 @@ public class Filament implements SubUnitListener {
                     if (Math.random() < _atpR) {
                         // su._state = 2;
                         //_changed.add(new Point(i, totalSRV == 0 ? __ADPPI : __ADP));
-                        _changed.add(new Point(i, __ADP));
-                        //_changed.add(new Point(i, __ADPPI));
+                        //_changed.add(new Point(i, __ADP));
+                        _changed.add(new Point(i, __ADPPI));
                     }
                     break;
                 case __ADPPI:
@@ -396,14 +398,14 @@ public class Filament implements SubUnitListener {
                 case __ADP:
                     adfr = _coflin.onRates[0];
                     if (totalADF > 0) {
-
+                        /*
                         if (i > 0 && _subunits.get(i - 1)._state == __COFILIN) {
                             adfr = _coflin.onRates[1];
                         }
                         if (i < _subunits.size() - 1 && _subunits.get(i + 1)._state == __COFILIN) {
                             adfr = _coflin.onRates[1];
-                        }
-                        //     adfr = _coflin.onRates[1];
+                        }*/
+                        adfr = _coflin.onRates[1];
                     }
 
                     if (Math.random() < adfr) {
@@ -429,7 +431,7 @@ public class Filament implements SubUnitListener {
                     }
                     if (hasNeighbour && Math.random() < _coflin.reactRate) {
                         //****sever = Math.max(sever, j);
-                        addSevering(Math.min(j + 1, _subunits.size()), 0);
+                        addSevering(Math.min(j, _subunits.size()), 0);
 
                     }
                     break;
@@ -541,7 +543,7 @@ public class Filament implements SubUnitListener {
             ret++;
         }
         if (newSu != null) {
-            newSu._record &= isTagged() <= 10;
+            //newSu._record &= isTagged() <= 1000;
             if (!storeCapped && newSu._record) {
                 taggON(t);
 
@@ -578,7 +580,7 @@ public class Filament implements SubUnitListener {
             }
         } else if (_taggedOffTime > -1) {
 
-            if ((Math.ceil(t * 10) - Math.ceil(_taggedOffTime * 10)) / 10 > _TIME) {
+            if ((Math.ceil(t * 10) - Math.ceil(_taggedOffTime * 10)) / 10 >= _TIME) {
                 addTime(_taggedOffTime, _taggedOnTime);
 
                 if (update) {

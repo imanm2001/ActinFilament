@@ -102,7 +102,7 @@ public class Utils {
             s += p.y;
         }
         float dx = (float) (scaleX) * 1;
-        scaleY *= 50 / s;
+        scaleY *= 20 / s;
         PointF p = points.getFirst();
         g.setColor(c);
         g.setStroke(new BasicStroke(3));

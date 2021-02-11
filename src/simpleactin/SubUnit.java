@@ -31,7 +31,7 @@ public class SubUnit {
         if (list != null) {
             _listerns.add(list);
         }
-        _record = Math.random() < 0.1;
+        _record = Math.random() < 0.01;
         //  _record = true;
     }
 
