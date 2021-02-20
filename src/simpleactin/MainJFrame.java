@@ -35,6 +35,7 @@ import org.apache.commons.math3.distribution.GammaDistribution;
 import static simpleactin.SimpleActin.PC;
 import org.apache.commons.math3.stat.inference.ChiSquareTest;
 import org.apache.commons.math3.stat.inference.KolmogorovSmirnovTest;
+import static simpleactin.Filament._STARTTIME;
 
 /**
  *
@@ -288,7 +289,7 @@ public class MainJFrame extends javax.swing.JFrame {
             .addGap(0, 307, Short.MAX_VALUE)
         );
 
-        imageBox2.setBorder(javax.swing.BorderFactory.createLineBorder(null));
+        imageBox2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         imageBox2.setPreferredSize(new java.awt.Dimension(200, 200));
         imageBox2.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
@@ -318,7 +319,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel1.setText("[ATP]:");
 
-        atpTextField.setText("12.4");
+        atpTextField.setText("7");
         atpTextField.setToolTipText("");
         atpTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -326,7 +327,7 @@ public class MainJFrame extends javax.swing.JFrame {
             }
         });
 
-        adpTextField.setText("4");
+        adpTextField.setText("0");
         adpTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 adpTextFieldActionPerformed(evt);
@@ -351,21 +352,21 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel8.setText("ADPbOff:");
 
-        adpboffTextField.setText("0.8");
+        adpboffTextField.setText("2");
         adpboffTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 adpboffTextFieldActionPerformed(evt);
             }
         });
 
-        atpboffTextField.setText("1.4");
+        atpboffTextField.setText("3.5");
         atpboffTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 atpboffTextFieldActionPerformed(evt);
             }
         });
 
-        atppoffTextField.setText("1.4");
+        atppoffTextField.setText("4.8");
         atppoffTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 atppoffTextFieldActionPerformed(evt);
@@ -376,7 +377,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel10.setText("ADPpOff:");
 
-        adppoffTextField.setText("1.8");
+        adppoffTextField.setText("1.62");
         adppoffTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 adppoffTextFieldActionPerformed(evt);
@@ -400,7 +401,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jLabel15.setText("SRV2off:");
 
         ADFSlider.setMaximum(10000);
-        ADFSlider.setValue(1070);
+        ADFSlider.setValue(450);
         ADFSlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 ADFSliderStateChanged(evt);
@@ -456,23 +457,23 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel24.setText("Severing Rate");
 
-        svrrTextField.setText("1.3");
+        svrrTextField.setText("1.6");
         svrrTextField.setToolTipText("");
 
         jLabel25.setText("K_ATP:");
 
-        katpTextField.setText("1.8");
+        katpTextField.setText("14");
         katpTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 katpTextFieldActionPerformed(evt);
             }
         });
 
-        kadppiTextField.setText("0.0019");
+        kadppiTextField.setText("0.076");
 
         jLabel26.setText("K_ADPPI:");
 
-        kadppicTextField.setText("0.035");
+        kadppicTextField.setText("1.4");
 
         jLabel27.setText("K_ADPPIC:");
 
@@ -522,7 +523,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         uScALabel.setText("0");
 
-        UScASlider.setMaximum(200);
+        UScASlider.setMaximum(5000);
         UScASlider.setMinimum(1);
         UScASlider.setValue(69);
         UScASlider.setValueIsAdjusting(true);
@@ -536,7 +537,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel32.setText("UShA:");
 
-        UShASlider.setMaximum(200);
+        UShASlider.setMaximum(2000);
         UShASlider.setValue(110);
         UShASlider.setValueIsAdjusting(true);
         UShASlider.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -595,7 +596,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         KSLabel.setText("0");
 
-        Fimk3onTextField.setText("0");
+        Fimk3onTextField.setText("10");
 
         jLabel53.setText("k3on:");
 
@@ -1118,6 +1119,12 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel40.setText("Y:");
 
+        xParComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                xParComboBoxActionPerformed(evt);
+            }
+        });
+
         xvTextField.setText("2;2;3");
 
         yvTextField.setText("2;2;3");
@@ -1136,10 +1143,10 @@ public class MainJFrame extends javax.swing.JFrame {
         jLabel42.setText("X:");
 
         xVLabel.setText("0");
-        xVLabel.setBorder(javax.swing.BorderFactory.createLineBorder(null));
+        xVLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         yVLabel.setText("0");
-        yVLabel.setBorder(javax.swing.BorderFactory.createLineBorder(null));
+        yVLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel45.setText("Y:");
 
@@ -1151,19 +1158,19 @@ public class MainJFrame extends javax.swing.JFrame {
         });
 
         mxVLabel.setText("0");
-        mxVLabel.setBorder(javax.swing.BorderFactory.createLineBorder(null));
+        mxVLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel43.setText("m:");
 
         myVLabel.setText("0");
-        myVLabel.setBorder(javax.swing.BorderFactory.createLineBorder(null));
+        myVLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel46.setText("m:");
 
         jLabel44.setText("e:");
 
         eVLabel.setText("0");
-        eVLabel.setBorder(javax.swing.BorderFactory.createLineBorder(null));
+        eVLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         lowerLimitSlider.setMaximum(60);
         lowerLimitSlider.setValue(3);
@@ -1194,8 +1201,8 @@ public class MainJFrame extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(lowerLimitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel45)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(yVLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1214,12 +1221,17 @@ public class MainJFrame extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel44)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(eVLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(6, 6, 6)
-                                        .addComponent(jButton3))))
-                            .addComponent(imageBox2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(eVLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel41)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(errorMethComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(imageBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel39)
                                     .addComponent(jLabel40))
@@ -1229,18 +1241,11 @@ public class MainJFrame extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(yvTextField, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(xvTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel42)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(xVLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel41)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(errorMethComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addGroup(layout.createSequentialGroup()
                                 .addGap(17, 17, 17)
                                 .addComponent(xParComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -1317,7 +1322,7 @@ public class MainJFrame extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel38)
                         .addComponent(sampZLabel)))
-                .addGap(267, 267, 267))
+                .addContainerGap())
         );
 
         pack();
@@ -1380,7 +1385,7 @@ public class MainJFrame extends javax.swing.JFrame {
         }
 
     }
-    
+
     private double[] getlims(String s) {
         double ret[] = new double[3];
         StringTokenizer st = new StringTokenizer(s.replaceAll(";", ":"), ":");
@@ -1523,7 +1528,7 @@ public class MainJFrame extends javax.swing.JFrame {
                                         fimk2off, fimk3off, paramsV[_USH],
                                         paramsV[_USHA], paramsV[_USC], paramsV[_USCA],
                                         paramsV[_THERMALFLUC], dt, tt, (int) paramsV[_NFILAMENTS], true);
-                                Object[] ret = Utils.generateHist(_lifeTimes, 0.25, 6, 0.1);
+                                Object[] ret = Utils.generateHist(lt, 0.25, 6, 0.1);
 
                                 LinkedList<PointF> points = (LinkedList<PointF>) ret[0];
                                 _histHeat.add(points);
@@ -1691,6 +1696,10 @@ public class MainJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_atpponTextFieldActionPerformed
 
+    private void xParComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_xParComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_xParComboBoxActionPerformed
+
     public double calDist(LinkedList<PointF> points) {
         double ret = 0;
         int num = upLimitSlider.getValue();
@@ -1799,20 +1808,37 @@ public class MainJFrame extends javax.swing.JFrame {
         System.out.println(barbed);
         System.out.println(pointed);
         System.out.println(cofilin);
-        System.out.println(SRV2);
+        System.out.println(cap);
+//        System.out.println(SRV2);
         System.out.println(atp + "\t" + adppi + "\t" + adppico + "\t" + chunksize + "\t" + distance);
+
+        System.out.println("" + fimk1on + "\t" + fimk2on + "\t" + fimk3on);
+        System.out.println("" + fimk1off + "\t" + fimk2off + "\t" + fimk3off);
+        System.out.println("" + uSc + "\t" + uSh + "\t" + uScA + "\t" + uShA);
+        System.out.println("---------");
         PrintStream lenps = new PrintStream("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\Sims\\Len_adp2.txt");
         String fn = "C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\Sims\\LT_actin_tagged_10s_atp2.txt";
         PrintStream ltps = new PrintStream(fn);
 
         final int totalRuns = 1000000;
         LinkedList<Double> lifeTimes = new LinkedList<>();
+        LifeTimeRecorder ltr = new LifeTimeRecorder() {
+            @Override
+            public void addTime(double toff, double ton) {
+                double dt = (Math.ceil(toff * 10) - Math.ceil(ton * 10)) / 10;
+                if (ton >= _STARTTIME && dt <= 6000 && dt >= 0.3) {
+                    if (lifeTimes != null) {
+                        lifeTimes.add(dt);
+                    }
+                }
+            }
+        };
         int ii = 0;
         Fimbrin.setDists(uSh, uShA, uSc, uScA, fimk1off, fimk2off, fimk3off, fimk1on, fimk2on, fimk3on);
         long t1 = System.currentTimeMillis();
         boolean chiz = true;
         //int maxSamples = _sampNum;
-        int maxSamples = Math.min(1000, _sampNum);
+        int maxSamples = Math.min(2000, _sampNum);
         //int maxSamples = 500;
         //GammaDistribution protDelay = new GammaDistribution(fimbrinTimeDiffS, fimbrinTimeDiffA);
         WaitingTime wt = new WaitingTime() {
@@ -1837,8 +1863,8 @@ public class MainJFrame extends javax.swing.JFrame {
             //Filament f1 = new Filament(), f2 = new Filament();
 
             //Fimbrin fim = new Fimbrin(f1, f2, fimk1off, fimk2off, fimk1on, fimk2on, thermalFluc, fimbrinTimeDiff);
-            int[] filnums = new int[]{1, 1, 1, 1, 8};
-            int[] protnums = new int[]{0, 0, 1, 1, 8};
+            int[] filnums = new int[]{1, 1, 1, 1, 2};
+            int[] protnums = new int[]{0, 0, 1, 1, 1};
             int filamentNumber = filnums[proteinType];// proteinType == 4 ? 8 : 1;
             int protNumber = protnums[proteinType];
 
@@ -1846,7 +1872,8 @@ public class MainJFrame extends javax.swing.JFrame {
 
             for (int fi = 0; fi < filamentNumber; fi++) {
                 filaments[fi] = new Filament();
-                filaments[fi].setParams(barbed, pointed, cofilin, SRV2, cap, atp, adppi, adppico, raise, distance, chunksize);
+                filaments[fi].setParams(barbed, pointed, cofilin, SRV2, cap, atp,
+                        adppi, adppico, raise, distance, chunksize, fimk3on, fimk3off);
 
             }
             ProteinI[] prot = null;
@@ -1855,7 +1882,7 @@ public class MainJFrame extends javax.swing.JFrame {
                 prot = new ProteinI[protNumber];
                 for (int pi = 0; pi < protNumber; pi++) {
                     Filament f1 = filaments[pi * 2], f2 = filaments[pi * 2 + 1];
-                    prot[pi] = new Fimbrin(f1, f2, thermalFluc, wt);
+                    prot[pi] = new Fimbrin(f1, f2, thermalFluc, wt, ltr);
                     f1._prot = f2._prot = prot[pi];
                 }
 
@@ -1864,7 +1891,7 @@ public class MainJFrame extends javax.swing.JFrame {
                 prot = new ProteinI[protNumber];
                 for (int pi = 0; pi < protNumber; pi++) {
                     Filament f1 = filaments[pi];
-                    prot[pi] = new Protein(filaments[pi], fimk1off, fimk1on, fimk2off, fimk2on);
+                    prot[pi] = new Protein(filaments[pi], fimk1off, fimk1on, fimk2off, fimk2on, ltr);
                     f1._prot = prot[pi];
                 }
                 /*
@@ -1872,13 +1899,15 @@ public class MainJFrame extends javax.swing.JFrame {
                 filaments[0]._prot = prot[0];*/
             }
             if (onlyActin) {
-                filaments[0]._lifeTimes = lifeTimes;
+                filaments[0]._ltr = ltr;
             }
 
             double st2 = Math.random() * filamentTimeDiff, stFim = wt.getTime();
             boolean init2 = false, initFim = false;
             //while ((fim._t == -1 || t - fim._t < totalTime) && _running) {
-
+            for (int pi = 0; pi < protNumber; pi++) {
+                prot[pi].reset();
+            }
             while (t < totalTime && _running) {
 
                 if ((n++) % 4000 == 0) {
@@ -1923,15 +1952,7 @@ public class MainJFrame extends javax.swing.JFrame {
                 for (int fi = 0; fi < filamentNumber; fi++) {
                     filaments[fi].update(t);
                 }
-                int tags = 0;
-                for (int fi = 0; fi < filamentNumber; fi++) {
-                    if (filaments[fi]._taggedOnTime > Filament._STARTTIME) {
-                        tags += filaments[0].isTagged();
-                        if (tags > 0) {
-                            numberTagged[Math.min(tags - 1, 3)]++;
-                        }
-                    }
-                }
+
                 if (!onlyActin && proteinType > 1) {
                     /*
                     if (t > st2 && fimk2on > 0) {
@@ -1955,7 +1976,7 @@ public class MainJFrame extends javax.swing.JFrame {
                             for (int pi = 0; pi < protNumber; pi++) {
                                 reset[pi] = prot[pi].update(t);
                                 double ptime = prot[pi].getTime();
-                                tagged |= reset[pi] ;
+                                tagged |= reset[pi];
 
                             }
                             if (!tagged) {
@@ -1963,7 +1984,7 @@ public class MainJFrame extends javax.swing.JFrame {
                                     double dtt = (Math.ceil(getDetachedTime(prot) * 10) - Math.ceil(pt * 10)) / 10;
 
                                     if (dtt >= 0.3) {
-                                        lifeTimes.add(dtt);
+                                        //lifeTimes.add(dtt);
                                     }
                                 }
 
@@ -1994,6 +2015,7 @@ public class MainJFrame extends javax.swing.JFrame {
             ltps.println(lt);
         }
          */
+
         if (updatePlot) {
             _ret = Utils.generateHist(lifeTimes, 0.25, 6, 0.1);
             _lifeTimes.clear();
@@ -2293,7 +2315,10 @@ public class MainJFrame extends javax.swing.JFrame {
                                 (int) getValue(NFilamentsTextField), true);
                     } catch (Exception ex) {
                         _running = false;
+                        _ended = true;
+                        jButton1.setText("Run(E)");
                         ex.printStackTrace();
+
                     }
                 }
             }).start();

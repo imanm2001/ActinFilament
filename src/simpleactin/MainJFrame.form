@@ -41,7 +41,7 @@
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel45" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
@@ -64,13 +64,18 @@
                                   <Group type="102" attributes="0">
                                       <Component id="jLabel44" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="eVLabel" min="-2" pref="91" max="-2" attributes="0"/>
+                                      <Component id="eVLabel" min="-2" pref="37" max="-2" attributes="0"/>
                                   </Group>
-                                  <Group type="102" attributes="0">
-                                      <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
-                                      <Component id="jButton3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="jButton3" min="-2" pref="58" max="-2" attributes="0"/>
                               </Group>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                              <Component id="jButton2" min="-2" pref="84" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jLabel41" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="errorMethComboBox" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="imageBox2" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
@@ -90,14 +95,6 @@
                               <Component id="jLabel42" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="xVLabel" min="-2" pref="47" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                              <Component id="jButton2" min="-2" pref="84" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jLabel41" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="errorMethComboBox" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
@@ -202,7 +199,7 @@
                       <Component id="sampZLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace min="-2" pref="267" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -863,7 +860,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="atpTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="12.4"/>
+            <Property name="text" type="java.lang.String" value="7"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
           <AccessibilityProperties>
@@ -875,7 +872,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="adpTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="4"/>
+            <Property name="text" type="java.lang.String" value="0"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" [ADP]"/>
@@ -937,7 +934,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="adpboffTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="0.8"/>
+            <Property name="text" type="java.lang.String" value="2"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" ADPbOff"/>
@@ -948,7 +945,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="atpboffTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="1.4"/>
+            <Property name="text" type="java.lang.String" value="3.5"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" ATPbOff"/>
@@ -959,7 +956,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="atppoffTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="1.4"/>
+            <Property name="text" type="java.lang.String" value="4.8"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" ATPpOff"/>
@@ -980,7 +977,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="adppoffTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="1.8"/>
+            <Property name="text" type="java.lang.String" value="1.62"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" ADPpOff"/>
@@ -1041,7 +1038,7 @@
         <Component class="javax.swing.JSlider" name="ADFSlider">
           <Properties>
             <Property name="maximum" type="int" value="10000"/>
-            <Property name="value" type="int" value="1070"/>
+            <Property name="value" type="int" value="450"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" [ADF]"/>
@@ -1152,7 +1149,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="svrrTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="1.3"/>
+            <Property name="text" type="java.lang.String" value="1.6"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
           <AccessibilityProperties>
@@ -1166,7 +1163,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="katpTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="1.8"/>
+            <Property name="text" type="java.lang.String" value="14"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" K_ATP"/>
@@ -1177,7 +1174,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="kadppiTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="0.0019"/>
+            <Property name="text" type="java.lang.String" value="0.076"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" K_ADPPI"/>
@@ -1190,7 +1187,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="kadppicTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="0.035"/>
+            <Property name="text" type="java.lang.String" value="1.4"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" K_ADPPIC"/>
@@ -1323,7 +1320,7 @@
         </Component>
         <Component class="javax.swing.JSlider" name="UScASlider">
           <Properties>
-            <Property name="maximum" type="int" value="200"/>
+            <Property name="maximum" type="int" value="5000"/>
             <Property name="minimum" type="int" value="1"/>
             <Property name="value" type="int" value="69"/>
             <Property name="valueIsAdjusting" type="boolean" value="true"/>
@@ -1347,7 +1344,7 @@
         </Component>
         <Component class="javax.swing.JSlider" name="UShASlider">
           <Properties>
-            <Property name="maximum" type="int" value="200"/>
+            <Property name="maximum" type="int" value="2000"/>
             <Property name="value" type="int" value="110"/>
             <Property name="valueIsAdjusting" type="boolean" value="true"/>
           </Properties>
@@ -1492,7 +1489,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="Fimk3onTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="0"/>
+            <Property name="text" type="java.lang.String" value="10"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" fimk3on"/>
@@ -1582,6 +1579,9 @@
           <StringArray count="0"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="xParComboBoxActionPerformed"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>

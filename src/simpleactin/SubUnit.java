@@ -16,7 +16,7 @@ public class SubUnit {
 
     public int _id, _state;
     public boolean _barbed;
-    public double _t, _connectedTime = -1;
+    public double _t = -1,_decorationTime=-1;
     public int _decoratedOffrateIndex=-1;
             ;
     private LinkedList<SubUnitListener> _listerns = new LinkedList<>();
@@ -31,7 +31,7 @@ public class SubUnit {
         if (list != null) {
             _listerns.add(list);
         }
-        _record = Math.random() < 0.01;
+        _record = Math.random() < 0.001;
         //  _record = true;
     }
 

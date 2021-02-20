@@ -37,17 +37,17 @@ public class Protein implements SubUnitListener, ProteinI {
     private LinkedList<SubUnit> _end1Attached = new LinkedList<>(), _detachEnd1 = new LinkedList<>();
     private boolean _end1CanAttach = true;
     double bt = -1, _nextAttachTime;
-    public double decoration = 0.1;
+    public double decoration = 0.01;
+    private LifeTimeRecorder _ltr = null;
 
-    public Protein(Filament f1, double k1, double kon1, double k2, double kon2) {
+    public Protein(Filament f1, double k1, double kon1, double k2, double kon2, LifeTimeRecorder ltr) {
         _f1 = f1;
-
         _k1 = k1;
         _kon1 = kon1;
-
         _k2 = k2;
         _kon2 = kon2;
         _ratio = _kon1 / (_kon1 + _kon2);
+        _ltr = ltr;
         resetOffrates();
     }
 
@@ -65,11 +65,16 @@ public class Protein implements SubUnitListener, ProteinI {
     private void detach(double t) {
         for (SubUnit s : _detachEnd1) {
             if (_end1Attached.contains(s)) {
+                if (s._decorationTime == -1) {
+                    throw new RuntimeException("ERROR");
+                }
                 s.removeListener(this);
                 _end1Attached.remove(s);
+                _ltr.addTime(t, s._decorationTime);
             }
             s._decorated = false;
             s._decoratedOffrateIndex = -1;
+            s._decorationTime = -1;
 
         }
         _detachEnd1.clear();
@@ -112,6 +117,7 @@ public class Protein implements SubUnitListener, ProteinI {
 
                                 if (!_end1Attached.contains(s)) {
                                     _end1Attached.add(s);
+                                    s._decorationTime = t;
                                 } else {
                                     System.out.println("ERROR");
                                 }
@@ -134,72 +140,8 @@ public class Protein implements SubUnitListener, ProteinI {
         if (_detachEnd1.size() > 0) {
             detach(t);
         }
-        /*
-        if (_t == -1 && _f1.isTagged() > 0) {
-            _t = t;
-        }*/
-        if (_t == -1 && _end1Attached.size() > 0) {
-            _t = t;
-        }
-        if (_t != -1 && _detached == -1 && (_end1Attached.size() == 0)) {
-            _detached = t;
 
-        }
-        if (_f1._subunits.size() == 1 && _t > -1 && Protein.getFrames(t, _f1._subunits.getFirst()._t) > _TIME) {
-            if (_t != -1 && _detached == -1 && _end1Attached.size() == 1) {
-                _detachEnd1.add(_f1._subunits.get(0));
-                detach(t);
-                _f1._subunits.get(0)._record = false;
-                _detached = t;
-            }
-            if (_t > _STARTTIME) {
-                _forceDetach = true;
-
-            }
-            //capoff(t);
-        }
-        if (!_forceDetach && _detached > -1 && (Math.ceil(t * 10) - Math.ceil(_detached * 10)) / 10 <= _TIME && _end1Attached.size() > 0) {
-            _detached = -1;
-
-        }
-        boolean waitingTime = !_forceDetach && _detached > 0 && (Math.floor(t * 10) - Math.floor(_detached * 10)) / 10.0 < 0.1;
-        if (_end1Attached.size() > 0) {
-            _detached = -1;
-        }
-
-        boolean attached = _detached == -1 || waitingTime;
-        /*
-        if (_f1._subunits.size() == 0) {
-            if (getFrames(t, _t) > 100.0) {
-                attached = false;
-                if (_detached == -1) {
-                    _detached = t;
-                }
-            } else if(_t==-1) {
-                reset();
-
-            }
-
-        }*/
-
- /*
-        if (!attached && _t < Filament._STARTTIME) {
-            _t = _detached = -1;
-            attached = true;
-        }*/
- /*if ( (_end1Attached.size()==0) != (_f1.isTagged()==0)) {
-            //for (SubUnit s : _end1Attached) {
-              //  if (!_f1._subunits.contains(s)) {
-                    System.out.println("ERROOR" + _end1Attached.size() + "\t" + _f1.isTagged());
-              //  }
-           // }
-
-        }*/
- /*
-        if (!attached) {
-            _t += t - _detached;
-        }*/
-        return attached;
+        return true;
         /*boolean decorated = false;
         for (SubUnit s : _f1._subunits) {
             if (s._t > Filament._STARTTIME && s._record) {
@@ -274,7 +216,7 @@ public class Protein implements SubUnitListener, ProteinI {
     @Override
     public void severAlert(double t) {
 
-        if (_end1Attached.size() == 0) {
+        /*if (_end1Attached.size() == 0) {
 
             if (_detached > -1 && _t > _STARTTIME) {
                 _forceDetach = true;
@@ -282,6 +224,6 @@ public class Protein implements SubUnitListener, ProteinI {
                 reset();
             }
 
-        }
+        }*/
     }
 }
