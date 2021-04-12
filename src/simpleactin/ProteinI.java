@@ -12,7 +12,9 @@ package simpleactin;
 public interface ProteinI {
     public double getTime();
     public double getDetachedTime();
+    
     public abstract boolean update(double t);
+    public abstract void react(double t);
     public void reset();
     public void severAlert(double t);
     

@@ -56,7 +56,7 @@ public class MainJFrame extends javax.swing.JFrame {
     private int _sampNum = 0, _sampNum2 = 0;
     ChiSquareTest _chst = new ChiSquareTest();
     Object _ret[] = null;
-
+    public static LinkedList<Filament> _filaments;
     LinkedList<JComponent> _params = new LinkedList<>();
     private LinkedList<LinkedList<PointF>> _histHeat = new LinkedList<>();
     private LinkedList<Double> _lifeTimes = new LinkedList<Double>();
@@ -81,7 +81,7 @@ public class MainJFrame extends javax.swing.JFrame {
         initComponents();
         Component coms[] = jPanel1.getComponents();
         int k = 0;
-
+        _filaments = new LinkedList<>();
         for (int i = 0; i < coms.length; i++) {
             String name = "";
             if ((name = coms[i].getAccessibleContext().getAccessibleName()) != null && name.startsWith(" ")) {
@@ -308,9 +308,9 @@ public class MainJFrame extends javax.swing.JFrame {
             .addGap(0, 198, Short.MAX_VALUE)
         );
 
-        adpponTextField.setText("0.16");
+        adpponTextField.setText("0");
 
-        atpponTextField.setText("1.3");
+        atpponTextField.setText("0");
         atpponTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 atpponTextFieldActionPerformed(evt);
@@ -319,7 +319,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel1.setText("[ATP]:");
 
-        atpTextField.setText("7");
+        atpTextField.setText("15");
         atpTextField.setToolTipText("");
         atpTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -352,21 +352,21 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel8.setText("ADPbOff:");
 
-        adpboffTextField.setText("2");
+        adpboffTextField.setText("0.4");
         adpboffTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 adpboffTextFieldActionPerformed(evt);
             }
         });
 
-        atpboffTextField.setText("3.5");
+        atpboffTextField.setText("2");
         atpboffTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 atpboffTextFieldActionPerformed(evt);
             }
         });
 
-        atppoffTextField.setText("4.8");
+        atppoffTextField.setText("4");
         atppoffTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 atppoffTextFieldActionPerformed(evt);
@@ -377,7 +377,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel10.setText("ADPpOff:");
 
-        adppoffTextField.setText("1.62");
+        adppoffTextField.setText("0.27");
         adppoffTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 adppoffTextFieldActionPerformed(evt);
@@ -401,7 +401,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jLabel15.setText("SRV2off:");
 
         ADFSlider.setMaximum(10000);
-        ADFSlider.setValue(450);
+        ADFSlider.setValue(960);
         ADFSlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 ADFSliderStateChanged(evt);
@@ -410,7 +410,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         DistanceSlider.setMaximum(1000);
         DistanceSlider.setMinimum(1);
-        DistanceSlider.setValue(18);
+        DistanceSlider.setValue(2);
         DistanceSlider.setValueIsAdjusting(true);
         DistanceSlider.setVerifyInputWhenFocusTarget(false);
         DistanceSlider.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -457,23 +457,28 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel24.setText("Severing Rate");
 
-        svrrTextField.setText("1.6");
+        svrrTextField.setText("1.4");
         svrrTextField.setToolTipText("");
+        svrrTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                svrrTextFieldActionPerformed(evt);
+            }
+        });
 
         jLabel25.setText("K_ATP:");
 
-        katpTextField.setText("14");
+        katpTextField.setText("15");
         katpTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 katpTextFieldActionPerformed(evt);
             }
         });
 
-        kadppiTextField.setText("0.076");
+        kadppiTextField.setText("2.8");
 
         jLabel26.setText("K_ADPPI:");
 
-        kadppicTextField.setText("1.4");
+        kadppicTextField.setText("2.8");
 
         jLabel27.setText("K_ADPPIC:");
 
@@ -492,23 +497,28 @@ public class MainJFrame extends javax.swing.JFrame {
 
         FLTDTextField.setText("0.6");
 
-        Fimk3offTextField.setText("0.12");
+        Fimk3offTextField.setText("0");
 
         jLabel18.setText("k3off:");
 
         jLabel19.setText("k1on:");
 
-        Fimk1onTextField.setText("9.4");
+        Fimk1onTextField.setText("20");
+        Fimk1onTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Fimk1onTextFieldActionPerformed(evt);
+            }
+        });
 
-        Fimk1offTextField.setText("0.028");
+        Fimk1offTextField.setText("0");
 
         jLabel20.setText("k1off:");
 
         jLabel29.setText("k2off:");
 
-        Fimk2offTextField.setText("0.46");
+        Fimk2offTextField.setText("0.002");
 
-        UShTextField.setText("0.001");
+        UShTextField.setText("0.01");
         UShTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 UShTextFieldActionPerformed(evt);
@@ -519,13 +529,13 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel31.setText("USc:");
 
-        UScTextField.setText("1");
+        UScTextField.setText("0.01");
 
         uScALabel.setText("0");
 
         UScASlider.setMaximum(5000);
         UScASlider.setMinimum(1);
-        UScASlider.setValue(69);
+        UScASlider.setValue(200);
         UScASlider.setValueIsAdjusting(true);
         UScASlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -538,7 +548,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jLabel32.setText("UShA:");
 
         UShASlider.setMaximum(2000);
-        UShASlider.setValue(110);
+        UShASlider.setValue(180);
         UShASlider.setValueIsAdjusting(true);
         UShASlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -560,7 +570,12 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel34.setText("ThFluc:");
 
-        Fimk2onTextField.setText("9");
+        Fimk2onTextField.setText("0.12");
+        Fimk2onTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Fimk2onTextFieldActionPerformed(evt);
+            }
+        });
 
         jLabel35.setText("k2on:");
 
@@ -574,7 +589,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel51.setText("Coff:");
 
-        CoffTextField.setText("0.004");
+        CoffTextField.setText("0.015");
 
         CCapTextField.setText("0.8");
 
@@ -596,7 +611,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         KSLabel.setText("0");
 
-        Fimk3onTextField.setText("10");
+        Fimk3onTextField.setText("95");
 
         jLabel53.setText("k3on:");
 
@@ -1363,6 +1378,7 @@ public class MainJFrame extends javax.swing.JFrame {
         }
         mxVLabel.setText("" + (_svX[0] + xminInd * xs));
         myVLabel.setText("" + (_svY[0] + yminInd * ys));
+
         eVLabel.setText(String.format("%.2E", _minE));
         System.out.println(":::" + _maxE + "\t" + _minE);
         if (_maxE != _minE) {
@@ -1373,7 +1389,7 @@ public class MainJFrame extends javax.swing.JFrame {
             for (int i = 0; i < _erros.length; i++) {
                 if (_erros[i] > 0) {
                     int c = (int) ((Math.log(_erros[i]) - lmin) * a);
-                    System.out.println("::>><<" + c);
+
                     g.setColor(new Color(c, c, c));
                     int x = i % (int) _svX[1], y = i / (int) _svY[1];
                     g.fillRect((int) (x * dw), (int) (y * dh), (int) (dw), (int) (dh));
@@ -1700,6 +1716,18 @@ public class MainJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_xParComboBoxActionPerformed
 
+    private void Fimk2onTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Fimk2onTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Fimk2onTextFieldActionPerformed
+
+    private void Fimk1onTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Fimk1onTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Fimk1onTextFieldActionPerformed
+
+    private void svrrTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_svrrTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_svrrTextFieldActionPerformed
+
     public double calDist(LinkedList<PointF> points) {
         double ret = 0;
         int num = upLimitSlider.getValue();
@@ -1816,8 +1844,8 @@ public class MainJFrame extends javax.swing.JFrame {
         System.out.println("" + fimk1off + "\t" + fimk2off + "\t" + fimk3off);
         System.out.println("" + uSc + "\t" + uSh + "\t" + uScA + "\t" + uShA);
         System.out.println("---------");
-        PrintStream lenps = new PrintStream("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\Sims\\Len_adp2.txt");
-        String fn = "C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\Sims\\LT_actin_tagged_10s_atp2.txt";
+        PrintStream lenps = new PrintStream("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\Sims\\Len_actin_fast.txt");
+        String fn = "C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\Sims\\LT_actin_fast0.txt";
         PrintStream ltps = new PrintStream(fn);
 
         final int totalRuns = 1000000;
@@ -1834,11 +1862,11 @@ public class MainJFrame extends javax.swing.JFrame {
             }
         };
         int ii = 0;
-        Fimbrin.setDists(uSh, uShA, uSc, uScA, fimk1off, fimk2off, fimk3off, fimk1on, fimk2on, fimk3on);
+        //Fimbrin.setDists(uSh, uShA, uSc, uScA, fimk1off, fimk2off, fimk3off, fimk1on, fimk2on, fimk3on);
         long t1 = System.currentTimeMillis();
         boolean chiz = true;
         //int maxSamples = _sampNum;
-        int maxSamples = Math.min(2000, _sampNum);
+        int maxSamples = Math.min(1000, _sampNum);
         //int maxSamples = 500;
         //GammaDistribution protDelay = new GammaDistribution(fimbrinTimeDiffS, fimbrinTimeDiffA);
         WaitingTime wt = new WaitingTime() {
@@ -1851,6 +1879,7 @@ public class MainJFrame extends javax.swing.JFrame {
         int numberTagged[] = {0, 0, 0, 0};
 
         for (ii = 0; ii < totalRuns && _running && lifeTimes.size() < maxSamples; ii++) {
+            _filaments.clear();
             /*     
             if (ii > 0) {
                 System.out.println(">>" + (t2 - t1) / ii);
@@ -1874,6 +1903,7 @@ public class MainJFrame extends javax.swing.JFrame {
                 filaments[fi] = new Filament();
                 filaments[fi].setParams(barbed, pointed, cofilin, SRV2, cap, atp,
                         adppi, adppico, raise, distance, chunksize, fimk3on, fimk3off);
+                _filaments.add(filaments[fi]);
 
             }
             ProteinI[] prot = null;
@@ -1882,24 +1912,27 @@ public class MainJFrame extends javax.swing.JFrame {
                 prot = new ProteinI[protNumber];
                 for (int pi = 0; pi < protNumber; pi++) {
                     Filament f1 = filaments[pi * 2], f2 = filaments[pi * 2 + 1];
-                    prot[pi] = new Fimbrin(f1, f2, thermalFluc, wt, ltr);
-                    f1._prot = f2._prot = prot[pi];
+                    prot[pi] = new Fimbrin(thermalFluc, wt, ltr);
+                    ((Fimbrin) prot[pi]).setDists(uSh, uShA, uSc, uScA, fimk1off, fimk2off, fimk1on, fimk2on);
                 }
-
+                // Fimbrin.setDists(uSh, uShA, uSc, uScA, fimk1off, fimk2off, fimk3off, fimk1on, fimk2on, fimk3on);
             } else if (proteinType > 1) {
 
                 prot = new ProteinI[protNumber];
                 for (int pi = 0; pi < protNumber; pi++) {
                     Filament f1 = filaments[pi];
-                    prot[pi] = new Protein(filaments[pi], fimk1off, fimk1on, fimk2off, fimk2on, ltr);
-                    f1._prot = prot[pi];
+                    prot[pi] = new Protein(fimk1off, fimk1on, ltr);
+
                 }
                 /*
                 prot[0] = new Protein(filaments[0], fimk1off, fimk1on, fimk2off, fimk2on);
                 filaments[0]._prot = prot[0];*/
             }
             if (onlyActin) {
-                filaments[0]._ltr = ltr;
+                for (Filament f : _filaments) {
+                    f._ltr = ltr;
+                }
+
             }
 
             double st2 = Math.random() * filamentTimeDiff, stFim = wt.getTime();
@@ -1908,9 +1941,12 @@ public class MainJFrame extends javax.swing.JFrame {
             for (int pi = 0; pi < protNumber; pi++) {
                 prot[pi].reset();
             }
-            while (t < totalTime && _running) {
+            int pn = 0;
 
-                if ((n++) % 4000 == 0) {
+            while (t < totalTime && _running) {
+                System.out.println("\t\t" + _filaments.size());
+                if ((n++) % 4000 == 0 || _lifeTimes.size() > pn) {
+                    pn = _lifeTimes.size();
                     //ps.println("" + t + "\t" + b * raise + "\t" + (p) * raise + "\t" + _subunits.size() * raise + "\t" + b / totalTime + "\t" + p / totalTime);
                     //            System.out.print("\033[2K"); 
                     //  System.out.println("" + t + "\t" + f1._subunits.size());
@@ -1919,6 +1955,7 @@ public class MainJFrame extends javax.swing.JFrame {
                     jProgressBar1.setValue(Math.max(p1, p2));
                     sampNLabel.setText("" + lifeTimes.size());
                     if (updatePlot) {
+
                         Object[] ret = Utils.generateHist(lifeTimes, 0.25, 6, 0.1);
                         if (!_heatGenerating) {
                             LinkedList<PointF> points = (LinkedList<PointF>) ret[0];
@@ -1949,8 +1986,11 @@ public class MainJFrame extends javax.swing.JFrame {
                 if (n % 10000 == 0) {
                     System.gc();
                 }
-                for (int fi = 0; fi < filamentNumber; fi++) {
-                    filaments[fi].update(t);
+                int size = _filaments.size();
+                for (int fi = 0; fi < size; fi++) {
+                    Filament f = _filaments.get(fi);
+                    f.update(t);
+
                 }
 
                 if (!onlyActin && proteinType > 1) {
@@ -1975,28 +2015,34 @@ public class MainJFrame extends javax.swing.JFrame {
                             boolean[] reset = new boolean[protNumber];
                             for (int pi = 0; pi < protNumber; pi++) {
                                 reset[pi] = prot[pi].update(t);
-                                double ptime = prot[pi].getTime();
-                                tagged |= reset[pi];
-
                             }
-                            if (!tagged) {
-                                if ((pt = getTime(prot)) > Filament._STARTTIME) {
-                                    double dtt = (Math.ceil(getDetachedTime(prot) * 10) - Math.ceil(pt * 10)) / 10;
 
-                                    if (dtt >= 0.3) {
-                                        //lifeTimes.add(dtt);
-                                    }
-                                }
-
-                            }
-                            for (int pi = 0; pi < protNumber; pi++) {
-                                if (!reset[pi]) {
-                                    prot[pi].reset();
-                                }
-                            }
                         }
                     }
+
                 }
+                for (Filament f : _filaments) {
+                    f.decorateSubunits(t);
+                }
+                if (!onlyActin && proteinType > 1) {
+
+                    for (int pi = 0; pi < protNumber; pi++) {
+                        prot[pi].react(t);
+
+                    }
+
+                }
+                LinkedList<Filament> removeList = new LinkedList<>();
+                size = _filaments.size();
+                for (int fi = 0; fi < size; fi++) {
+                    Filament fl = _filaments.get(fi);
+                    if (fl.severFilament(t)) {
+                        removeList.add(fl);
+                    }
+
+                }
+                _filaments.removeAll(removeList);
+
                 t += dt;
 
             }

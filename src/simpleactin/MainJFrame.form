@@ -836,7 +836,7 @@
       <SubComponents>
         <Component class="javax.swing.JTextField" name="adpponTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="0.16"/>
+            <Property name="text" type="java.lang.String" value="0"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" ADPpOn"/>
@@ -844,7 +844,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="atpponTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="1.3"/>
+            <Property name="text" type="java.lang.String" value="0"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" ATPpOn"/>
@@ -860,7 +860,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="atpTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="7"/>
+            <Property name="text" type="java.lang.String" value="15"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
           <AccessibilityProperties>
@@ -934,7 +934,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="adpboffTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="2"/>
+            <Property name="text" type="java.lang.String" value="0.4"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" ADPbOff"/>
@@ -945,7 +945,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="atpboffTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="3.5"/>
+            <Property name="text" type="java.lang.String" value="2"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" ATPbOff"/>
@@ -956,7 +956,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="atppoffTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="4.8"/>
+            <Property name="text" type="java.lang.String" value="4"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" ATPpOff"/>
@@ -977,7 +977,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="adppoffTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="1.62"/>
+            <Property name="text" type="java.lang.String" value="0.27"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" ADPpOff"/>
@@ -1038,7 +1038,7 @@
         <Component class="javax.swing.JSlider" name="ADFSlider">
           <Properties>
             <Property name="maximum" type="int" value="10000"/>
-            <Property name="value" type="int" value="450"/>
+            <Property name="value" type="int" value="960"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" [ADF]"/>
@@ -1051,7 +1051,7 @@
           <Properties>
             <Property name="maximum" type="int" value="1000"/>
             <Property name="minimum" type="int" value="1"/>
-            <Property name="value" type="int" value="18"/>
+            <Property name="value" type="int" value="2"/>
             <Property name="valueIsAdjusting" type="boolean" value="true"/>
             <Property name="verifyInputWhenFocusTarget" type="boolean" value="false"/>
           </Properties>
@@ -1149,12 +1149,15 @@
         </Component>
         <Component class="javax.swing.JTextField" name="svrrTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="1.6"/>
+            <Property name="text" type="java.lang.String" value="1.4"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" Coff Severing Rate"/>
           </AccessibilityProperties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="svrrTextFieldActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel25">
           <Properties>
@@ -1163,7 +1166,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="katpTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="14"/>
+            <Property name="text" type="java.lang.String" value="15"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" K_ATP"/>
@@ -1174,7 +1177,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="kadppiTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="0.076"/>
+            <Property name="text" type="java.lang.String" value="2.8"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" K_ADPPI"/>
@@ -1187,7 +1190,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="kadppicTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="1.4"/>
+            <Property name="text" type="java.lang.String" value="2.8"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" K_ADPPIC"/>
@@ -1233,7 +1236,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="Fimk3offTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="0.12"/>
+            <Property name="text" type="java.lang.String" value="0"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" fimk3off"/>
@@ -1251,15 +1254,18 @@
         </Component>
         <Component class="javax.swing.JTextField" name="Fimk1onTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="9.4"/>
+            <Property name="text" type="java.lang.String" value="20"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" fimk1on"/>
           </AccessibilityProperties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Fimk1onTextFieldActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="Fimk1offTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="0.028"/>
+            <Property name="text" type="java.lang.String" value="0"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" fimk1off"/>
@@ -1277,7 +1283,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="Fimk2offTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="0.46"/>
+            <Property name="text" type="java.lang.String" value="0.002"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" fimk2off"/>
@@ -1286,7 +1292,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="UShTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="0.001"/>
+            <Property name="text" type="java.lang.String" value="0.01"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" USh"/>
@@ -1307,7 +1313,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="UScTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="1"/>
+            <Property name="text" type="java.lang.String" value="0.01"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" USc"/>
@@ -1322,7 +1328,7 @@
           <Properties>
             <Property name="maximum" type="int" value="5000"/>
             <Property name="minimum" type="int" value="1"/>
-            <Property name="value" type="int" value="69"/>
+            <Property name="value" type="int" value="200"/>
             <Property name="valueIsAdjusting" type="boolean" value="true"/>
           </Properties>
           <AccessibilityProperties>
@@ -1345,7 +1351,7 @@
         <Component class="javax.swing.JSlider" name="UShASlider">
           <Properties>
             <Property name="maximum" type="int" value="2000"/>
-            <Property name="value" type="int" value="110"/>
+            <Property name="value" type="int" value="180"/>
             <Property name="valueIsAdjusting" type="boolean" value="true"/>
           </Properties>
           <AccessibilityProperties>
@@ -1384,11 +1390,14 @@
         </Component>
         <Component class="javax.swing.JTextField" name="Fimk2onTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="9"/>
+            <Property name="text" type="java.lang.String" value="0.12"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" fimk2on"/>
           </AccessibilityProperties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Fimk2onTextFieldActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel35">
           <Properties>
@@ -1428,7 +1437,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="CoffTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="0.004"/>
+            <Property name="text" type="java.lang.String" value="0.015"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" Coff"/>
@@ -1489,7 +1498,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="Fimk3onTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="10"/>
+            <Property name="text" type="java.lang.String" value="95"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" fimk3on"/>

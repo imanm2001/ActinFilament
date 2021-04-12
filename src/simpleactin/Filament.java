@@ -15,18 +15,17 @@ import static simpleactin.Filament._STARTTIME;
  *
  * @author sm2983
  */
-public class Filament implements SubUnitListener {
+public class Filament implements SubUnitListener, DecorationListener {
 
-    ProteinI _prot;
     boolean storeCapped = MainJFrame.ACP1P;
 
     public static double _TIME = 0.1, _STARTTIME = 1;
     double _capOnTime = -1;
     double _initTime = 0;
     double _sideOn, _sideOff;
-    final int __ATP = 1, __ADPPI = 2, __ADP = 4, __COFILIN = 8, __SRV2 = 16;
+    final int __ATP = 1, __ADPPI = 2, __ADP = 4, __COFILIN = 8, __SRV2 = 16, __CAP = 1024, __OTHERS = 256;
 
-    public LinkedList<SubUnit> _subunits = new LinkedList<>();
+    public LinkedList<SubUnit> _subunits;
     double _atpR, _adppiR, _adppicoR, _depolySRV2;
 
     int totalADF, chunksize, distance, totalSRV;
@@ -42,10 +41,17 @@ public class Filament implements SubUnitListener {
 
     LinkedList<SeverStatus> _severingList = new LinkedList<>();
     LinkedList<Point> _changed = new LinkedList<>();
+    DecorationReaction _capReaction = null;
+    boolean isClone;
+    private static int _ID = 0;
+    public int ID;
 
     public Filament() {
-        //      _b = _p = 0;
-
+        //      _b = _p = 0
+        isClone = false;
+        ID = _ID;
+        _ID++;
+        _subunits = new LinkedList<>();
     }
 
     public void setParams(PolymerizationRate barbed, PolymerizationRate pointed,
@@ -68,14 +74,21 @@ public class Filament implements SubUnitListener {
     }
 
     public void update(double t) {
-        int size = _subunits.size();
-        updateSubunits(0, _subunits.size(), t);
+
+        updateSubunits(t);
         dynamic(_subunits, _pointed, false, t);
         if (!capped) {
             //_b += dynamic(_subunits, _barbed, true, t);
             dynamic(_subunits, _barbed, true, t);
             if (_subunits.size() >= 3) {
-                boolean b1 = (!_subunits.getLast()._decorated) && Math.random() < _Cap.onRates[0];
+                SubUnit barbedEnd = _subunits.getLast();
+                boolean b1 = (!barbedEnd._decorated) && Math.random() < _Cap.onRates[0];
+                //boolean b1 =  Math.random() < _Cap.onRates[0];
+                if (b1) {
+                    barbedEnd._decorationReaction.add(new DecorationReaction(_Cap.onRates[0], _Cap.offRate, __CAP, this));
+                    //capon(t);
+                }
+                /*
                 boolean b2 = _subunits.getLast()._decorated || (_ltr != null && Math.random() < _sideOn);
                 if (b1 && b2) {
                     double ratio = _Cap.onRates[0] / (_Cap.onRates[0] + _sideOn);
@@ -87,11 +100,8 @@ public class Filament implements SubUnitListener {
                 }
 
                 _subunits.getLast()._decorated = b2;
-
+                 */
             }
-
-        } else if (Math.random() < _Cap.offRate) {
-            capoff(t);
 
         }
 
@@ -104,24 +114,6 @@ public class Filament implements SubUnitListener {
 
         _pointed.ADPoff = padpoff;
 
-        if (_severingList.size() > 0) {
-
-            int select = selectAChuck(0);
-            select = _severingList.size() - 1;
-            //select=(int)(Math.random()*_severingList.size());
-            //select = Math.random() < 0.5 ? 0 : 1;
-            //select = 0;
-
-            int sp = select > 0 ? _severingList.get(select - 1).location : 0;
-            int ep = _severingList.get(select).location;
-            if (sp >= 0) {
-                sever(t, sp, ep);
-
-                // System.out.println("INIT>>" + capped + "  " + _subunits.size());
-            }
-
-        }
-
         totalADF = 0;
         totalSRV = 0;
         int totalADF2 = 0;
@@ -129,7 +121,7 @@ public class Filament implements SubUnitListener {
             SubUnit su = _subunits.get(i);
             if (su._state == __COFILIN) {
                 totalADF++;
-                if (i < 1000) {
+                if (i >= _subunits.size() - distance) {
                     totalADF2++;
                 }
             }
@@ -137,20 +129,35 @@ public class Filament implements SubUnitListener {
                 totalSRV++;
             }
         }
-
-        if (_subunits.size() < 4) {
-            boolean sc = storeCapped;
-            //    storeCapped = false;
+        if (_capReaction != null) {
+            if (totalADF2 > 0) {
+                _capReaction.offrate = _Cap.offRate * 10;
+            } else {
+                _capReaction.offrate = _Cap.offRate;
+            }
+        }
+        if (_subunits.size() < 2) {
+            //        boolean sc = storeCapped;
+            //          storeCapped = false;
             capoff(t);
+//            storeCapped=sc;
+            _initTime = t;
             for (SubUnit su : _subunits) {
                 su.remove(t);
             }
             _subunits.clear();
-            _STARTTIME = t + 1;
-            while (_subunits.size() < 4) {
-                dynamic(_subunits, _barbed, true, t);
-                dynamic(_subunits, _pointed, false, t);
+
+            if (!isClone) {
+                //_STARTTIME = t + 1;
+                while (_subunits.size() < 5) {
+                    dynamic(_subunits, _barbed, true, t);
+                    dynamic(_subunits, _pointed, false, t);
+                    for (SubUnit su : _subunits) {
+                        su._record = false;
+                    }
+                }
             }
+
         }
         _coffilinwithindist = totalADF2 > 0;
         /*
@@ -173,10 +180,19 @@ public class Filament implements SubUnitListener {
             }
         }
     }*/
-    private int sever(double t, int start, int end) {
+    private int sever(double t, int start) {
+        Filament f = new Filament();
+        int ret = splits(start, f);
+        if (f._subunits.size() > 3) {
+            MainJFrame._filaments.add(f);
+        }
+        return ret;
+    }
+
+    private int severOld(double t, int start, int end) {
         int size = _subunits.size();
 
-        if (capped && end < size) {
+        if (capped && end < size - 1) {
             boolean sc = storeCapped;
             storeCapped = false;
             capoff(t);
@@ -213,10 +229,10 @@ public class Filament implements SubUnitListener {
             //}
             _subunits.removeLast();
         }
-
+        /*
         if (_prot != null) {
             _prot.severAlert(t);
-        }
+        }*/
         return adf;
     }
 
@@ -250,7 +266,7 @@ public class Filament implements SubUnitListener {
         int i = -1;
         do {
             i++;
-            prop = Math.round(1000 * (_severingList.get(i).location - offset) / len) / 1000;
+            prop = Math.round(1000 * (_severingList.get(i).location - offset) / len) / 1000.0;
         } while (prop < r && i < size - 1);
         /*
         System.out.print("r="+r+"\t i="+i+"\t");
@@ -263,7 +279,7 @@ public class Filament implements SubUnitListener {
 
     }
 
-    public void updateSubunits(int start, int end, double time) {
+    public void updateSubunits(double time) {
         double adfr;
         //int sever = -1;
         _severingList.clear();
@@ -272,7 +288,7 @@ public class Filament implements SubUnitListener {
         //ThreadLocalRandom tlr=ThreadLocalRandom.current();
         double adppi = totalADF == 0 ? _adppiR : _adppicoR;
 
-        for (int i = start; i < end; i++) {
+        for (int i = 0; i < _subunits.size(); i++) {
             SubUnit su = _subunits.get(i);
             switch (su._state) {
                 case __ATP:
@@ -294,40 +310,43 @@ public class Filament implements SubUnitListener {
                 case __ADP:
                     adfr = _coflin.onRates[0];
                     if (totalADF > 0) {
-                        /*
+
                         if (i > 0 && _subunits.get(i - 1)._state == __COFILIN) {
                             adfr = _coflin.onRates[1];
                         }
                         if (i < _subunits.size() - 1 && _subunits.get(i + 1)._state == __COFILIN) {
                             adfr = _coflin.onRates[1];
-                        }*/
+                        }
                         adfr = _coflin.onRates[1];
                     }
 
                     if (Math.random() < adfr) {
 
                         _changed.add(new Point(i, __COFILIN));
+                        //su._decorationReaction.add(new DecorationReaction(adfr, _coflin.offRate, __COFILIN, this));
                     }
                     break;
                 case __COFILIN:
+                    /*
                     if (Math.random() < _coflin.offRate) {
 
                         //   changed.add(i);
                         _changed.add(new Point(i, __ADP));
 
-                    }
+                    }*/
                     boolean hasNeighbour = false;
                     //int j = _subunits.size() - 1 - i;
                     int j = i;
-                    if (j > 0) {
-                        hasNeighbour |= _subunits.get(j - 1)._state == __COFILIN;
+                    if (j > 1) {
+                        hasNeighbour |= (_subunits.get(j - 1)._state == __COFILIN && _subunits.get(j - 2)._state != __COFILIN);
                     }
+                    /*
                     if (j < _subunits.size() - 1) {
                         hasNeighbour |= _subunits.get(j + 1)._state == __COFILIN;
-                    }
+                    }*/
                     if (hasNeighbour && Math.random() < _coflin.reactRate) {
                         //****sever = Math.max(sever, j);
-                        addSevering(Math.min(j, _subunits.size()), 0);
+                        addSevering(Math.min(j - 1, _subunits.size()), 0);
 
                     }
                     break;
@@ -367,6 +386,15 @@ public class Filament implements SubUnitListener {
                 }
             }
              */
+            if (su._decorated) {
+                su._undecorated |= su._decoratedOffrate > 0 && Math.random() < su._decoratedOffrate;
+
+            } else {
+                if (Math.random() < _sideOn) {
+
+                    su._decorationReaction.add(new DecorationReaction(_sideOn, _sideOff, __OTHERS, this));
+                }
+            }
         }
 
         for (Point p : _changed) {
@@ -376,8 +404,14 @@ public class Filament implements SubUnitListener {
     }
 
     private int dynamic(LinkedList<SubUnit> _subunits, PolymerizationRate rates, boolean barbed, double t) {
-        boolean addATP = Math.random() < rates.ATPon;
-        boolean addADP = Math.random() < rates.ADPon;
+        double c = 1;
+        if (!_subunits.isEmpty()) {
+            if ((barbed && (_subunits.getLast()._state & __COFILIN) > 0) || (!barbed && (_subunits.getFirst()._state & __COFILIN) > 0)) {
+                c = 0;
+            }
+        }
+        boolean addATP = Math.random() < rates.ATPon * c;
+        boolean addADP = Math.random() < rates.ADPon * c;
         int ret = 0;
 
         double poff = 0;
@@ -429,12 +463,12 @@ public class Filament implements SubUnitListener {
         }
         SubUnit newSu = null;
         if (addADP) {
-            newSu = new SubUnit(__ADP, barbed, t, this);
+            newSu = new SubUnit(__ADP, barbed, t, this, this);
             _subunits.add(index, newSu);
             ret++;
         }
         if (addATP) {
-            newSu = new SubUnit(__ATP, barbed, t, this);
+            newSu = new SubUnit(__ATP, barbed, t, this, this);
             _subunits.add(index, newSu);
             ret++;
         }
@@ -445,11 +479,11 @@ public class Filament implements SubUnitListener {
     @Override
     public void remove(double t, SubUnit su) {
 
-        if (t != -1 && _ltr != null && !storeCapped && su._record) {
+        if (t >= 0 && _ltr != null && !storeCapped && su._record) {
             _ltr.addTime(t, su._t);
         }
-        if (capped && _subunits.size() < 1) {
-            //     capoff(t);
+        if (_subunits.getLast() == su) {
+            capoff(t);
         }
     }
 
@@ -490,14 +524,102 @@ public class Filament implements SubUnitListener {
             _init = false;
             
         }*/
-
-        if (capped && _ltr != null && storeCapped && _capOnTime != -1) {
+        _capReaction = null;
+        if (capped && _ltr != null && storeCapped && _capOnTime != -1 && Math.random() < 0.1) {
             _ltr.addTime(t, _capOnTime);
 
+        }
+        if (capped && _subunits.size() > 0) {
+            SubUnit last = _subunits.getLast();
+            if (last._decoratedTag == __CAP) {
+                last.resetReaction();
+            } else {
+                throw new RuntimeException("" + last._decoratedTag);
+            }
         }
         cappistagged = false;
         _capOnTime = -1;
         capped = false;
+
+    }
+
+    public void decorateSubunits(double t) {
+        for (SubUnit su : _subunits) {
+            su.decorate(t);
+        }
+    }
+
+    @Override
+    public void reactionCallBack(SubUnit su, double t, int tag) {
+        switch (tag) {
+            case __COFILIN:
+                su._state = __COFILIN;
+                break;
+            case -__COFILIN:
+                su._state = __ADP;
+                break;
+            case __CAP:
+                for (DecorationReaction dr : su._decorationReaction) {
+                    if (dr.tag == __CAP) {
+                        _capReaction = dr;
+                        break;
+                    }
+                }
+                capon(t);
+                break;
+            case -__CAP:
+                capoff(t);
+                break;
+            case __OTHERS:
+                break;
+            case -__OTHERS:
+                break;
+
+        }
+
+    }
+
+    public int splits(int end, Filament f) {
+        int ret = 0;
+        f.setParams(_barbed, _pointed, _coflin, _SRV2, _Cap, _atpR, _adppiR, _adppicoR, _depolySRV2, distance, chunksize, _sideOn, _sideOff);
+        f.isClone = true;
+        f._ltr = _ltr;
+        f.storeCapped = storeCapped;
+
+        for (int i = 0; i < end; i++) {
+            SubUnit su = _subunits.pop();
+            f._subunits.addLast(su);
+            if (su._state == __COFILIN) {
+                ret++;
+            }
+            su._filament = f;
+            su.removeListener(this);
+            su.addListener(f);
+        }
+        return ret;
+    }
+
+    public boolean severFilament(double t) {
+        if (_severingList.size() > 0) {
+
+            //int select = selectAChuck(0);
+            //select = _severingList.size() - 1;
+            //select=(int)(Math.random()*_severingList.size());
+            //select = Math.random() < 0.5 ? 0 : 1;
+//            select = 0;
+
+            /*int sp = select > 0 ? _severingList.get(select - 1).location : 0;
+            int ep = _severingList.get(select).location;
+            if (sp >= 0) {
+                sever(t, ep,ep);
+
+                // System.out.println("INIT>>" + capped + "  " + _subunits.size());
+            }
+             */
+            sever(t, _severingList.get(0).location);
+            _severingList.clear();
+        }
+        return isClone && _subunits.size() < 2;
 
     }
 }

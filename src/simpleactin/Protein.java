@@ -15,40 +15,36 @@ import static simpleactin.Filament._TIME;
  *
  * @author sm2983
  */
-public class Protein implements SubUnitListener, ProteinI {
+public class Protein implements SubUnitListener, ProteinI, DecorationListener {
 
+    final int __DECORATE = 64;
     final double KBT = 4.114;
     final static int GSCALE = 16;
-    private Filament _f1;
-    double _t = -1, _detached = -1;
+
     boolean _forceDetach = false;
     private LinkedList<SubUnit> _available = new LinkedList<>();
-    private double[] _offRates = new double[2];
+
     /*
     0:No connection
     1:Connected to filament 1
     2:Connected to filament 2
      */
-    private double _k1, _kon1;
-    private double _k2, _kon2;
-    private double _ratio;
+    private double _koff1, _kon1;
 
     private static GammaDistribution GammaDists[] = new GammaDistribution[140 * GSCALE];
     private LinkedList<SubUnit> _end1Attached = new LinkedList<>(), _detachEnd1 = new LinkedList<>();
     private boolean _end1CanAttach = true;
     double bt = -1, _nextAttachTime;
-    public double decoration = 0.01;
+    public double decoration = 0.1;
     private LifeTimeRecorder _ltr = null;
 
-    public Protein(Filament f1, double k1, double kon1, double k2, double kon2, LifeTimeRecorder ltr) {
-        _f1 = f1;
-        _k1 = k1;
+    public Protein(double koff1, double kon1, LifeTimeRecorder ltr) {
+
+        _koff1 = koff1;
         _kon1 = kon1;
-        _k2 = k2;
-        _kon2 = kon2;
-        _ratio = _kon1 / (_kon1 + _kon2);
+
         _ltr = ltr;
-        resetOffrates();
+
     }
 
     public static void setDists(double Sh, double ShA, double Sc, double ScA) {
@@ -58,31 +54,30 @@ public class Protein implements SubUnitListener, ProteinI {
         }
     }
 
-    private final SubUnit getSubUnit(int i) {
-        return _f1._subunits.get(i);
-    }
-
     private void detach(double t) {
+
         for (SubUnit s : _detachEnd1) {
-            if (_end1Attached.contains(s)) {
+
+            if (s._record) {
+                _ltr.addTime(t, s._t);
+                /*
                 if (s._decorationTime == -1) {
                     throw new RuntimeException("ERROR");
                 }
-                s.removeListener(this);
+                
                 _end1Attached.remove(s);
-                _ltr.addTime(t, s._decorationTime);
+                if (s._decorationTime == -1) {
+                    throw new RuntimeException();
+                }
+                 */
+
             }
-            s._decorated = false;
-            s._decoratedOffrateIndex = -1;
             s._decorationTime = -1;
+            s._undecorated = true;
+            s.removeListener(this);
 
         }
         _detachEnd1.clear();
-    }
-
-    public void resetOffrates() {
-        _offRates[0] = _k1;
-        _offRates[1] = _k2;
     }
 
     public static double getFrames(double t1, double t2) {
@@ -91,54 +86,30 @@ public class Protein implements SubUnitListener, ProteinI {
 
     @Override
     public boolean update(double t) {
+        for (Filament f : MainJFrame._filaments) {
+            if (f._subunits.size() > 0) {
+                for (SubUnit s : f._subunits) {
+                    if (!s._decorated) {
 
-        if (_f1._subunits.size() > 0) {
-
-            for (SubUnit s : _f1._subunits) {
-
-                if (!s._decorated) {
-                    boolean b1 = Math.random() < _kon1;
-                    boolean b2 = Math.random() < _kon2;
-                    //b1 = s._record;
-                    //b2 = false;
-                    if (b1 && b2) {
-                        if (Math.random() < _ratio) {
-                            b2 = false;
-                        } else {
-                            b1 = false;
+                        boolean b1 = Math.random() < _kon1;
+                        if (_end1Attached.contains(s)) {
+                            throw new RuntimeException("AGAIN" + s._id + "\t" + _end1Attached.get(_end1Attached.indexOf(s))._id);
                         }
-                    }
-                    if (b1 || b2) {
-                        s._decorated = true;
-
                         if (b1) {
-                            s.addListener(this);
-                            if (Math.random() < decoration) {
-
-                                if (!_end1Attached.contains(s)) {
-                                    _end1Attached.add(s);
-                                    s._decorationTime = t;
-                                } else {
-                                    System.out.println("ERROR");
-                                }
-
+                            if (decorationExists(s)) {
+                                throw new RuntimeException();
                             }
-                            s._decoratedOffrateIndex = 0;
-
-                        } else {
-                            s._decoratedOffrateIndex = 1;
+                            s._decorationReaction.add(new DecorationReaction(_kon1, _koff1, __DECORATE, this));
                         }
-
                     }
-                } else if (Math.random() < _offRates[s._decoratedOffrateIndex]) {
-                    _detachEnd1.add(s);
+                    /*else {
+                        if (!(s == s._filament._subunits.getLast() && s._decoratedTag == 1024)) {
+                            throw new RuntimeException();
+                        }
+                    }*/
                 }
+
             }
-
-        }
-
-        if (_detachEnd1.size() > 0) {
-            detach(t);
         }
 
         return true;
@@ -169,15 +140,15 @@ public class Protein implements SubUnitListener, ProteinI {
         /*if (t == -1 && _t != -1 && _f1.isTagged() == 0) {
             _t = _detached = -1;
         }*/
-
-        if (t > -1) {
+        su._undecorated = true;
+        if (t >= 0) {
             if (!_detachEnd1.contains(su)) {
                 _detachEnd1.add(su);
             }
         } else {
-            su.removeListener(this);
-            _end1Attached.remove(su);
 
+            _end1Attached.remove(su);
+            /*
             if (_end1Attached.size() == 0) {
                 if (_t > Filament._STARTTIME && _detached != -1 && _f1._subunits.size() < 3) {
                     _forceDetach = true;
@@ -185,24 +156,25 @@ public class Protein implements SubUnitListener, ProteinI {
                     reset();
                 }
 
-            }
+            }*/
 
         }
-
+        su.removeListener(this);
     }
 
     @Override
     public double getTime() {
-        return _t;
+        return 0;
     }
 
     @Override
     public void reset() {
-        _t = -1;
-        _detached = -1;
+
         _forceDetach = false;
         _detachEnd1.clear();
+
         for (SubUnit s : _end1Attached) {
+            s._decorationReaction.clear();
             s.removeListener(this);
         }
         _end1Attached.clear();
@@ -210,7 +182,7 @@ public class Protein implements SubUnitListener, ProteinI {
 
     @Override
     public double getDetachedTime() {
-        return _detached;
+        return -1;
     }
 
     @Override
@@ -225,5 +197,52 @@ public class Protein implements SubUnitListener, ProteinI {
             }
 
         }*/
+    }
+
+    @Override
+    public void reactionCallBack(SubUnit su, double t, int tag) {
+
+        if (tag == __DECORATE) {
+
+            su.addListener(this);
+
+            if (!_end1Attached.contains(su)) {
+
+                _end1Attached.add(su);
+
+            } else {
+                throw new RuntimeException("Subunit was already added:" + su._decorated + "\t" + _end1Attached.size() + "\t" + _end1Attached.indexOf(su));
+            }
+
+        } else if (tag == -__DECORATE) {
+            {
+
+                if (false && !_detachEnd1.contains(su)) {
+                    _detachEnd1.add(su);
+
+                } else if (!_end1Attached.contains(su)) {
+                    throw new RuntimeException();
+                } else {
+                    //_end1Attached.remove(su);
+                    //su.removeListener(this);
+                }
+            }
+        }
+    }
+
+    private boolean decorationExists(SubUnit su) {
+        for (DecorationReaction dr : su._decorationReaction) {
+            if (dr.callback == this) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void react(double t) {
+        if (_detachEnd1.size() > 0) {
+            detach(t);
+        }
     }
 }
