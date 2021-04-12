@@ -31,7 +31,7 @@ public class Fimbrin implements SubUnitListener, ProteinI, DecorationListener {
     public double _UCA;
     private static GammaDistribution GammaDists[] = new GammaDistribution[(int) (140 * GSCALE)];
     int state = 0;
-    //private SubUnit _end1Attached, _end2Attached;
+    private SubUnit _end1Attached, _end2Attached;
     private LifeTimeRecorder _ltr = null;
     private LinkedList<Updates> _updates;
     private LinkedList<ABDs> _fimbrins = new LinkedList<>();
@@ -414,7 +414,7 @@ public class Fimbrin implements SubUnitListener, ProteinI, DecorationListener {
                     throw new RuntimeException();
                 }
                 up.su._decorationTime = t;
-                _fimbrins.add(up.su);
+//                _fimbrins.add(up.su);
 
                 /*
                 if (i != N) {
