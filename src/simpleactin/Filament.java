@@ -17,6 +17,7 @@ import static simpleactin.Filament._STARTTIME;
  */
 public class Filament implements SubUnitListener, DecorationListener {
 
+    private final boolean twoCofilin = true;
     boolean storeCapped = MainJFrame.ACP1P;
 
     public static double _TIME = 0.1, _STARTTIME = 1;
@@ -73,6 +74,15 @@ public class Filament implements SubUnitListener, DecorationListener {
         _sideOff = sideOff;
     }
 
+    public double age() {
+        double t = 0;
+        for (SubUnit su : _subunits) {
+            t += su._t;
+        }
+        t /= (double) _subunits.size();
+        return t;
+    }
+
     public void update(double t) {
 
         updateSubunits(t);
@@ -85,7 +95,8 @@ public class Filament implements SubUnitListener, DecorationListener {
                 boolean b1 = (!barbedEnd._decorated) && Math.random() < _Cap.onRates[0];
                 //boolean b1 =  Math.random() < _Cap.onRates[0];
                 if (b1) {
-                    barbedEnd._decorationReaction.add(new DecorationReaction(_Cap.onRates[0], _Cap.offRate, __CAP, this));
+                    double s = barbedEnd._state == __COFILIN ? 0.1 : 1;
+                    barbedEnd._decorationReaction.add(new DecorationReaction(_Cap.onRates[0] * s, _Cap.offRate, __CAP, this));
                     //capon(t);
                 }
                 /*
@@ -317,7 +328,7 @@ public class Filament implements SubUnitListener, DecorationListener {
                         if (i < _subunits.size() - 1 && _subunits.get(i + 1)._state == __COFILIN) {
                             adfr = _coflin.onRates[1];
                         }
-                        adfr = _coflin.onRates[1];
+                        //adfr = _coflin.onRates[1];
                     }
 
                     if (Math.random() < adfr) {
@@ -327,26 +338,40 @@ public class Filament implements SubUnitListener, DecorationListener {
                     }
                     break;
                 case __COFILIN:
-                    /*
+
                     if (Math.random() < _coflin.offRate) {
 
                         //   changed.add(i);
                         _changed.add(new Point(i, __ADP));
 
-                    }*/
+                    }
                     boolean hasNeighbour = false;
                     //int j = _subunits.size() - 1 - i;
                     int j = i;
-                    if (j > 1) {
-                        hasNeighbour |= (_subunits.get(j - 1)._state == __COFILIN && _subunits.get(j - 2)._state != __COFILIN);
-                    }
                     /*
-                    if (j < _subunits.size() - 1) {
-                        hasNeighbour |= _subunits.get(j + 1)._state == __COFILIN;
+                    if (j >1) {
+                        hasNeighbour |= (_subunits.get(j - 1)._state == __COFILIN && _subunits.get(j - 2)._state != __COFILIN);
                     }*/
+                    if (j > 0 && j < _subunits.size() - 1) {
+                        //hasNeighbour = (_subunits.get(j-1)._state!= __COFILIN && _subunits.get(j + 1)._state == __COFILIN);
+                        hasNeighbour = twoCofilin && (_subunits.get(j - 1)._state != __COFILIN) && _subunits.get(j + 1)._state == __COFILIN;
+                        hasNeighbour |= !twoCofilin && (_subunits.get(j - 1)._state != __COFILIN);
+                    }
+
                     if (hasNeighbour && Math.random() < _coflin.reactRate) {
                         //****sever = Math.max(sever, j);
-                        addSevering(Math.min(j - 1, _subunits.size()), 0);
+                        addSevering(Math.min(j, _subunits.size() - 1), 0);
+
+                    }
+                    if (j > 0 && j < _subunits.size() - 1) {
+                        //hasNeighbour = (_subunits.get(j-1)._state!= __COFILIN && _subunits.get(j + 1)._state == __COFILIN);
+                        hasNeighbour = twoCofilin && _subunits.get(j - 1)._state == __COFILIN && _subunits.get(j + 1)._state != __COFILIN;
+                        hasNeighbour |= !twoCofilin && (_subunits.get(j + 1)._state != __COFILIN);
+                    }
+
+                    if (hasNeighbour && Math.random() < _coflin.reactRate / 4) {
+                        //****sever = Math.max(sever, j);
+                        addSevering(Math.min(j, _subunits.size() - 1), 0);
 
                     }
                     break;
@@ -550,7 +575,7 @@ public class Filament implements SubUnitListener, DecorationListener {
     }
 
     @Override
-    public void reactionCallBack(SubUnit su, double t, int tag) {
+    public void reactionCallBack(SubUnit su, double t, int tag, Object data) {
         switch (tag) {
             case __COFILIN:
                 su._state = __COFILIN;
@@ -586,7 +611,7 @@ public class Filament implements SubUnitListener, DecorationListener {
         f._ltr = _ltr;
         f.storeCapped = storeCapped;
 
-        for (int i = 0; i < end; i++) {
+        for (int i = 0; i < end && _subunits.size() > 0; i++) {
             SubUnit su = _subunits.pop();
             f._subunits.addLast(su);
             if (su._state == __COFILIN) {
@@ -616,7 +641,11 @@ public class Filament implements SubUnitListener, DecorationListener {
                 // System.out.println("INIT>>" + capped + "  " + _subunits.size());
             }
              */
-            sever(t, _severingList.get(0).location);
+            int offset = 0;
+            for (int i = 0; i < _severingList.size(); i++) {
+                sever(t, _severingList.get(i).location - offset);
+                offset += _severingList.get(i).location;
+            }
             _severingList.clear();
         }
         return isClone && _subunits.size() < 2;

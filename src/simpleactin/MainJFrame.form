@@ -69,14 +69,6 @@
                                   <Component id="jButton3" min="-2" pref="58" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                              <Component id="jButton2" min="-2" pref="84" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jLabel41" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="errorMethComboBox" min="-2" max="-2" attributes="0"/>
-                          </Group>
                           <Component id="imageBox2" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="1" attributes="0">
@@ -99,6 +91,19 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
                               <Component id="xParComboBox" min="-2" pref="80" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jCheckBox2" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <Component id="jButton2" min="-2" pref="84" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jLabel41" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="errorMethComboBox" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
                           </Group>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
@@ -187,6 +192,8 @@
                           <Component id="errorMethComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel41" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jCheckBox2" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -376,7 +383,7 @@
                                       <EmptySpace min="244" pref="244" max="-2" attributes="0"/>
                                       <Component id="jLabel37" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="sampNLabel" max="32767" attributes="0"/>
+                                      <Component id="sampNLabel" pref="120" max="32767" attributes="0"/>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Component id="jLabel48" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
@@ -451,20 +458,37 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jLabel24" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="svrrTextField" min="-2" pref="55" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jLabel24" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="svrrTextField" min="-2" pref="55" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <Component id="jLabel28" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="totalTimeTextField" min="-2" pref="55" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
-                              <Group type="102" alignment="1" attributes="0">
-                                  <Component id="jLabel28" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="totalTimeTextField" min="-2" pref="55" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <Component id="jLabel57" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                          <Component id="FRemovalbTextField" min="-2" pref="55" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" attributes="0">
+                                          <Component id="jLabel56" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                          <Component id="FRemovalaTextField" min="-2" pref="55" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
                               </Group>
                           </Group>
                       </Group>
                   </Group>
-                  <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
               </Group>
               <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -693,6 +717,10 @@
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Component id="jLabel27" alignment="1" min="-2" max="-2" attributes="0"/>
                               <Component id="kadppicTextField" alignment="1" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" alignment="1" groupAlignment="3" attributes="0">
+                                  <Component id="FRemovalaTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel56" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                       </Group>
                   </Group>
@@ -708,6 +736,10 @@
                                       <Component id="ChunkSlider" min="-2" max="-2" attributes="0"/>
                                       <Component id="ChunkLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
+                              </Group>
+                              <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                                  <Component id="FRemovalbTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel57" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Component id="SRV2Label" min="-2" max="-2" attributes="0"/>
                           </Group>
@@ -860,11 +892,11 @@
         </Component>
         <Component class="javax.swing.JTextField" name="atpTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="15"/>
+            <Property name="text" type="java.lang.String" value="10"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
           <AccessibilityProperties>
-            <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" [ATP]"/>
+            <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" CATP"/>
           </AccessibilityProperties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="atpTextFieldActionPerformed"/>
@@ -875,7 +907,7 @@
             <Property name="text" type="java.lang.String" value="0"/>
           </Properties>
           <AccessibilityProperties>
-            <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" [ADP]"/>
+            <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" CADP"/>
           </AccessibilityProperties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="adpTextFieldActionPerformed"/>
@@ -934,7 +966,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="adpboffTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="0.4"/>
+            <Property name="text" type="java.lang.String" value="10"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" ADPbOff"/>
@@ -945,7 +977,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="atpboffTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="2"/>
+            <Property name="text" type="java.lang.String" value="1"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" ATPbOff"/>
@@ -956,7 +988,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="atppoffTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="4"/>
+            <Property name="text" type="java.lang.String" value="10"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" ATPpOff"/>
@@ -977,7 +1009,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="adppoffTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="0.27"/>
+            <Property name="text" type="java.lang.String" value="10"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" ADPpOff"/>
@@ -1038,10 +1070,10 @@
         <Component class="javax.swing.JSlider" name="ADFSlider">
           <Properties>
             <Property name="maximum" type="int" value="10000"/>
-            <Property name="value" type="int" value="960"/>
+            <Property name="value" type="int" value="1700"/>
           </Properties>
           <AccessibilityProperties>
-            <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" [ADF]"/>
+            <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" CADF"/>
           </AccessibilityProperties>
           <Events>
             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="ADFSliderStateChanged"/>
@@ -1166,7 +1198,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="katpTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="15"/>
+            <Property name="text" type="java.lang.String" value="30"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" K_ATP"/>
@@ -1177,11 +1209,14 @@
         </Component>
         <Component class="javax.swing.JTextField" name="kadppiTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="2.8"/>
+            <Property name="text" type="java.lang.String" value="0.2"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" K_ADPPI"/>
           </AccessibilityProperties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="kadppiTextFieldActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel26">
           <Properties>
@@ -1190,11 +1225,14 @@
         </Component>
         <Component class="javax.swing.JTextField" name="kadppicTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="2.8"/>
+            <Property name="text" type="java.lang.String" value="3"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" K_ADPPIC"/>
           </AccessibilityProperties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="kadppicTextFieldActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel27">
           <Properties>
@@ -1241,6 +1279,9 @@
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" fimk3off"/>
           </AccessibilityProperties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Fimk3offTextFieldActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel18">
           <Properties>
@@ -1254,7 +1295,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="Fimk1onTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="20"/>
+            <Property name="text" type="java.lang.String" value="1.4"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" fimk1on"/>
@@ -1265,11 +1306,14 @@
         </Component>
         <Component class="javax.swing.JTextField" name="Fimk1offTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="0"/>
+            <Property name="text" type="java.lang.String" value="1.8"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" fimk1off"/>
           </AccessibilityProperties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Fimk1offTextFieldActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel20">
           <Properties>
@@ -1283,7 +1327,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="Fimk2offTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="0.002"/>
+            <Property name="text" type="java.lang.String" value="0.017"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" fimk2off"/>
@@ -1292,7 +1336,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="UShTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="0.01"/>
+            <Property name="text" type="java.lang.String" value="0.064"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" USh"/>
@@ -1313,7 +1357,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="UScTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="0.01"/>
+            <Property name="text" type="java.lang.String" value="0.082"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" USc"/>
@@ -1328,7 +1372,7 @@
           <Properties>
             <Property name="maximum" type="int" value="5000"/>
             <Property name="minimum" type="int" value="1"/>
-            <Property name="value" type="int" value="200"/>
+            <Property name="value" type="int" value="2733"/>
             <Property name="valueIsAdjusting" type="boolean" value="true"/>
           </Properties>
           <AccessibilityProperties>
@@ -1350,8 +1394,8 @@
         </Component>
         <Component class="javax.swing.JSlider" name="UShASlider">
           <Properties>
-            <Property name="maximum" type="int" value="2000"/>
-            <Property name="value" type="int" value="180"/>
+            <Property name="maximum" type="int" value="3000"/>
+            <Property name="value" type="int" value="260"/>
             <Property name="valueIsAdjusting" type="boolean" value="true"/>
           </Properties>
           <AccessibilityProperties>
@@ -1390,7 +1434,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="Fimk2onTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="0.12"/>
+            <Property name="text" type="java.lang.String" value="0.7"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" fimk2on"/>
@@ -1437,7 +1481,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="CoffTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="0.015"/>
+            <Property name="text" type="java.lang.String" value="0.004"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" Coff"/>
@@ -1498,11 +1542,14 @@
         </Component>
         <Component class="javax.swing.JTextField" name="Fimk3onTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="95"/>
+            <Property name="text" type="java.lang.String" value="20"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" fimk3on"/>
           </AccessibilityProperties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Fimk3onTextFieldActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel53">
           <Properties>
@@ -1541,6 +1588,35 @@
         <Component class="javax.swing.JLabel" name="jLabel55">
           <Properties>
             <Property name="text" type="java.lang.String" value="#Filaments:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="FRemovalaTextField">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="0"/>
+          </Properties>
+          <AccessibilityProperties>
+            <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" FRemovala"/>
+          </AccessibilityProperties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="FRemovalaTextFieldActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel56">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="FRemovala:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="FRemovalbTextField">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="0"/>
+          </Properties>
+          <AccessibilityProperties>
+            <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" FRemovalb"/>
+          </AccessibilityProperties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel57">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="FRemovalb:"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -1739,6 +1815,11 @@
     <Component class="javax.swing.JLabel" name="lowerLimitLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="0"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="jCheckBox2">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="export Dataset"/>
       </Properties>
     </Component>
   </SubComponents>

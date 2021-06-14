@@ -43,6 +43,8 @@ import static simpleactin.Filament._STARTTIME;
  */
 public class MainJFrame extends javax.swing.JFrame {
 
+    private String storagepath = "";
+
     private double _STARTTIME = Filament._STARTTIME;
     private double _originalDataPoints[] = null;
     public static boolean ACTIN = true, ACP1P = false;
@@ -62,11 +64,13 @@ public class MainJFrame extends javax.swing.JFrame {
     private LinkedList<Double> _lifeTimes = new LinkedList<Double>();
     final int _ADFOFF = 0, _CADP = 1, _CATP = 2, _ADPBON = 3, _ADFCOON = 4, _ATPBON = 5,
             _ADPPON = 6, _ATPPON = 7, _ADPBOFF = 8, _ATPBOFF = 9, _SRV2ON = 10, _ADPPOFF = 11,
-            _ATPPOFF = 12, _SRV2OFF = 13, _FIMTD = 14, _USH = 15, _FLTD = 16, _USC = 17,
-            _USHA = 18, _USCA = 19, _THERMALFLUC = 20, _K_ATP = 21, _K_ADPPI = 22,
-            _K_ADPPIC = 23, _COFF_SEVERING_RATE = 24, _ADFON = 25, _CHUNK = 26, _K_SRV2 = 27,
-            _CADF = 28, _DISTANCE = 29, _FIMK1OFF = 30, _CCAP = 31, _CON = 32, _COFF = 33,
-            _FIMK1ON = 34, _FIMK2ON = 35, _FIMK3ON = 36, _FIMK2OFF = 37, _FIMK3OFF = 38, _NFILAMENTS = 39;
+            _ATPPOFF = 12, _SRV2OFF = 13, _FIMTD = 14, _USH = 15, _FLTD = 16, _USC = 17, _USHA = 18,
+            _USCA = 19, _THERMALFLUC = 20, _K_ATP = 21, _K_ADPPI = 22, _K_ADPPIC = 23,
+            _COFF_SEVERING_RATE = 24, _FREMOVALB = 25, _FREMOVALA = 26, _ADFON = 27,
+            _CHUNK = 28, _K_SRV2 = 29, _CADF = 30, _DISTANCE = 31, _FIMK1OFF = 32, _CCAP = 33,
+            _CON = 34, _COFF = 35, _FIMK1ON = 36, _FIMK2ON = 37, _FIMK3ON = 38, _FIMK2OFF = 39,
+            _FIMK3OFF = 40, _NFILAMENTS = 41;
+
     final String PATH = "C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\";
 
     final String _histFilenames[] = new String[]{"out_actin_java.txt", "out_acp_java.txt",
@@ -248,6 +252,10 @@ public class MainJFrame extends javax.swing.JFrame {
         ProteinComboBox = new javax.swing.JComboBox<>();
         NFilamentsTextField = new javax.swing.JTextField();
         jLabel55 = new javax.swing.JLabel();
+        FRemovalaTextField = new javax.swing.JTextField();
+        jLabel56 = new javax.swing.JLabel();
+        FRemovalbTextField = new javax.swing.JTextField();
+        jLabel57 = new javax.swing.JLabel();
         jCheckBox1 = new javax.swing.JCheckBox();
         upLimitSlider = new javax.swing.JSlider();
         upperLimitLabel = new javax.swing.JLabel();
@@ -275,6 +283,7 @@ public class MainJFrame extends javax.swing.JFrame {
         eVLabel = new javax.swing.JLabel();
         lowerLimitSlider = new javax.swing.JSlider();
         lowerLimitLabel = new javax.swing.JLabel();
+        jCheckBox2 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -319,7 +328,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel1.setText("[ATP]:");
 
-        atpTextField.setText("15");
+        atpTextField.setText("10");
         atpTextField.setToolTipText("");
         atpTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -352,21 +361,21 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel8.setText("ADPbOff:");
 
-        adpboffTextField.setText("0.4");
+        adpboffTextField.setText("10");
         adpboffTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 adpboffTextFieldActionPerformed(evt);
             }
         });
 
-        atpboffTextField.setText("2");
+        atpboffTextField.setText("1");
         atpboffTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 atpboffTextFieldActionPerformed(evt);
             }
         });
 
-        atppoffTextField.setText("4");
+        atppoffTextField.setText("10");
         atppoffTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 atppoffTextFieldActionPerformed(evt);
@@ -377,7 +386,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel10.setText("ADPpOff:");
 
-        adppoffTextField.setText("0.27");
+        adppoffTextField.setText("10");
         adppoffTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 adppoffTextFieldActionPerformed(evt);
@@ -401,7 +410,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jLabel15.setText("SRV2off:");
 
         ADFSlider.setMaximum(10000);
-        ADFSlider.setValue(960);
+        ADFSlider.setValue(1700);
         ADFSlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 ADFSliderStateChanged(evt);
@@ -467,18 +476,28 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel25.setText("K_ATP:");
 
-        katpTextField.setText("15");
+        katpTextField.setText("30");
         katpTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 katpTextFieldActionPerformed(evt);
             }
         });
 
-        kadppiTextField.setText("2.8");
+        kadppiTextField.setText("0.2");
+        kadppiTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                kadppiTextFieldActionPerformed(evt);
+            }
+        });
 
         jLabel26.setText("K_ADPPI:");
 
-        kadppicTextField.setText("2.8");
+        kadppicTextField.setText("3");
+        kadppicTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                kadppicTextFieldActionPerformed(evt);
+            }
+        });
 
         jLabel27.setText("K_ADPPIC:");
 
@@ -498,27 +517,37 @@ public class MainJFrame extends javax.swing.JFrame {
         FLTDTextField.setText("0.6");
 
         Fimk3offTextField.setText("0");
+        Fimk3offTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Fimk3offTextFieldActionPerformed(evt);
+            }
+        });
 
         jLabel18.setText("k3off:");
 
         jLabel19.setText("k1on:");
 
-        Fimk1onTextField.setText("20");
+        Fimk1onTextField.setText("1.4");
         Fimk1onTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Fimk1onTextFieldActionPerformed(evt);
             }
         });
 
-        Fimk1offTextField.setText("0");
+        Fimk1offTextField.setText("1.8");
+        Fimk1offTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Fimk1offTextFieldActionPerformed(evt);
+            }
+        });
 
         jLabel20.setText("k1off:");
 
         jLabel29.setText("k2off:");
 
-        Fimk2offTextField.setText("0.002");
+        Fimk2offTextField.setText("0.017");
 
-        UShTextField.setText("0.01");
+        UShTextField.setText("0.064");
         UShTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 UShTextFieldActionPerformed(evt);
@@ -529,13 +558,13 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel31.setText("USc:");
 
-        UScTextField.setText("0.01");
+        UScTextField.setText("0.082");
 
         uScALabel.setText("0");
 
         UScASlider.setMaximum(5000);
         UScASlider.setMinimum(1);
-        UScASlider.setValue(200);
+        UScASlider.setValue(2733);
         UScASlider.setValueIsAdjusting(true);
         UScASlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -547,8 +576,8 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel32.setText("UShA:");
 
-        UShASlider.setMaximum(2000);
-        UShASlider.setValue(180);
+        UShASlider.setMaximum(3000);
+        UShASlider.setValue(260);
         UShASlider.setValueIsAdjusting(true);
         UShASlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -570,7 +599,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel34.setText("ThFluc:");
 
-        Fimk2onTextField.setText("0.12");
+        Fimk2onTextField.setText("0.7");
         Fimk2onTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Fimk2onTextFieldActionPerformed(evt);
@@ -589,7 +618,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel51.setText("Coff:");
 
-        CoffTextField.setText("0.015");
+        CoffTextField.setText("0.004");
 
         CCapTextField.setText("0.8");
 
@@ -611,7 +640,12 @@ public class MainJFrame extends javax.swing.JFrame {
 
         KSLabel.setText("0");
 
-        Fimk3onTextField.setText("95");
+        Fimk3onTextField.setText("20");
+        Fimk3onTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Fimk3onTextFieldActionPerformed(evt);
+            }
+        });
 
         jLabel53.setText("k3on:");
 
@@ -622,6 +656,19 @@ public class MainJFrame extends javax.swing.JFrame {
         NFilamentsTextField.setText("1");
 
         jLabel55.setText("#Filaments:");
+
+        FRemovalaTextField.setText("0");
+        FRemovalaTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                FRemovalaTextFieldActionPerformed(evt);
+            }
+        });
+
+        jLabel56.setText("FRemovala:");
+
+        FRemovalbTextField.setText("0");
+
+        jLabel57.setText("FRemovalb:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -722,7 +769,7 @@ public class MainJFrame extends javax.swing.JFrame {
                                     .addGap(244, 244, 244)
                                     .addComponent(jLabel37)
                                     .addGap(18, 18, 18)
-                                    .addComponent(sampNLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(sampNLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                     .addComponent(jLabel48)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -782,15 +829,27 @@ public class MainJFrame extends javax.swing.JFrame {
                                 .addComponent(kadppicTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jLabel24)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(svrrTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jLabel28)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(totalTimeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel24)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(svrrTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel28)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(totalTimeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(50, 50, 50))
+                                .addGap(12, 12, 12)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel57)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(FRemovalbTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel56)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(FRemovalaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                .addGap(48, 48, 48))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -965,7 +1024,10 @@ public class MainJFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel27)
-                            .addComponent(kadppicTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(kadppicTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(FRemovalaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel56)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
@@ -977,6 +1039,9 @@ public class MainJFrame extends javax.swing.JFrame {
                                     .addComponent(jLabel21)
                                     .addComponent(ChunkSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(ChunkLabel)))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(FRemovalbTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel57))
                             .addComponent(SRV2Label))
                         .addGap(3, 3, 3)
                         .addComponent(jButton1)
@@ -1075,8 +1140,8 @@ public class MainJFrame extends javax.swing.JFrame {
 
         adpponTextField.getAccessibleContext().setAccessibleName(" ADPpOn");
         atpponTextField.getAccessibleContext().setAccessibleName(" ATPpOn");
-        atpTextField.getAccessibleContext().setAccessibleName(" [ATP]");
-        adpTextField.getAccessibleContext().setAccessibleName(" [ADP]");
+        atpTextField.getAccessibleContext().setAccessibleName(" CATP");
+        adpTextField.getAccessibleContext().setAccessibleName(" CADP");
         atpbonTextField.getAccessibleContext().setAccessibleName(" ATPbOn");
         adpbonTextField.getAccessibleContext().setAccessibleName(" ADPbOn");
         adpboffTextField.getAccessibleContext().setAccessibleName(" ADPbOff");
@@ -1086,7 +1151,7 @@ public class MainJFrame extends javax.swing.JFrame {
         adfonTextField.getAccessibleContext().setAccessibleName(" ADFon");
         srv2onTextField.getAccessibleContext().setAccessibleName(" SRV2on");
         srv2offTextField.getAccessibleContext().setAccessibleName(" SRV2off");
-        ADFSlider.getAccessibleContext().setAccessibleName(" [ADF]");
+        ADFSlider.getAccessibleContext().setAccessibleName(" CADF");
         DistanceSlider.getAccessibleContext().setAccessibleName(" Distance");
         SRV2Slider.getAccessibleContext().setAccessibleName(" K_SRV2");
         ChunkSlider.getAccessibleContext().setAccessibleName(" Chunk");
@@ -1114,6 +1179,8 @@ public class MainJFrame extends javax.swing.JFrame {
         CCapTextField.getAccessibleContext().setAccessibleName(" CCap");
         Fimk3onTextField.getAccessibleContext().setAccessibleName(" fimk3on");
         NFilamentsTextField.getAccessibleContext().setAccessibleName(" nFilaments");
+        FRemovalaTextField.getAccessibleContext().setAccessibleName(" FRemovala");
+        FRemovalbTextField.getAccessibleContext().setAccessibleName(" FRemovalb");
 
         jCheckBox1.setSelected(true);
         jCheckBox1.setText("Actin");
@@ -1197,6 +1264,8 @@ public class MainJFrame extends javax.swing.JFrame {
 
         lowerLimitLabel.setText("0");
 
+        jCheckBox2.setText("export Dataset");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -1238,13 +1307,6 @@ public class MainJFrame extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(eVLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel41)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(errorMethComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(imageBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -1262,7 +1324,17 @@ public class MainJFrame extends javax.swing.JFrame {
                                 .addComponent(xVLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(17, 17, 17)
-                                .addComponent(xParComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(xParComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jCheckBox2)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel41)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(errorMethComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jCheckBox1)
@@ -1328,7 +1400,9 @@ public class MainJFrame extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton2)
                             .addComponent(errorMethComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel41))))
+                            .addComponent(jLabel41))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jCheckBox2)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
@@ -1432,6 +1506,19 @@ public class MainJFrame extends javax.swing.JFrame {
             jButton2.setText("Stop");
             jButton1.setEnabled(false);
             loadDataPoints();
+            String path = null;
+            if (jCheckBox2.isSelected()) {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                int option = fileChooser.showOpenDialog(this);
+                if (option == JFileChooser.APPROVE_OPTION) {
+                    File file = fileChooser.getSelectedFile();
+                    path = file.getPath() + "/" + ProteinComboBox.getSelectedItem() + "/" + xParComboBox.getSelectedItem() + "_" + yParComboBox.getSelectedItem() + "/";
+                    new File(path).mkdirs();
+
+                }
+            }
+            final String SPath = path;
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -1480,7 +1567,9 @@ public class MainJFrame extends javax.swing.JFrame {
                     paramsV[_THERMALFLUC] = ThFluSlider.getValue() / 50.0;
                     paramsV[_DISTANCE] = DistanceSlider.getValue();
                     paramsV[_CHUNK] = ChunkSlider.getValue();
-
+                    if (SPath != null) {
+                        writeDescriptions(SPath, paramsV);
+                    }
                     _svX = getlims(xvTextField.getText());
                     _svY = getlims(yvTextField.getText());
                     double xs = (_svX[2] - _svX[0]) / _svX[1];
@@ -1499,6 +1588,11 @@ public class MainJFrame extends javax.swing.JFrame {
                         for (int i = 0; i < _svX[1] && _heatGenerating; i++) {
                             paramsV[_xInd] = _svX[0] + i * xs;
                             setValue(_xInd, paramsV[_xInd]);
+                            if (SPath != null) {
+                                storagepath = SPath + paramsV[_xInd] + "_" + paramsV[_yInd] + ".txt";
+                            } else {
+                                storagepath = null;
+                            }
 
                             final double atpbonr = paramsV[_ATPBON] * paramsV[_CATP];
                             final double atpponr = paramsV[_ATPPON] * paramsV[_CATP];
@@ -1523,7 +1617,8 @@ public class MainJFrame extends javax.swing.JFrame {
                                     fimk2off = paramsV[_FIMK2OFF] * dt,
                                     fimk3on = paramsV[_FIMK3ON] * dt,
                                     fimk3off = paramsV[_FIMK3OFF] * dt;
-
+                            final double frratea = paramsV[_FREMOVALA] * dt;
+                            final double frrateb = paramsV[_FREMOVALB] * dt;
                             final int distance = (int) paramsV[_DISTANCE];
                             final int chunk = (int) paramsV[_CHUNK];
                             _running = true;
@@ -1543,7 +1638,7 @@ public class MainJFrame extends javax.swing.JFrame {
                                         fimk1on, fimk2on, fimk3on, fimk1off,
                                         fimk2off, fimk3off, paramsV[_USH],
                                         paramsV[_USHA], paramsV[_USC], paramsV[_USCA],
-                                        paramsV[_THERMALFLUC], dt, tt, (int) paramsV[_NFILAMENTS], true);
+                                        paramsV[_THERMALFLUC], dt, tt, (int) paramsV[_NFILAMENTS], frratea, frrateb, true);
                                 Object[] ret = Utils.generateHist(lt, 0.25, 6, 0.1);
 
                                 LinkedList<PointF> points = (LinkedList<PointF>) ret[0];
@@ -1579,12 +1674,17 @@ public class MainJFrame extends javax.swing.JFrame {
                     _heatGenerating = false;
                     _ended = true;
                     _running = false;
-                    jButton2.setText("Run");
-                    jButton2.setEnabled(true);
-                    jButton1.setEnabled(true);
+
+                    jButton2.setText(
+                            "Run");
+                    jButton2.setEnabled(
+                            true);
+                    jButton1.setEnabled(
+                            true);
                     // jProgressBar2.setValue(0);
                 }
-            }).start();
+            }
+            ).start();
         } else {
             jButton2.setText("Wait...");
             jButton2.setEnabled(false);
@@ -1728,6 +1828,30 @@ public class MainJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_svrrTextFieldActionPerformed
 
+    private void Fimk3onTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Fimk3onTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Fimk3onTextFieldActionPerformed
+
+    private void Fimk3offTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Fimk3offTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Fimk3offTextFieldActionPerformed
+
+    private void Fimk1offTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Fimk1offTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Fimk1offTextFieldActionPerformed
+
+    private void kadppiTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kadppiTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_kadppiTextFieldActionPerformed
+
+    private void kadppicTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kadppicTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_kadppicTextFieldActionPerformed
+
+    private void FRemovalaTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FRemovalaTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_FRemovalaTextFieldActionPerformed
+
     public double calDist(LinkedList<PointF> points) {
         double ret = 0;
         int num = upLimitSlider.getValue();
@@ -1813,188 +1937,194 @@ public class MainJFrame extends javax.swing.JFrame {
             final double fimk1on, final double fimk2on, final double fimk3on, final double fimk1off,
             final double fimk2off, final double fimk3off, final double uSh, final double uShA,
             final double uSc, final double uScA, final double thermalFluc,
-            final double dt, double totalTime, int nFilaments, boolean updatePlot) throws Exception {
+            final double dt, double totalTime, int nFilaments, final double frratea,
+            final double frrateb, boolean updatePlot) throws Exception {
+        LinkedList<Double> lifeTimes = new LinkedList<>();
+        PrintStream lenps = new PrintStream("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\Sims\\Len_actin_fast.txt");
+        String fn = "C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\HeatMaps\\Res\\RFR0.003\\" + ProteinComboBox.getSelectedItem() + ".txt";
+        if (storagepath != null && jCheckBox2.isSelected()) {
+            fn = storagepath;
+        }
+        System.out.println(">>" + fn);
+        PrintStream ltps = new PrintStream(fn);
+        if (!(frratea < 0 && frrateb < 0 || frratea < 0 && frrateb == 0)) {
 
-
-        /*
+            /*
         final double ATP = 1, ADP = 0.0, ADF = 0;
         final double bton = 11.6 * ATP, bdon = 3.8 * ADP, btoff = 1.4 , bdoff = 7.2 ;
         final double pton = 1.3 * ATP, pdon = 0.16 * ADP, ptoff = 0.8 , pdoff = 0.27 ;
         final double atpR = 0.35, adppi = 0.0019, adppico = 0.035*ADF, adf = 0.0085*ADF, adfco = 0.075 * ADF, adfoff = 0.005, sev = 0.012, SVR2 = 43, SVR2B = 0*11/50.0, SVR2UB = 0.45;
         final int distance = 10, chunksize = 1;
-         */
-        //LinkedList<SubUnit> _subunits = new LinkedList<>();
+             */
+            //LinkedList<SubUnit> _subunits = new LinkedList<>();
 
-        /*double bton = btonr * ATP, pton = ptonr * ATP, bdon = btonr * ADP, pdon = bdonr * ADP, SRV2B = SRV2Br * SVR2C;
+            /*double bton = btonr * ATP, pton = ptonr * ATP, bdon = btonr * ADP, pdon = bdonr * ADP, SRV2B = SRV2Br * SVR2C;
         adfon *= ADF;
         adfcoon *= ADF;
         System.out.println(">>>" + SRV2B + "   " + ADF);
         final double maxR = Math.max(SRV2, bton);*/
-        final double raise = 0.00275;
-        _ended = false;
-        _ret = null;
-        System.out.println(barbed);
-        System.out.println(pointed);
-        System.out.println(cofilin);
-        System.out.println(cap);
+            final double raise = 0.00275;
+            _ended = false;
+            _ret = null;
+            System.out.println(barbed);
+            System.out.println(pointed);
+            System.out.println(cofilin);
+            System.out.println(cap);
 //        System.out.println(SRV2);
-        System.out.println(atp + "\t" + adppi + "\t" + adppico + "\t" + chunksize + "\t" + distance);
+            System.out.println(atp + "\t" + adppi + "\t" + adppico + "\t" + chunksize + "\t" + distance);
 
-        System.out.println("" + fimk1on + "\t" + fimk2on + "\t" + fimk3on);
-        System.out.println("" + fimk1off + "\t" + fimk2off + "\t" + fimk3off);
-        System.out.println("" + uSc + "\t" + uSh + "\t" + uScA + "\t" + uShA);
-        System.out.println("---------");
-        PrintStream lenps = new PrintStream("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\Sims\\Len_actin_fast.txt");
-        String fn = "C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\Sims\\LT_actin_fast0.txt";
-        PrintStream ltps = new PrintStream(fn);
+            System.out.println("" + fimk1on + "\t" + fimk2on + "\t" + fimk3on);
+            System.out.println("" + fimk1off + "\t" + fimk2off + "\t" + fimk3off);
+            System.out.println("" + uSc + "\t" + uSh + "\t" + uScA + "\t" + uShA);
+            System.out.println("---------");
 
-        final int totalRuns = 1000000;
-        LinkedList<Double> lifeTimes = new LinkedList<>();
-        LifeTimeRecorder ltr = new LifeTimeRecorder() {
-            @Override
-            public void addTime(double toff, double ton) {
-                double dt = (Math.ceil(toff * 10) - Math.ceil(ton * 10)) / 10;
-                if (ton >= _STARTTIME && dt <= 6000 && dt >= 0.3) {
-                    if (lifeTimes != null) {
-                        lifeTimes.add(dt);
+            final int totalRuns = 1000000;
+
+            LifeTimeRecorder ltr = new LifeTimeRecorder() {
+                @Override
+                public void addTime(double toff, double ton) {
+                    double dt = (Math.ceil(toff * 10) - Math.ceil(ton * 10)) / 10;
+                    if (ton >= _STARTTIME && dt <= 6000 && dt >= 0.3) {
+                        if (lifeTimes != null) {
+                            lifeTimes.add(dt);
+                        }
                     }
                 }
-            }
-        };
-        int ii = 0;
-        //Fimbrin.setDists(uSh, uShA, uSc, uScA, fimk1off, fimk2off, fimk3off, fimk1on, fimk2on, fimk3on);
-        long t1 = System.currentTimeMillis();
-        boolean chiz = true;
-        //int maxSamples = _sampNum;
-        int maxSamples = Math.min(1000, _sampNum);
-        //int maxSamples = 500;
-        //GammaDistribution protDelay = new GammaDistribution(fimbrinTimeDiffS, fimbrinTimeDiffA);
-        WaitingTime wt = new WaitingTime() {
-            @Override
-            public double getTime() {
-                //return protDelay.sample(); //To change body of generated methods, choose Tools | Templates.
-                return fimbrinTimeDiffS * Math.random();
-            }
-        };
-        int numberTagged[] = {0, 0, 0, 0};
-
-        for (ii = 0; ii < totalRuns && _running && lifeTimes.size() < maxSamples; ii++) {
-            _filaments.clear();
-            /*     
+            };
+            int ii = 0;
+            //Fimbrin.setDists(uSh, uShA, uSc, uScA, fimk1off, fimk2off, fimk3off, fimk1on, fimk2on, fimk3on);
+            long t1 = System.currentTimeMillis();
+            boolean chiz = true;
+            //int maxSamples = _sampNum;
+            int maxSamples = Math.min(5000, _sampNum);
+            //int maxSamples = 500;
+            //GammaDistribution protDelay = new GammaDistribution(fimbrinTimeDiffS, fimbrinTimeDiffA);
+            WaitingTime wt = new WaitingTime() {
+                @Override
+                public double getTime() {
+                    //return protDelay.sample(); //To change body of generated methods, choose Tools | Templates.
+                    return fimbrinTimeDiffS * Math.random();
+                }
+            };
+            int numberTagged[] = {0, 0, 0, 0};
+            LinkedList<Filament> removeList = new LinkedList<>();
+            for (ii = 0; ii < totalRuns && _running && lifeTimes.size() < maxSamples; ii++) {
+                _filaments.clear();
+                /*     
             if (ii > 0) {
                 System.out.println(">>" + (t2 - t1) / ii);
             }
-             */
+                 */
 
-            double t = 0;
+                double t = 0;
 
-            int n = 0;
-            //Filament f1 = new Filament(), f2 = new Filament();
+                int n = 0;
+                //Filament f1 = new Filament(), f2 = new Filament();
 
-            //Fimbrin fim = new Fimbrin(f1, f2, fimk1off, fimk2off, fimk1on, fimk2on, thermalFluc, fimbrinTimeDiff);
-            int[] filnums = new int[]{1, 1, 1, 1, 2};
-            int[] protnums = new int[]{0, 0, 1, 1, 1};
-            int filamentNumber = filnums[proteinType];// proteinType == 4 ? 8 : 1;
-            int protNumber = protnums[proteinType];
+                //Fimbrin fim = new Fimbrin(f1, f2, fimk1off, fimk2off, fimk1on, fimk2on, thermalFluc, fimbrinTimeDiff);
+                int[] filnums = new int[]{1, 1, 1, 1, 2};
+                int[] protnums = new int[]{0, 0, 1, 1, 1};
+                int filamentNumber = filnums[proteinType];// proteinType == 4 ? 8 : 1;
+                int protNumber = protnums[proteinType];
 
-            Filament[] filaments = new Filament[filamentNumber];
+                Filament[] filaments = new Filament[filamentNumber];
 
-            for (int fi = 0; fi < filamentNumber; fi++) {
-                filaments[fi] = new Filament();
-                filaments[fi].setParams(barbed, pointed, cofilin, SRV2, cap, atp,
-                        adppi, adppico, raise, distance, chunksize, fimk3on, fimk3off);
-                _filaments.add(filaments[fi]);
-
-            }
-            ProteinI[] prot = null;
-            if (proteinType == 4) {
-
-                prot = new ProteinI[protNumber];
-                for (int pi = 0; pi < protNumber; pi++) {
-                    Filament f1 = filaments[pi * 2], f2 = filaments[pi * 2 + 1];
-                    prot[pi] = new Fimbrin(thermalFluc, wt, ltr);
-                    ((Fimbrin) prot[pi]).setDists(uSh, uShA, uSc, uScA, fimk1off, fimk2off, fimk1on, fimk2on);
-                }
-                // Fimbrin.setDists(uSh, uShA, uSc, uScA, fimk1off, fimk2off, fimk3off, fimk1on, fimk2on, fimk3on);
-            } else if (proteinType > 1) {
-
-                prot = new ProteinI[protNumber];
-                for (int pi = 0; pi < protNumber; pi++) {
-                    Filament f1 = filaments[pi];
-                    prot[pi] = new Protein(fimk1off, fimk1on, ltr);
+                for (int fi = 0; fi < filamentNumber; fi++) {
+                    filaments[fi] = new Filament();
+                    filaments[fi].setParams(barbed, pointed, cofilin, SRV2, cap, atp,
+                            adppi, adppico, raise, distance, chunksize, fimk3on, fimk3off);
+                    _filaments.add(filaments[fi]);
 
                 }
-                /*
-                prot[0] = new Protein(filaments[0], fimk1off, fimk1on, fimk2off, fimk2on);
-                filaments[0]._prot = prot[0];*/
-            }
-            if (onlyActin) {
-                for (Filament f : _filaments) {
-                    f._ltr = ltr;
-                }
+                ProteinI[] prot = null;
+                if (proteinType == 4) {
 
-            }
+                    prot = new ProteinI[protNumber];
+                    for (int pi = 0; pi < protNumber; pi++) {
+                        Filament f1 = filaments[pi * 2], f2 = filaments[pi * 2 + 1];
+                        prot[pi] = new Fimbrin(thermalFluc, wt, ltr);
+                        ((Fimbrin) prot[pi]).setDists(uSh, uShA, uSc, uScA, fimk1off, fimk2off, fimk1on, fimk2on);
+                    }
+                    // Fimbrin.setDists(uSh, uShA, uSc, uScA, fimk1off, fimk2off, fimk3off, fimk1on, fimk2on, fimk3on);
+                } else if (proteinType > 1) {
 
-            double st2 = Math.random() * filamentTimeDiff, stFim = wt.getTime();
-            boolean init2 = false, initFim = false;
-            //while ((fim._t == -1 || t - fim._t < totalTime) && _running) {
-            for (int pi = 0; pi < protNumber; pi++) {
-                prot[pi].reset();
-            }
-            int pn = 0;
-
-            while (t < totalTime && _running) {
-                System.out.println("\t\t" + _filaments.size());
-                if ((n++) % 4000 == 0 || _lifeTimes.size() > pn) {
-                    pn = _lifeTimes.size();
-                    //ps.println("" + t + "\t" + b * raise + "\t" + (p) * raise + "\t" + _subunits.size() * raise + "\t" + b / totalTime + "\t" + p / totalTime);
-                    //            System.out.print("\033[2K"); 
-                    //  System.out.println("" + t + "\t" + f1._subunits.size());
-                    int p1 = (int) (100 * (ii * totalTime + t) / (double) (totalTime * totalRuns));
-                    int p2 = (int) (100 * (lifeTimes.size()) / (double) (maxSamples));
-                    jProgressBar1.setValue(Math.max(p1, p2));
-                    sampNLabel.setText("" + lifeTimes.size());
-                    if (updatePlot) {
-
-                        Object[] ret = Utils.generateHist(lifeTimes, 0.25, 6, 0.1);
-                        if (!_heatGenerating) {
-                            LinkedList<PointF> points = (LinkedList<PointF>) ret[0];
-                            double chst = calChi(points, lifeTimes.size());
-                            if (chst > 0) {
-                                chiz = true;
-                            }
-                            if (chiz && chst == 0) {
-                                sampZLabel.setText("" + lifeTimes.size());
-                                chiz = false;
-
-                            }
-                            DistLabel.setText(String.format("%10.2e", calDist(points)));
-                            KSLabel.setText(String.format("%10.2e", calKS(lifeTimes)));
-                            chiLabel.setText(String.format("%10.2e", chst));
-                        }
-
-                        updateHisto((LinkedList<PointF>) ret[0]);
+                    prot = new ProteinI[protNumber];
+                    for (int pi = 0; pi < protNumber; pi++) {
+                        Filament f1 = filaments[pi];
+                        prot[pi] = new Protein(fimk1off, fimk1on, ltr);
 
                     }
-
-                    // lifeTimes.add(f1._subunits.size() * raise);
                     /*
+                prot[0] = new Protein(filaments[0], fimk1off, fimk1on, fimk2off, fimk2on);
+                filaments[0]._prot = prot[0];*/
+                }
+                if (onlyActin) {
+                    for (Filament f : _filaments) {
+                        f._ltr = ltr;
+                    }
+
+                }
+
+                double st2 = Math.random() * filamentTimeDiff, stFim = wt.getTime();
+                boolean init2 = false, initFim = false;
+                //while ((fim._t == -1 || t - fim._t < totalTime) && _running) {
+                for (int pi = 0; pi < protNumber; pi++) {
+                    prot[pi].reset();
+                }
+                int pn = 0;
+
+                while (t < totalTime && _running) {
+                    //System.out.println("\t\t" + _filaments.size());
+                    if ((n++) % 4000 == 0 || _lifeTimes.size() > pn) {
+                        pn = _lifeTimes.size();
+                        //ps.println("" + t + "\t" + b * raise + "\t" + (p) * raise + "\t" + _subunits.size() * raise + "\t" + b / totalTime + "\t" + p / totalTime);
+                        //            System.out.print("\033[2K"); 
+                        //  System.out.println("" + t + "\t" + f1._subunits.size());
+                        int p1 = (int) (100 * (ii * totalTime + t) / (double) (totalTime * totalRuns));
+                        int p2 = (int) (100 * (lifeTimes.size()) / (double) (maxSamples));
+                        jProgressBar1.setValue(Math.max(p1, p2));
+                        sampNLabel.setText("" + lifeTimes.size());
+                        if (updatePlot) {
+
+                            Object[] ret = Utils.generateHist(lifeTimes, 0.25, 6, 0.1);
+                            if (!_heatGenerating) {
+                                LinkedList<PointF> points = (LinkedList<PointF>) ret[0];
+                                double chst = calChi(points, lifeTimes.size());
+                                if (chst > 0) {
+                                    chiz = true;
+                                }
+                                if (chiz && chst == 0) {
+                                    sampZLabel.setText("" + lifeTimes.size());
+                                    chiz = false;
+
+                                }
+                                DistLabel.setText(String.format("%10.2e", calDist(points)));
+                                KSLabel.setText(String.format("%10.2e", calKS(lifeTimes)));
+                                chiLabel.setText(String.format("%10.2e", chst));
+                            }
+
+                            updateHisto((LinkedList<PointF>) ret[0]);
+
+                        }
+
+                        // lifeTimes.add(f1._subunits.size() * raise);
+                        /*
                     if (f1._subunits.size() > 0) {
                         ltps.println(f1._subunits.size());
                     }*/
-                }
-                if (n % 10000 == 0) {
-                    System.gc();
-                }
-                int size = _filaments.size();
-                for (int fi = 0; fi < size; fi++) {
-                    Filament f = _filaments.get(fi);
-                    f.update(t);
+                    }
+                    if (n % 10000 == 0) {
+                        System.gc();
+                    }
+                    int size = _filaments.size();
+                    for (int fi = 0; fi < size; fi++) {
+                        Filament f = _filaments.get(fi);
+                        f.update(t);
 
-                }
+                    }
 
-                if (!onlyActin && proteinType > 1) {
-                    /*
+                    if (!onlyActin && proteinType > 1) {
+                        /*
                     if (t > st2 && fimk2on > 0) {
                         if (!init2) {
                             st2 = t;
@@ -2004,64 +2134,77 @@ public class MainJFrame extends javax.swing.JFrame {
 
                     }*/
 
-                    if (t >= 0) {
-                        if (!initFim) {
-                            stFim = t;
-                            initFim = true;
-                        }
-                        double pt = -1;
-                        if (prot != null) {
-                            boolean tagged = false;
-                            boolean[] reset = new boolean[protNumber];
-                            for (int pi = 0; pi < protNumber; pi++) {
-                                reset[pi] = prot[pi].update(t);
+                        if (t >= 0) {
+                            if (!initFim) {
+                                stFim = t;
+                                initFim = true;
                             }
+                            double pt = -1;
+                            if (prot != null) {
+                                boolean tagged = false;
+                                boolean[] reset = new boolean[protNumber];
+                                for (int pi = 0; pi < protNumber; pi++) {
+                                    reset[pi] = prot[pi].update(t);
+                                }
+
+                            }
+                        }
+
+                    }
+
+                    for (Filament f : _filaments) {
+                        f.decorateSubunits(t);
+                    }
+                    if (!onlyActin && proteinType > 1) {
+
+                        for (int pi = 0; pi < protNumber; pi++) {
+                            prot[pi].react(t);
 
                         }
-                    }
-
-                }
-                for (Filament f : _filaments) {
-                    f.decorateSubunits(t);
-                }
-                if (!onlyActin && proteinType > 1) {
-
-                    for (int pi = 0; pi < protNumber; pi++) {
-                        prot[pi].react(t);
 
                     }
 
-                }
-                LinkedList<Filament> removeList = new LinkedList<>();
-                size = _filaments.size();
-                for (int fi = 0; fi < size; fi++) {
-                    Filament fl = _filaments.get(fi);
-                    if (fl.severFilament(t)) {
-                        removeList.add(fl);
+                    size = _filaments.size();
+                    removeList.clear();
+                    for (int fi = 0; fi < size; fi++) {
+                        Filament fl = _filaments.get(fi);
+                        if (fl.severFilament(t)) {
+                            removeList.add(fl);
+                        }
+                        if (Math.random() < frratea * (t - fl.age()) + frrateb) {
+                            //if (Math.random() < frrate) {
+                            for (int i = 0; i < fl._subunits.size(); i++) {
+                                fl._subunits.get(i).remove(t);
+                            }
+                            fl._subunits.clear();
+                            if (fl.isClone) {
+                                removeList.add(fl);
+                            }
+                        }
+
                     }
+                    _filaments.removeAll(removeList);
+
+                    t += dt;
 
                 }
-                _filaments.removeAll(removeList);
+                if (onlyActin) {
+                    lenps.println((filaments[0]._subunits.size() * raise * 1000));
 
-                t += dt;
+                }
 
+                //  System.out.println("NUM:"+_subunits.size());
+                //ps.println("" + t + "\t" + b * raise + "\t" + (p) * raise + "\t" + _subunits.size() * raise + "\t" + b / totalTime + "\t" + p / totalTime);
+                //    System.out.println(_subunits.size() * raise + "\t" + _subunits.size() / t);
+                // System.out.println("" + (System.currentTimeMillis() - t1));
             }
-            if (onlyActin) {
-                lenps.println((filaments[0]._subunits.size() * raise * 1000));
 
-            }
-
-            //  System.out.println("NUM:"+_subunits.size());
-            //ps.println("" + t + "\t" + b * raise + "\t" + (p) * raise + "\t" + _subunits.size() * raise + "\t" + b / totalTime + "\t" + p / totalTime);
-            //    System.out.println(_subunits.size() * raise + "\t" + _subunits.size() / t);
-            // System.out.println("" + (System.currentTimeMillis() - t1));
-        }
-        /*
+            /*
         for (double lt : lifeTimes) {
             ltps.println(lt);
         }
-         */
-
+             */
+        }
         if (updatePlot) {
             _ret = Utils.generateHist(lifeTimes, 0.25, 6, 0.1);
             _lifeTimes.clear();
@@ -2077,12 +2220,14 @@ public class MainJFrame extends javax.swing.JFrame {
             }
             ltps.flush();
         }
+        ltps.flush();
+        ltps.close();
         lenps.flush();
         lenps.close();
         jProgressBar1.setValue(0);
         _running = false;
-        double total = numberTagged[0] + numberTagged[1] + numberTagged[2] + numberTagged[3];
-        System.out.println("Report:" + numberTagged[0] / total + "\t" + numberTagged[1] / total + "\t" + numberTagged[2] / total + "\t" + numberTagged[3] / total + "\t");
+        //double total = numberTagged[0] + numberTagged[1] + numberTagged[2] + numberTagged[3];
+        //System.out.println("Report:" + numberTagged[0] / total + "\t" + numberTagged[1] / total + "\t" + numberTagged[2] / total + "\t" + numberTagged[3] / total + "\t");
         return lifeTimes;
     }
 
@@ -2123,16 +2268,21 @@ public class MainJFrame extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainJFrame.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainJFrame.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainJFrame.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainJFrame.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -2156,6 +2306,8 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel DistanceLabel;
     private javax.swing.JSlider DistanceSlider;
     private javax.swing.JTextField FLTDTextField;
+    private javax.swing.JTextField FRemovalaTextField;
+    private javax.swing.JTextField FRemovalbTextField;
     private javax.swing.JTextField FimTDTextField;
     private javax.swing.JTextField Fimk1offTextField;
     private javax.swing.JTextField Fimk1onTextField;
@@ -2196,6 +2348,7 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -2247,6 +2400,8 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel53;
     private javax.swing.JLabel jLabel54;
     private javax.swing.JLabel jLabel55;
+    private javax.swing.JLabel jLabel56;
+    private javax.swing.JLabel jLabel57;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -2288,8 +2443,10 @@ public class MainJFrame extends javax.swing.JFrame {
 
                 try {
                     Thread.sleep(100);
+
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(MainJFrame.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -2335,6 +2492,8 @@ public class MainJFrame extends javax.swing.JFrame {
                     fimk2off = fimk2offr * dt,
                     fimk3on = fimk3onr * dt,
                     fimk3off = fimk3offr * dt;
+            final double frratea = getValue(FRemovalaTextField) * dt;
+            final double frrateb = getValue(FRemovalbTextField) * dt;
             final int distance = DistanceSlider.getValue(), chunk = ChunkSlider.getValue();
             ADFLabel.setText("" + ADF);
             SRV2Label.setText("" + K_SRV2);
@@ -2358,7 +2517,7 @@ public class MainJFrame extends javax.swing.JFrame {
                                 adppi * dt, adppic * dt, distance, chunk, ProteinComboBox.getSelectedIndex(), FLTD,
                                 fimTD, fimk1on, fimk2on, fimk3on, fimk1off, fimk2off, fimk3off, uSh, uShA,
                                 uSc, uScA, thermalFluc, dt, getValue(totalTimeTextField),
-                                (int) getValue(NFilamentsTextField), true);
+                                (int) getValue(NFilamentsTextField), frratea, frrateb, true);
                     } catch (Exception ex) {
                         _running = false;
                         _ended = true;
@@ -2378,8 +2537,10 @@ public class MainJFrame extends javax.swing.JFrame {
 
                 try {
                     Thread.sleep(100);
+
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(MainJFrame.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
 
             }
@@ -2460,6 +2621,20 @@ public class MainJFrame extends javax.swing.JFrame {
         }
 
         _originalDataPoints = Utils.listToArray(datapoints);
+    }
+
+    private void writeDescriptions(String path, double paramsV[]) {
+        try {
+            PrintStream ps = new PrintStream(path + "/Readme.txt");
+            for (int i = 0; i < _params.size(); i++) {
+                if (i != xParComboBox.getSelectedIndex() && i != yParComboBox.getSelectedIndex()) {
+                    ps.println(_params.get(i).getAccessibleContext().getAccessibleName() + "\t" + paramsV[i]);
+                }
+            }
+
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
     }
 
 }

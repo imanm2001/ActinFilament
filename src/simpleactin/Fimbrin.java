@@ -5,6 +5,7 @@
  */
 package simpleactin;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
 import org.apache.commons.math3.distribution.GammaDistribution;
@@ -15,7 +16,7 @@ import org.apache.commons.math3.distribution.GammaDistribution;
  */
 public class Fimbrin implements SubUnitListener, ProteinI, DecorationListener {
 
-    final static int _ABDAssociated = 1, _OtherProteinsAssociated = 2, _Dissociated = 4, _SEVERED = 8, _OTHERFIMBRINS = 16;
+    final static int _NewABDAssociated = 1, _Associated = 2, _Dissociated = 4, _SEVERED = 8;
     final static double KBT = 4.114;
     final static double GSCALE = 20;
 
@@ -24,23 +25,21 @@ public class Fimbrin implements SubUnitListener, ProteinI, DecorationListener {
     1:Connected to filament 1
     2:Connected to filament 2
      */
-    double _t1 = -1, _t2 = -1;
-
+    //double _t1 = -1, _t2 = -1;
     public double _thermalFluctions, _k1off, _k2off, _k1on, _k2on;
 
     public double _UCA;
     private static GammaDistribution GammaDists[] = new GammaDistribution[(int) (140 * GSCALE)];
-    int state = 0;
-    private SubUnit _end1Attached, _end2Attached;
+    //int state = 0;
+    //private SubUnit _end1Attached, _end2Attached;
     private LifeTimeRecorder _ltr = null;
     private LinkedList<Updates> _updates;
     private LinkedList<ABDs> _fimbrins = new LinkedList<>();
-    int _numFoundSU = 0;
 
     public Fimbrin(double thermalFluctions, WaitingTime waitingTime, LifeTimeRecorder ltr) {
 
         _thermalFluctions = thermalFluctions;
-        _end1Attached = _end2Attached = null;
+
         _ltr = ltr;
         _updates = new LinkedList<>();
 //        _p1=new Protein(f1, _k1off, _k1on, _k3off, _k3on);
@@ -48,9 +47,9 @@ public class Fimbrin implements SubUnitListener, ProteinI, DecorationListener {
 
     public double getOffRate(double t) {
         int index = Math.min(GammaDists.length - 1, (int) (t * GSCALE));
-        //double factor = _k2off * Math.exp((GammaDists[index].sample() / KBT));
+        double factor = _k2off * Math.exp((GammaDists[index].sample() / KBT));
         //double factor = _k2off * Math.exp((t * _UCA + 0 * GammaDists[0].sample() / KBT));
-        double factor = _k2off * (1 + t * _UCA);
+        //double factor = _k2off * (1 + t * _UCA);
         //double factor = _k2off + t * _UCA;
         return 1 - Math.exp(-factor);
 
@@ -91,11 +90,13 @@ public class Fimbrin implements SubUnitListener, ProteinI, DecorationListener {
          */
     }
 
-    private void addUpdate(int state, SubUnit su, double t) {
+    private void addUpdate(int state, SubUnit su, ABDs abd, double t) {
         if (!contained(su)) {
-            _updates.add(new Updates(state, su, t));
-        } else {
-//            throw new RuntimeException();
+            if (abd != null) {
+                _updates.add(new Updates(state, su, abd, t));
+            } else {
+                throw new RuntimeException(" " + abd);
+            }
         }
     }
 
@@ -104,7 +105,9 @@ public class Fimbrin implements SubUnitListener, ProteinI, DecorationListener {
         double onrate = -1;
         double offrate = -1;
         if (t > Filament._STARTTIME) {
-            if (state == 0) {
+            onrate = _k1on;
+            offrate = -1;
+            /*if (state == 0) {
                 onrate = _k1on;
                 offrate = -1;
             } else if (state == 1) {
@@ -114,7 +117,7 @@ public class Fimbrin implements SubUnitListener, ProteinI, DecorationListener {
                     onrate = -1;
                 }
                 offrate = -1;
-            }
+            }*/
         }
 
         for (int i = 0; i < f._subunits.size(); i++) {
@@ -132,14 +135,17 @@ public class Fimbrin implements SubUnitListener, ProteinI, DecorationListener {
                 }*/
 
                 if (Math.random() < _k1on) {
-                    if (state == 0 && su._record) {
-                        su._decorationReaction.add(new DecorationReaction(_k1on, 0, _ABDAssociated, this));
-                    } else {
-                        su._decorationReaction.add(new DecorationReaction(_k1on, _k1off, _OTHERFIMBRINS, this));
-                    }
+
+                    su._decorationReaction.add(new DecorationReaction(_k1on, 0, _NewABDAssociated, this));
+
                 }
-                if (state == 1 && _end1Attached._filament.ID != f.ID && Math.random() < _k2on) {
-                    su._decorationReaction.add(new DecorationReaction(_k2on, 0, _ABDAssociated, this));
+
+                for (ABDs ab : _fimbrins) {
+                    ab.arrange();
+                    if (ab._state == 1 && ab._abd1._filament != f && Math.random() < _k2on) {
+
+                        su._decorationReaction.add(new DecorationReaction(_k2on, 0, _Associated, this, ab));
+                    }
                 }
 
                 //updateSubunit(su, f, filamentIndex, t);
@@ -151,43 +157,52 @@ public class Fimbrin implements SubUnitListener, ProteinI, DecorationListener {
 
     @Override
     public boolean update(double t) {
-        _numFoundSU = 0;
+
         for (Filament f : MainJFrame._filaments) {
             attachToFilament(f, t);
         }
+        for (ABDs abd : _fimbrins) {
+            abd.arrange();
+            int numFound = 0;
+            if (abd._state == 2) {
+                if (contained(abd._abd1)) {
+                    numFound++;
+                }
+                if (contained(abd._abd2)) {
+                    numFound++;
+                }
+                Filament f1 = abd._abd1._filament;
+                Filament f2 = abd._abd2._filament;
+                if (f1._subunits.contains(abd._abd1)) {
+                    numFound++;
+                }
+                if (f2._subunits.contains(abd._abd2)) {
+                    numFound++;
+                }
+                if (numFound != 2) {
 
-        if (state == 2) {
-            if (contained(_end1Attached)) {
-                _numFoundSU++;
-            }
-            if (contained(_end2Attached)) {
-                _numFoundSU++;
-            }
-            Filament f1 = _end1Attached._filament;
-            Filament f2 = _end2Attached._filament;
-            if (f1._subunits.contains(_end1Attached)) {
-                _numFoundSU++;
-            }
-            if (f2._subunits.contains(_end2Attached)) {
-                _numFoundSU++;
-            }
-            if (_numFoundSU != 2) {
+                    throw new RuntimeException(abd._abd1 + "\t" + abd._abd1 + "\t("
+                            + contained(abd._abd1) + "," + abd._abd1._filament._subunits.contains(abd._abd1)
+                            + ")\t(" + contained(abd._abd2) + "," + abd._abd2._filament._subunits.contains(abd._abd2)
+                            + ")\t" + numFound);
 
-                throw new RuntimeException(_end1Attached + "\t" + _end2Attached + "\t"
-                        + (contained(_end1Attached) + "," + f1._subunits.contains(_end1Attached))
-                        + "\t" + (contained(_end2Attached) + "," + f2._subunits.contains(_end2Attached))
-                        + "\t" + _numFoundSU);
+                }
+                if (abd._t2 <= 0) {
+                    throw new RuntimeException();
+                }
+                if (Math.random() < getOffRate(t - abd._t2)) {
+
+                    addUpdate(_Dissociated, abd._abd1, abd, t);
+
+                }
+                if (Math.random() < getOffRate(t - abd._t2)) {
+                    addUpdate(_Dissociated, abd._abd2, abd, t);
+                }
+            } else if (abd._state == 1 && Math.random() < _k1off) {
+                abd.arrange();
+                addUpdate(_Dissociated, abd._abd1, abd, t);
 
             }
-            if (Math.random() < getOffRate(t - _t2)) {
-                addUpdate(_Dissociated, _end1Attached, t);
-            }
-            if (Math.random() < getOffRate(t - _t2)) {
-                addUpdate(_Dissociated, _end2Attached, t);
-            }
-        } else if (state == 1 && Math.random() < _k1off) {
-            addUpdate(_Dissociated, _end1Attached, t);
-
         }
 
         return true;
@@ -344,7 +359,7 @@ public class Fimbrin implements SubUnitListener, ProteinI, DecorationListener {
 
     }*/
     private void applyUpdates(double t) {
-        int newState = state;
+
         boolean severed = false;
         boolean dissociated = false;
         double dissociateTime = 0;
@@ -352,30 +367,26 @@ public class Fimbrin implements SubUnitListener, ProteinI, DecorationListener {
 
             Updates update = _updates.get(i);
 
-            if (update.newState != _ABDAssociated) {
-                if (update.su == _end1Attached || update.su == _end2Attached) {
-                    newState--;
-                    if (newState == 0) {
-                        _ltr.addTime(t, _t1);
-                        System.out.println("" + t + "\t" + _t1 + "\t" + update.su._t);
-                    }
+            if (update.newState == _Dissociated || update.newState == _SEVERED) {
+                if (update.su == update._abd._abd1 || update.su == update._abd._abd2) {
+                    update._abd._newState--;
 
                     if (update.newState == _Dissociated) {
 
                         //recored = true;
                     }
-                    if (update.su == _end1Attached) {
+                    if (update.su == update._abd._abd1) {
 
-                        _end1Attached = null;
+                        update._abd._abd1 = null;
 
                     }
-                    if (update.su == _end2Attached) {
-                        _end2Attached = null;
+                    if (update.su == update._abd._abd2) {
+                        update._abd._abd2 = null;
 
                     }
                     update.su._decorationTime = -1;
                 }
-
+                update.su.removeListener(this);
                 _updates.remove(i);
 
             } else {
@@ -384,117 +395,130 @@ public class Fimbrin implements SubUnitListener, ProteinI, DecorationListener {
         }
 
         if (_updates.size() > 0) {
+            HashMap hmap = splitTheReactionToTheirCorrespondingFimbrins();
 
-            int N = (int) Math.floor(_updates.size() * Math.random());
-            Updates update = _updates.get(N);
-            update.su.addListener(this);
-            if (state == 0) {
+            for (Object obj : hmap.keySet()) {
+                ABDs abd = (ABDs) obj;
+                LinkedList<Updates> updates = (LinkedList<Updates>) hmap.get(obj);
+                int N = (int) Math.floor(updates.size() * Math.random());
+                Updates update = updates.get(N);
+                update.su.addListener(this);
+                abd.arrange();
 
-                if (_end1Attached == null) {
-                    newState++;
-                    _end1Attached = update.su;
-                    _t1 = update._t;
+                abd._newState++;
+
+                abd._abd2 = update.su;
+                if (abd._newState == 2) {
+                    abd._t2 = t;
                 } else {
-                    throw new RuntimeException();
+
                 }
 
-                //_end1Attached._decorationTime = t;
-                /*if (_end1Attached == null) {
-                    throw new RuntimeException();
-                }*/
-            } else if (state == 1) {
-                newState++;
-                _end2Attached = update.su;
-                _t2 = t;
-            }
-
-            for (int i = 0; i < _updates.size() * 0; i++) {
-                Updates up = _updates.get(i);
-                if (up.newState != _ABDAssociated) {
-                    throw new RuntimeException();
-                }
-                up.su._decorationTime = t;
+                for (int i = 0; i < updates.size(); i++) {
+                    Updates up = updates.get(i);
+                    if (up.newState != _Associated) {
+                        throw new RuntimeException();
+                    }
+                    up.su._decorationTime = t;
 //                _fimbrins.add(up.su);
 
-                /*
-                if (i != N) {
-
-                    up.su.removeReaction(this, up.su._oldDecorationReaction);
-                    if (up.su._oldDecorationReaction.size() > 0) {
-                        up.su.peakAReaction(t, up.su._oldDecorationReaction);
-                    } else {
-                        up.su.resetReaction();
+                    if (i != N) {
+                        up.su.removeReaction(this, up.su._oldDecorationReaction);
+                        if (up.su._oldDecorationReaction.size() > 0) {
+                            up.su.peakAReaction(t, up.su._oldDecorationReaction);
+                        } else {
+                            up.su.resetReaction();
+                        }
                     }
-                }*/
-            }
-        }
+                }
 
-        if (!severed && dissociated) {
+                if (!severed && dissociated) {
 
 //            _ltr.addTime(t, _end1Attached._t);
+                }
+            }
         }
-        if (newState != state) {
+        LinkedList<ABDs> removeList = new LinkedList<>();
+        for (ABDs abd : _fimbrins) {
+            if (abd._newState != abd._state) {
+                abd.arrange();
 
-
-            /* if (state > 0 && newState == 0) {
+                /* if (state > 0 && newState == 0) {
 
                 _end1Attached._decorationTime = -1;
                 _end1Attached = null;
                 _t1 = -1;
                 _end1FilamentIndex = _end2FilamentIndex = -1;
             }*/
-            if (_end1Attached == null && _end2Attached != null) {
-                _end1Attached = _end2Attached;
+                if (abd._abd1 != null) {
+                    if (abd._abd2 != null) {
+                        if (abd._newState != 2) {
+                            throw new RuntimeException("Err");
+                        }
 
-                _end2Attached = null;
+                        if (abd._t2 == -1) {
+                            abd._t2 = t;
+                        }
+                    } else {
+                        abd._t2 = -1;
+                        if (abd._newState != 1) {
+                            throw new RuntimeException("Err:" + abd._newState + "\t" + abd._state);
+                        }
 
-            }
-            if (_end1Attached != null) {
-                if (_end2Attached != null) {
-                    if (newState != 2) {
+                    }
+
+                } else if (abd._abd2 == null) {
+
+                    if (abd._newState != 0) {
+                        throw new RuntimeException("ERROR");
+                    }
+                    if (abd._abd1 != null || abd._abd2 != null) {
                         throw new RuntimeException("Err");
                     }
 
-                    if (_t2 == -1) {
-                        _t2 = t;
+                    abd._t2 = -1;
+                }
+
+                abd._state = abd._newState;
+                if (abd._newState == 0) {
+                    //System.out.println("__" + (t - abd._t1));
+                    if (Math.random() < 0.1) {
+                        _ltr.addTime(t, abd._t1);
                     }
-                } else {
-                    _t2 = -1;
-                    if (newState != 1) {
-                        throw new RuntimeException("Err:" + newState + "\t" + state);
-                    }
-
+                    abd._t1 = -1;
+                    removeList.add(abd);
                 }
-
-            } else if (_end2Attached == null) {
-
-                if (newState != 0) {
-                    throw new RuntimeException("ERROR");
-                }
-                if (_end1Attached != null || _end2Attached != null) {
-                    throw new RuntimeException("Err");
-                }
-
-                _t1 = _t2 = -1;
             }
 
-            state = newState;
+            if (abd._state < 0 || abd._state > 2) {
+                throw new RuntimeException("ERR:" + abd._state);
+            }
+            if (abd._state == 2 && (abd._abd1 == null || abd._abd2 == null)) {
+                throw new RuntimeException("ERR:" + abd._state);
+            }
+            if (abd._state == 2 && (abd._abd1._filament == abd._abd2._filament)) {
+                Filament f1 = abd._abd1._filament;
+                Filament f2 = abd._abd2._filament;
+                System.out.flush();
+                throw new RuntimeException("ERR:" + abd._abd1 + "," + abd._abd2 + ":" + f1._subunits.contains(abd._abd1)
+                        + "\t" + f2._subunits.contains(abd._abd2));
+            }
         }
+        _fimbrins.remove(removeList);
+    }
 
-        if (state < 0 || state > 2) {
-            throw new RuntimeException("ERR:" + state);
+    public ABDs getTheCorrespondingFimbrin(SubUnit su) {
+        ABDs ret = null;
+        for (ABDs abd : _fimbrins) {
+            if (abd._abd1 == su || abd._abd2 == su) {
+                if (ret == null) {
+                    ret = abd;
+                } else {
+                    throw new RuntimeException();
+                }
+            }
         }
-        if (state == 2 && (_end1Attached == null || _end2Attached == null)) {
-            throw new RuntimeException("ERR:" + state);
-        }
-        if (state == 2 && (_end1Attached._filament.ID == _end2Attached._filament.ID)) {
-            Filament f1 = _end1Attached._filament;
-            Filament f2 = _end2Attached._filament;
-            System.out.flush();
-            throw new RuntimeException("ERR:" + _end1Attached + "," + _end2Attached + ":" + f1._subunits.contains(_end1Attached)
-                    + "\t" + f2._subunits.contains(_end2Attached));
-        }
-
+        return ret;
     }
 
     @Override
@@ -504,15 +528,14 @@ public class Fimbrin implements SubUnitListener, ProteinI, DecorationListener {
         if (t >= 0) {
 
             if (!contained(su)) {
-                addUpdate(_Dissociated, su, t);
-
+                addUpdate(_Dissociated, su, getTheCorrespondingFimbrin(su), t);
                 //_ltr.addTime(t, su._t);
             } else {
                 throw new RuntimeException();
             }
         } else {
             //  System.out.println(":::SEVEER::");
-            addUpdate(_SEVERED, su, t);
+            addUpdate(_SEVERED, su, getTheCorrespondingFimbrin(su), t);
 
         }
         /*
@@ -565,25 +588,25 @@ public class Fimbrin implements SubUnitListener, ProteinI, DecorationListener {
 
     @Override
     public double getTime() {
-        return _t1;
+        return -1;
     }
 
     @Override
     public void reset() {
-        _t1 = -1;
-        _t2 = -1;
-        state = 0;
-        if (_end1Attached != null) {
-            _end1Attached._decorationReaction.clear();
+        for (ABDs abd : _fimbrins) {
+            if (abd._abd1 != null) {
+                abd._abd1._decorationReaction.clear();
+                abd._abd1.removeListener(this);
+            }
+            if (abd._abd2 != null) {
+                abd._abd1.removeListener(this);
+                abd._abd2._decorationReaction.clear();
+            }
         }
-        if (_end2Attached != null) {
-            _end2Attached._decorationReaction.clear();
-        }
-        _end1Attached = _end2Attached = null;
 
         _updates.clear();
         _fimbrins.clear();
-        
+
         /*        _end1Connection = 0;
         _end2Connection = 0;
         _end1Attached = null;
@@ -614,7 +637,7 @@ public class Fimbrin implements SubUnitListener, ProteinI, DecorationListener {
     }
 
     @Override
-    public void reactionCallBack(SubUnit su, double t, int tag) {
+    public void reactionCallBack(SubUnit su, double t, int tag, Object data) {
         if (su._filament == null) {
             throw new RuntimeException();
         }
@@ -625,21 +648,23 @@ public class Fimbrin implements SubUnitListener, ProteinI, DecorationListener {
         }
 
         switch (tag) {
-            case _ABDAssociated:
-                if (state == 0 || state == 1) {
-                    addUpdate(_ABDAssociated, su, t);
-
-                }
+            case _NewABDAssociated:
+                //    addUpdate(_NewABDAssociated, su, t);
+                _fimbrins.add(new ABDs(su, null, t));
                 su._decorated = true;
+                su._decorationTime = t;
+                su.addListener(this);
                 break;
 
-            case _OTHERFIMBRINS:
+            case _Associated:
+                ABDs abd = (ABDs) data;
+                abd.arrange();
+
+                addUpdate(_Associated, su, abd, t);
                 su._decorationTime = t;
                 su._decorated = true;
                 break;
-            case _OtherProteinsAssociated:
-                su._decorationTime = t;
-                break;
+
             case -1:
 //                addUpdate(su._filament == _f1 ? 0 : 1, _Dissociated, su);
 //                break;
@@ -652,11 +677,12 @@ public class Fimbrin implements SubUnitListener, ProteinI, DecorationListener {
     }
 
     @Override
-    public void react(double t
-    ) {
+    public void react(double t) {
         applyUpdates(t);
-        if (_end1Attached != null && _end1Attached == _end2Attached) {
-            throw new RuntimeException("REP");
+        for (ABDs abd : _fimbrins) {
+            if (abd._abd1 != null && abd._abd1 == abd._abd2) {
+                throw new RuntimeException("REP");
+            }
         }
         _updates.clear();
 
@@ -681,19 +707,36 @@ public class Fimbrin implements SubUnitListener, ProteinI, DecorationListener {
         }
         return null;
     }
+
+    private HashMap splitTheReactionToTheirCorrespondingFimbrins() {
+        HashMap<ABDs, LinkedList<Updates>> ret = new HashMap<>();
+        for (Updates up : _updates) {
+            LinkedList<Updates> updates = null;
+            if (!ret.containsKey(up._abd)) {
+                updates = new LinkedList<>();
+                ret.put(up._abd, updates);
+            } else {
+                updates = ret.get(up._abd);
+            }
+            updates.add(up);
+        }
+        return ret;
+    }
 }
 
 class Updates {
 
+    ABDs _abd;
     SubUnit su;
     int newState;
     double _t;
 
-    public Updates(int state, SubUnit su, double t) {
+    public Updates(int state, SubUnit su, ABDs abd, double t) {
 
         newState = state;
         this.su = su;
         _t = t;
+        _abd = abd;
     }
 }
 
@@ -702,9 +745,29 @@ class ABDs {
     SubUnit _abd1, _abd2;
     double _t1, _t2;
     boolean _tagged = false;
+    int _state, _newState = 0;
 
-    public ABDs(SubUnit abd1, SubUnit abd2) {
+    public ABDs(SubUnit abd1, SubUnit abd2, double t) {
         _abd1 = abd1;
         _abd2 = abd2;
+        _t1 = t;
+        _t2 = -1;
+        arrange();
+        if (abd1 != null && _abd2 != null) {
+            _state = 2;
+        } else if (_abd1 != null && _abd2 == null) {
+            _state = 1;
+        } else {
+            _state = 0;
+        }
+        _newState = _state;
     }
+
+    public void arrange() {
+        if (_abd1 == null && _abd2 != null) {
+            _abd1 = _abd2;
+            _abd2 = null;
+        }
+    }
+
 }

@@ -35,7 +35,7 @@ public class Protein implements SubUnitListener, ProteinI, DecorationListener {
     private LinkedList<SubUnit> _end1Attached = new LinkedList<>(), _detachEnd1 = new LinkedList<>();
     private boolean _end1CanAttach = true;
     double bt = -1, _nextAttachTime;
-    public double decoration = 0.1;
+    public double decoration = 01;
     private LifeTimeRecorder _ltr = null;
 
     public Protein(double koff1, double kon1, LifeTimeRecorder ltr) {
@@ -58,14 +58,14 @@ public class Protein implements SubUnitListener, ProteinI, DecorationListener {
 
         for (SubUnit s : _detachEnd1) {
 
-            if (s._record) {
-                _ltr.addTime(t, s._t);
+            if (Math.random() < 0.01) {
+                _ltr.addTime(t, s._decorationTime);
                 /*
                 if (s._decorationTime == -1) {
                     throw new RuntimeException("ERROR");
                 }
                 
-                _end1Attached.remove(s);
+                
                 if (s._decorationTime == -1) {
                     throw new RuntimeException();
                 }
@@ -76,7 +76,9 @@ public class Protein implements SubUnitListener, ProteinI, DecorationListener {
             s._undecorated = true;
             s.removeListener(this);
 
+            _end1Attached.remove(s);
         }
+
         _detachEnd1.clear();
     }
 
@@ -200,7 +202,7 @@ public class Protein implements SubUnitListener, ProteinI, DecorationListener {
     }
 
     @Override
-    public void reactionCallBack(SubUnit su, double t, int tag) {
+    public void reactionCallBack(SubUnit su, double t, int tag, Object data) {
 
         if (tag == __DECORATE) {
 
@@ -217,14 +219,14 @@ public class Protein implements SubUnitListener, ProteinI, DecorationListener {
         } else if (tag == -__DECORATE) {
             {
 
-                if (false && !_detachEnd1.contains(su)) {
+                if (!_detachEnd1.contains(su)) {
                     _detachEnd1.add(su);
 
                 } else if (!_end1Attached.contains(su)) {
                     throw new RuntimeException();
                 } else {
-                    //_end1Attached.remove(su);
-                    //su.removeListener(this);
+                    _end1Attached.remove(su);
+                    su.removeListener(this);
                 }
             }
         }

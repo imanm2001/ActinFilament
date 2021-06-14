@@ -20,7 +20,7 @@ import javax.swing.plaf.basic.BasicLookAndFeel;
  */
 public class SimpleActin {
 
-    final static double PC = 0.1;
+    final static double PC = 0.05;
 
     
     public static void testHist() {

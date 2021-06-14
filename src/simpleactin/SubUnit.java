@@ -29,6 +29,7 @@ public class SubUnit {
     private DecorationListener _dl;
     public int _decoratedTag = 0;
     public Filament _filament;
+    private DecorationReaction _theChosenOne = null;
 
     public SubUnit(int state, boolean barbed, double t, SubUnitListener list, Filament fl) {
         _state = state;
@@ -39,7 +40,7 @@ public class SubUnit {
         if (list != null) {
             _listerns.add(list);
         }
-        _record = Math.random() < 0.1;
+        _record = Math.random() < 0.01;
         //  _record = true;
         _id = ID;
         ID++;
@@ -51,7 +52,9 @@ public class SubUnit {
 
     public void removeListener(SubUnitListener sl) {
         if (_listerns.contains(sl)) {
-            _listerns.remove(sl);
+            while (_listerns.contains(sl)) {
+                _listerns.remove(sl);
+            }
         } else {
             //  throw new RuntimeException();
         }
@@ -88,11 +91,13 @@ public class SubUnit {
         _decorated = true;
         _decorationTime = t;
         if (dr.callback != null) {
-            dr.callback.reactionCallBack(this, t, dr.tag);
+            dr.callback.reactionCallBack(this, t, dr.tag, dr._data);
         }
+        _theChosenOne = dr;
     }
 
     void resetReaction() {
+        _theChosenOne = null;
         _decoratedOffrate = -1;
         _dl = null;
         _decoratedTag = 0;
@@ -125,14 +130,10 @@ public class SubUnit {
     void decorate(double t) {
         if (_undecorated) {
             if (_dl != null) {
-                _dl.reactionCallBack(this, t, -_decoratedTag);
+                _dl.reactionCallBack(this, t, -_decoratedTag, _theChosenOne._data);
             }
-            _decorated = false;
 
-            _decoratedOffrate = 0;
-
-            _decoratedTag = 0;
-            _undecorated = false;
+            resetReaction();;
 
         } else if (_decorationReaction.size() > 0) {
 
@@ -142,9 +143,9 @@ public class SubUnit {
             peakAReaction(t, _decorationReaction);
             _oldDecorationReaction.clear();
             _oldDecorationReaction.addAll(_decorationReaction);
-            _decorationReaction.clear();
-        }
 
+        }
+        _decorationReaction.clear();
     }
 
     void removeReaction(DecorationListener dl, LinkedList<DecorationReaction> reactionList) {
@@ -172,16 +173,22 @@ class DecorationReaction {
     int tag;
     DecorationListener callback;
     Filament _filament;
+    Object _data;
 
-    public DecorationReaction(double onr, double offr, int tag, DecorationListener dl) {
+    public DecorationReaction(double onr, double offr, int tag, DecorationListener dl, Object data) {
         this.onrate = onr;
         this.offrate = offr;
         this.tag = tag;
         callback = dl;
+        _data = data;
+    }
+
+    public DecorationReaction(double onr, double offr, int tag, DecorationListener dl) {
+        this(onr, offr, tag, dl, null);
     }
 }
 
 interface DecorationListener {
 
-    void reactionCallBack(SubUnit su, double t, int tag);
+    void reactionCallBack(SubUnit su, double t, int tag, Object data);
 }
