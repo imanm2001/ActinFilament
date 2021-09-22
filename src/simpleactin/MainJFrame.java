@@ -1958,7 +1958,7 @@ public class MainJFrame extends javax.swing.JFrame {
             final double frrateb, boolean updatePlot) throws Exception {
         LinkedList<Double> lifeTimes = new LinkedList<>();
         PrintStream lenps = new PrintStream("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\HeatMaps\\Res\\others\\Len_actin_fast_coff_150.txt");
-        String fn = "C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\HeatMaps\\Res\\others\\" + ProteinComboBox.getSelectedItem() + "_5050_test.txt";
+        String fn = "C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\HeatMaps\\Res\\others\\" + ProteinComboBox.getSelectedItem() + "_test.txt";
         if (storagepath != null && jCheckBox2.isSelected()) {
             fn = storagepath;
         }

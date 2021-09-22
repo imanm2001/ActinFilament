@@ -59,7 +59,7 @@ public class Protein implements SubUnitListener, ProteinI, DecorationListener {
         for (SubUnit s : _detachEnd1) {
 
             if (Math.random() < 0.01) {
-                //_ltr.addTime(t, s._decorationTime);
+                _ltr.addTime(t, s._decorationTime);
                 /*
                 if (s._decorationTime == -1) {
                     throw new RuntimeException("ERROR");
@@ -211,7 +211,7 @@ public class Protein implements SubUnitListener, ProteinI, DecorationListener {
             if (!_end1Attached.contains(su)) {
 
                 _end1Attached.add(su);
-                _ltr.addTime(su._t, t);
+//                _ltr.addTime(su._t, t);
 
             } else {
                 throw new RuntimeException("Subunit was already added:" + su._decorated + "\t" + _end1Attached.size() + "\t" + _end1Attached.indexOf(su));
