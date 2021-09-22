@@ -192,7 +192,7 @@ public class Filament implements SubUnitListener, DecorationListener {
         }
     }*/
     private int sever(double t, int start) {
-        if (true) {
+        if (false) {
             // keep one end
 
             //boolean pointed = false;
