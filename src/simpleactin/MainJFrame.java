@@ -349,7 +349,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         atpbonTextField.setText("11.6");
 
-        adpbonTextField.setText("1.3");
+        adpbonTextField.setText("3.8");
 
         jLabel5.setText("ATPpOn:");
 
@@ -409,8 +409,8 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel15.setText("SRV2off:");
 
-        ADFSlider.setMaximum(10000);
-        ADFSlider.setValue(1700);
+        ADFSlider.setMaximum(15000);
+        ADFSlider.setValue(1500);
         ADFSlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 ADFSliderStateChanged(evt);
@@ -466,7 +466,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel24.setText("Severing Rate");
 
-        svrrTextField.setText("1.4");
+        svrrTextField.setText("1.24");
         svrrTextField.setToolTipText("");
         svrrTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1497,6 +1497,21 @@ public class MainJFrame extends javax.swing.JFrame {
             //   ((JSlider) jc).setValue((int) v);
         }
     }
+
+    private void fillparams(double paramsV[]) {
+        for (int i = 0; i < _params.size(); i++) {
+            if (_params.get(i) instanceof JTextField) {
+                paramsV[i] = getValue((JTextField) _params.get(i));
+            }
+        }
+        paramsV[_K_SRV2] = SRV2Slider.getValue() / 10.0;
+        paramsV[_CADF] = ADFSlider.getValue() / 10.0;
+        paramsV[_USCA] = UScASlider.getValue() / 100.0;
+        paramsV[_USHA] = UShASlider.getValue() / 100.0;
+        paramsV[_THERMALFLUC] = ThFluSlider.getValue() / 50.0;
+        paramsV[_DISTANCE] = DistanceSlider.getValue();
+        paramsV[_CHUNK] = ChunkSlider.getValue();
+    }
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         if (!_heatGenerating) {
@@ -1555,6 +1570,7 @@ public class MainJFrame extends javax.swing.JFrame {
         paramsV[_FIMK1OFF]=getValue(Fimk1offTextField);
         paramsV[_FIMK2OFF]=getValue(Fimk2offTextField);
                      */
+                    /*
                     for (int i = 0; i < _params.size(); i++) {
                         if (_params.get(i) instanceof JTextField) {
                             paramsV[i] = getValue((JTextField) _params.get(i));
@@ -1566,7 +1582,8 @@ public class MainJFrame extends javax.swing.JFrame {
                     paramsV[_USHA] = UShASlider.getValue() / 100.0;
                     paramsV[_THERMALFLUC] = ThFluSlider.getValue() / 50.0;
                     paramsV[_DISTANCE] = DistanceSlider.getValue();
-                    paramsV[_CHUNK] = ChunkSlider.getValue();
+                    paramsV[_CHUNK] = ChunkSlider.getValue();*/
+                    fillparams(paramsV);
                     if (SPath != null) {
                         writeDescriptions(SPath, paramsV);
                     }
@@ -1940,13 +1957,19 @@ public class MainJFrame extends javax.swing.JFrame {
             final double dt, double totalTime, int nFilaments, final double frratea,
             final double frrateb, boolean updatePlot) throws Exception {
         LinkedList<Double> lifeTimes = new LinkedList<>();
-        PrintStream lenps = new PrintStream("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\Sims\\Len_actin_fast.txt");
-        String fn = "C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\HeatMaps\\Res\\RFR0.003\\" + ProteinComboBox.getSelectedItem() + ".txt";
+        PrintStream lenps = new PrintStream("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\HeatMaps\\Res\\others\\Len_actin_fast_coff_150.txt");
+        String fn = "C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\HeatMaps\\Res\\others\\" + ProteinComboBox.getSelectedItem() + "_5050_test.txt";
         if (storagepath != null && jCheckBox2.isSelected()) {
             fn = storagepath;
         }
-        System.out.println(">>" + fn);
+        System.out.println(">>" + fn+"----\r\n"+storagepath);
         PrintStream ltps = new PrintStream(fn);
+        if (storagepath==null||storagepath.trim().length()==0) {
+            double paramsV[]=new double[_params.size()];
+            fillparams(paramsV);
+            ltps.println(-1);
+            printInfo(ltps, paramsV);
+        }
         if (!(frratea < 0 && frrateb < 0 || frratea < 0 && frrateb == 0)) {
 
             /*
@@ -1984,7 +2007,8 @@ public class MainJFrame extends javax.swing.JFrame {
                 @Override
                 public void addTime(double toff, double ton) {
                     double dt = (Math.ceil(toff * 10) - Math.ceil(ton * 10)) / 10;
-                    if (ton >= _STARTTIME && dt <= 6000 && dt >= 0.3) {
+                    //double dt = (toff - ton);
+                    if (ton >= _STARTTIME && dt <= 6000 && dt >= 0.0) {
                         if (lifeTimes != null) {
                             lifeTimes.add(dt);
                         }
@@ -1996,8 +2020,8 @@ public class MainJFrame extends javax.swing.JFrame {
             long t1 = System.currentTimeMillis();
             boolean chiz = true;
             //int maxSamples = _sampNum;
-            int maxSamples = Math.min(5000, _sampNum);
-            //int maxSamples = 500;
+            int maxSamples = Math.min(2000, _sampNum);
+            maxSamples = 5000;
             //GammaDistribution protDelay = new GammaDistribution(fimbrinTimeDiffS, fimbrinTimeDiffA);
             WaitingTime wt = new WaitingTime() {
                 @Override
@@ -2072,8 +2096,10 @@ public class MainJFrame extends javax.swing.JFrame {
                     prot[pi].reset();
                 }
                 int pn = 0;
-
+                int kk = 0;
+                //while (t < totalTime && _running && lifeTimes.size() < maxSamples) {
                 while (t < totalTime && _running) {
+                    kk++;
                     //System.out.println("\t\t" + _filaments.size());
                     if ((n++) % 4000 == 0 || _lifeTimes.size() > pn) {
                         pn = _lifeTimes.size();
@@ -2184,12 +2210,18 @@ public class MainJFrame extends javax.swing.JFrame {
 
                     }
                     _filaments.removeAll(removeList);
+/*
+                    if (onlyActin && ii == 0 & kk % 1000 == 0) {
 
+                        Filament f = _filaments.get(0);
+                        lenps.println(t + "\t" + (f._subunits.size()));
+                    }*/
                     t += dt;
-
                 }
                 if (onlyActin) {
-                    lenps.println((filaments[0]._subunits.size() * raise * 1000));
+                    for (Filament f : _filaments) {
+                        lenps.println((f._subunits.size()));
+                    }
 
                 }
 
@@ -2623,14 +2655,19 @@ public class MainJFrame extends javax.swing.JFrame {
         _originalDataPoints = Utils.listToArray(datapoints);
     }
 
+    private void printInfo(PrintStream ps, double paramsV[]) throws IOException {
+        for (int i = 0; i < _params.size(); i++) {
+            if (i != xParComboBox.getSelectedIndex() && i != yParComboBox.getSelectedIndex()) {
+                ps.println(_params.get(i).getAccessibleContext().getAccessibleName() + "\t" + paramsV[i]);
+            }
+        }
+        ps.flush();
+    }
+
     private void writeDescriptions(String path, double paramsV[]) {
         try {
             PrintStream ps = new PrintStream(path + "/Readme.txt");
-            for (int i = 0; i < _params.size(); i++) {
-                if (i != xParComboBox.getSelectedIndex() && i != yParComboBox.getSelectedIndex()) {
-                    ps.println(_params.get(i).getAccessibleContext().getAccessibleName() + "\t" + paramsV[i]);
-                }
-            }
+            printInfo(ps, paramsV);
 
         } catch (IOException ioe) {
             ioe.printStackTrace();

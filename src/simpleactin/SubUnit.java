@@ -41,7 +41,7 @@ public class SubUnit {
             _listerns.add(list);
         }
         _record = Math.random() < 0.01;
-        //  _record = true;
+        //_record = true;
         _id = ID;
         ID++;
     }

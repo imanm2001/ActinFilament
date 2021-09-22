@@ -49,11 +49,15 @@ public class SimpleActin {
         }
     }
     public static void main(String[] args) throws Exception {
-        
+        /*
         LinkedList<Integer> ls = new LinkedList<>();
+        ls.add(1);
+        ls.add(2);
+        ls.add(3);
         for(int i:ls){
             System.out.println(""+i);
         }
+        System.out.println(""+ls.pop());*/
         
         
         LinkedList<Double> vals=Utils.loadVector("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\adb2_lt_xiaobai_raw.txt", ",");
@@ -84,3 +88,4 @@ public class SimpleActin {
 
     
 }
+

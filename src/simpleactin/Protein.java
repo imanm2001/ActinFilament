@@ -35,7 +35,7 @@ public class Protein implements SubUnitListener, ProteinI, DecorationListener {
     private LinkedList<SubUnit> _end1Attached = new LinkedList<>(), _detachEnd1 = new LinkedList<>();
     private boolean _end1CanAttach = true;
     double bt = -1, _nextAttachTime;
-    public double decoration = 01;
+    public double decoration = 0.01;
     private LifeTimeRecorder _ltr = null;
 
     public Protein(double koff1, double kon1, LifeTimeRecorder ltr) {

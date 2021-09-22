@@ -192,12 +192,44 @@ public class Filament implements SubUnitListener, DecorationListener {
         }
     }*/
     private int sever(double t, int start) {
-        Filament f = new Filament();
-        int ret = splits(start, f);
-        if (f._subunits.size() > 3) {
-            MainJFrame._filaments.add(f);
+        if (true) {
+            // keep one end
+
+            //boolean pointed = false;
+            boolean pointed = Math.random() < 0.5;
+            if (pointed && start == 0 || !pointed && start == _subunits.size()) {
+                pointed = !pointed;
+            }
+            //boolean pointed = Math.random()<start/(double)_subunits.size();
+            int st = 0, ed = 0;
+            if (pointed) {
+                ed = start;
+            } else {
+                st = start;
+                ed = _subunits.size();
+            }
+            return severOld(t, st, ed);
+        } else {
+            /*
+            boolean pointed = Math.random()<start/_subunits.size();
+            Filament f = new Filament();
+            int ret = splits(start, f);
+            //if (f._subunits.size() > 3) {
+            if(pointed){
+                MainJFrame._filaments.add(f);
+                MainJFrame._filaments.remove(this);
+                for(SubUnit su:_subunits){
+                    su.remove(t);
+                }
+                _subunits.clear();
+            }*/
+            Filament f = new Filament();
+            int ret = splits(start, f);
+            if (f._subunits.size() > 3) {
+                MainJFrame._filaments.add(f);
+            }
+            return ret;
         }
-        return ret;
     }
 
     private int severOld(double t, int start, int end) {
@@ -205,7 +237,7 @@ public class Filament implements SubUnitListener, DecorationListener {
 
         if (capped && end < size - 1) {
             boolean sc = storeCapped;
-            storeCapped = false;
+            //storeCapped = false;
             capoff(t);
             storeCapped = sc;
             /*if (storeCapped) {
@@ -550,7 +582,7 @@ public class Filament implements SubUnitListener, DecorationListener {
             
         }*/
         _capReaction = null;
-        if (capped && _ltr != null && storeCapped && _capOnTime != -1 && Math.random() < 0.1) {
+        if (capped && _ltr != null && storeCapped && _capOnTime != -1 && Math.random() < 0.05) {
             _ltr.addTime(t, _capOnTime);
 
         }
@@ -642,6 +674,8 @@ public class Filament implements SubUnitListener, DecorationListener {
             }
              */
             int offset = 0;
+            //sever(t, _severingList.get(0).location - offset);
+
             for (int i = 0; i < _severingList.size(); i++) {
                 sever(t, _severingList.get(i).location - offset);
                 offset += _severingList.get(i).location;

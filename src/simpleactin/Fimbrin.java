@@ -52,6 +52,7 @@ public class Fimbrin implements SubUnitListener, ProteinI, DecorationListener {
         //double factor = _k2off * (1 + t * _UCA);
         //double factor = _k2off + t * _UCA;
         return 1 - Math.exp(-factor);
+        //return  _k1off;
 
     }
 
