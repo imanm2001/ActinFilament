@@ -9,14 +9,14 @@ import java.util.LinkedList;
 import java.util.Random;
 import org.apache.commons.math3.distribution.GammaDistribution;
 import static simpleactin.Filament._STARTTIME;
-import static simpleactin.Filament._TIME;
+
 
 /**
  *
  * @author sm2983
  */
 public class Protein implements SubUnitListener, ProteinI, DecorationListener {
-
+  
     final int __DECORATE = 64;
     final double KBT = 4.114;
     final static int GSCALE = 16;
@@ -60,6 +60,7 @@ public class Protein implements SubUnitListener, ProteinI, DecorationListener {
 
             if (Math.random() < 0.01) {
                 _ltr.addTime(t, s._decorationTime);
+                //_ltr.addTime(s._decorationTime-s._t);
                 /*
                 if (s._decorationTime == -1) {
                     throw new RuntimeException("ERROR");

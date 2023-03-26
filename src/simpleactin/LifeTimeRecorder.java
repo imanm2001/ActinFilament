@@ -11,4 +11,5 @@ package simpleactin;
  */
 public interface LifeTimeRecorder {
     public void addTime(double toff,double ton);
+    public void addTime(double t);
 }

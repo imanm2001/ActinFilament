@@ -49,18 +49,8 @@ public class SimpleActin {
         }
     }
     public static void main(String[] args) throws Exception {
-        /*
-        LinkedList<Integer> ls = new LinkedList<>();
-        ls.add(1);
-        ls.add(2);
-        ls.add(3);
-        for(int i:ls){
-            System.out.println(""+i);
-        }
-        System.out.println(""+ls.pop());*/
-        
-        
-        LinkedList<Double> vals=Utils.loadVector("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\adb2_lt_xiaobai_raw.txt", ",");
+
+        LinkedList<Double> vals=Utils.loadVector("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\fim_lt_mike_raw.txt", ",");
         Object[] ret=Utils.generateHist(vals, 0.25, 17, 0.1);
         LinkedList<PointF> data=(LinkedList<PointF>)ret[0];
         String txt="";
@@ -68,7 +58,7 @@ public class SimpleActin {
             txt+=data.get(i).x+","+data.get(i).y+"\r\n";
         }
         
-        PrintStream ps=new PrintStream("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\out_adb2_java.txt");
+        PrintStream ps=new PrintStream("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\out_fim_java.txt");
         ps.print(txt);
         ps.flush();
         ps.close();
@@ -83,7 +73,7 @@ public class SimpleActin {
             e.printStackTrace();
         }
         new MainJFrame().setVisible(true);
-        //run();
+ 
     }
 
     

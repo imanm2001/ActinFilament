@@ -1570,7 +1570,7 @@ public class MainJFrame extends javax.swing.JFrame {
         paramsV[_FIMK1OFF]=getValue(Fimk1offTextField);
         paramsV[_FIMK2OFF]=getValue(Fimk2offTextField);
                      */
-                    /*
+ /*
                     for (int i = 0; i < _params.size(); i++) {
                         if (_params.get(i) instanceof JTextField) {
                             paramsV[i] = getValue((JTextField) _params.get(i));
@@ -1957,15 +1957,15 @@ public class MainJFrame extends javax.swing.JFrame {
             final double dt, double totalTime, int nFilaments, final double frratea,
             final double frrateb, boolean updatePlot) throws Exception {
         LinkedList<Double> lifeTimes = new LinkedList<>();
-        PrintStream lenps = new PrintStream("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\HeatMaps\\Res\\others\\Len_actin_fast_coff_150.txt");
-        String fn = "C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\HeatMaps\\Res\\others\\" + ProteinComboBox.getSelectedItem() + "_test.txt";
+        PrintStream lenps = new PrintStream("C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\HeatMaps\\Res\\others\\Len_actin_original_coff_400_sevx10.txt");
+        String fn = "C:\\Users\\sm2983\\Documents\\Projects\\Fimbin\\HeatMaps\\Res\\others\\" + ProteinComboBox.getSelectedItem() + "_rev_filament_LT.txt";
         if (storagepath != null && jCheckBox2.isSelected()) {
             fn = storagepath;
         }
-        System.out.println(">>" + fn+"----\r\n"+storagepath);
+        System.out.println(">>" + fn + "----\r\n" + storagepath);
         PrintStream ltps = new PrintStream(fn);
-        if (storagepath==null||storagepath.trim().length()==0) {
-            double paramsV[]=new double[_params.size()];
+        if (storagepath == null || storagepath.trim().length() == 0) {
+            double paramsV[] = new double[_params.size()];
             fillparams(paramsV);
             ltps.println(-1);
             printInfo(ltps, paramsV);
@@ -2006,12 +2006,20 @@ public class MainJFrame extends javax.swing.JFrame {
             LifeTimeRecorder ltr = new LifeTimeRecorder() {
                 @Override
                 public void addTime(double toff, double ton) {
-                    double dt = (Math.ceil(toff * 10) - Math.ceil(ton * 10)) / 10;
+                    double DT = (Math.ceil(toff * 10) - Math.ceil(ton * 10)) / 10;
                     //double dt = (toff - ton);
-                    if (ton >= _STARTTIME && dt <= 6000 && dt >= 0.0) {
+                    if (ton >= _STARTTIME && DT <= 6000 && DT >= 0.0) {
                         if (lifeTimes != null) {
-                            lifeTimes.add(dt);
+                            lifeTimes.add(DT);
+                           // lifeTimes.add(dt);
                         }
+                    }
+                }
+
+                @Override
+                public void addTime(double t) {
+                    if (lifeTimes != null) {
+                        lifeTimes.add(t);
                     }
                 }
             };
@@ -2021,7 +2029,8 @@ public class MainJFrame extends javax.swing.JFrame {
             boolean chiz = true;
             //int maxSamples = _sampNum;
             int maxSamples = Math.min(2000, _sampNum);
-            maxSamples = 5000;
+            //maxSamples = 5000;
+            maxSamples=2500;
             //GammaDistribution protDelay = new GammaDistribution(fimbrinTimeDiffS, fimbrinTimeDiffA);
             WaitingTime wt = new WaitingTime() {
                 @Override
@@ -2102,6 +2111,7 @@ public class MainJFrame extends javax.swing.JFrame {
                     kk++;
                     //System.out.println("\t\t" + _filaments.size());
                     if ((n++) % 4000 == 0 || _lifeTimes.size() > pn) {
+                        //System.out.println(">>>" + t);
                         pn = _lifeTimes.size();
                         //ps.println("" + t + "\t" + b * raise + "\t" + (p) * raise + "\t" + _subunits.size() * raise + "\t" + b / totalTime + "\t" + p / totalTime);
                         //            System.out.print("\033[2K"); 
@@ -2210,27 +2220,34 @@ public class MainJFrame extends javax.swing.JFrame {
 
                     }
                     _filaments.removeAll(removeList);
-/*
-                    if (onlyActin && ii == 0 & kk % 1000 == 0) {
+
+                    if (onlyActin && ii == 0 & kk % 100 == 0) {
 
                         Filament f = _filaments.get(0);
                         lenps.println(t + "\t" + (f._subunits.size()));
-                    }*/
+                    }
                     t += dt;
                 }
+                /*
+                if (t>500) {
+                    System.exit(123);
+                }else{
+                    break;
+                }*/
+ /*
                 if (onlyActin) {
                     for (Filament f : _filaments) {
                         lenps.println((f._subunits.size()));
                     }
 
-                }
+                }*/
 
                 //  System.out.println("NUM:"+_subunits.size());
                 //ps.println("" + t + "\t" + b * raise + "\t" + (p) * raise + "\t" + _subunits.size() * raise + "\t" + b / totalTime + "\t" + p / totalTime);
                 //    System.out.println(_subunits.size() * raise + "\t" + _subunits.size() / t);
                 // System.out.println("" + (System.currentTimeMillis() - t1));
             }
-
+System.out.println("TOTAL RUNS::::"+ii);
             /*
         for (double lt : lifeTimes) {
             ltps.println(lt);

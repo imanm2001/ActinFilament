@@ -88,7 +88,7 @@ public class Utils {
         
         max=tot;
         for (int i = 0; i < bins; i++) {
-            points.add(new PointF(min + (i+0.5) * step, ret[i] / max));
+            points.add(new PointF(min + (i+1.5) * step, ret[i] / max));
         }
 
         return new Object[]{points, 1.0};
